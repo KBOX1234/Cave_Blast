@@ -12,7 +12,7 @@ make
 
 cd ../..
 
-cp ./external/rl_imgui/bin/Debug/librlImGui.a ./lib/librlImGui.a
+cp ./external/rl_imgui/bin/Debug/rlImGui.lib ./lib/rlImGui.lib
 
 cd ./external/raylib/src
 
@@ -24,7 +24,7 @@ cp ./external/raylib/src/libraylib.a ./lib/libraylib.a
 
 cd ./external/enet/
 
-cmake CMakeLists.txt
+cmake -G "MinGW Makefiles" CMakeLists.txt --fresh
 
 make
 
@@ -32,4 +32,4 @@ cd ../../
 
 cp ./external/enet/libenet.a ./lib/libenet.a
 
-cp ./make_linux ./Makefile
+cp ./make_windows ./Makefile
