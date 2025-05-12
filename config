@@ -1,0 +1,31 @@
+#!/bin/bash
+
+cd ./external/rl_imgui/
+
+chmod +x premake5
+
+./premake5 gmake
+
+make
+
+cd ../..
+
+cp ./external/rl_imgui/bin/Debug/librlImGui.a ./lib/librlImGui.a
+
+cd ./external/raylib/src
+
+make PLATFORM=PLATFORM_DESKTOP
+
+cd ../../..
+
+cp ./external/raylib/src/libraylib.a ./lib/libraylib.a
+
+cd ./external/enet/
+
+cmake CMakeLists.txt
+
+make
+
+cd ../../
+
+cp ./external/enet/libenet.a ./lib/libenet.a
