@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir lib
+
 cd ./external/rl_imgui/
 
 chmod +x premake5
