@@ -33,3 +33,11 @@ cd ../../
 cp ./external/enet/libenet.a ./lib/libenet.a
 
 cp ./make_windows ./Makefile
+
+cd ./external/sphysics/
+
+make
+
+cd ../../
+
+cp ./external/sphysics/libsphysics.a ./lib/libsphysics.a

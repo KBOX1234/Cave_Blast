@@ -1,6 +1,7 @@
-external
 main
 obj
 lib
 main.exe
 imgui.ini
+Makefile
+.vscode

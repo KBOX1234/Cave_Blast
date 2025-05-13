@@ -10,3 +10,6 @@
 [submodule "external/imgui"]
 	path = external/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "external/sphysics"]
+	path = external/sphysics
+	url = https://github.com/KBOX1234/sphysics.git

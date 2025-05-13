@@ -1,6 +1,15 @@
+#include <iostream>
+#include <vector>
+#include <cstring>
+#include <string>
+#include <cmath>
+
 #include "raylib.h"
 #include "imgui.h"
 #include "rlImGui.h"
+
+#include "rng.hpp"
+#include "world.hpp"
 
 int main() {
     InitWindow(800, 450, "Raylib Test");

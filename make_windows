@@ -1,6 +1,6 @@
 CC = g++
-CFLAGS = -lraylib -lgdi32 -lwinmm -lm -lrlImGui -lenet
-INCLUDE = -I./include -I./external/rl_imgui/ -I./external/raylib/src/ -I./external/imgui/ -I./external/enet/include/
+CFLAGS = -lraylib -lgdi32 -lwinmm -lm -lrlImGui -lenet -lsphysics
+INCLUDE = -I./include -I./external/rl_imgui/ -I./external/raylib/src/ -I./external/imgui/ -I./external/enet/include/ -I./external/sphysics/
 LINKS = -L./lib
 
 SRC_DIR = src
@@ -13,7 +13,7 @@ TARGET = main
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(INCLUDE) $(LINKS) $(CFLAGS)
+	$(CC) -o $@ $(OBJS) $(LINKS) $(CFLAGS)
 
 # Create obj/ if it doesn't exist and compile each .cpp to .o
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
