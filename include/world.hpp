@@ -2,6 +2,8 @@
 #include "sphysics.h"
 #include <cmath>
 #include <string>
+#include <vector>
+#include <unordered_set>
 
 #define CHUNK_SIZE 16
 
@@ -42,10 +44,23 @@ class chunk{
 
 };
 
-class world_class{
+class world_class {
     private:
+        static bool approx_equal(float a, float b, float epsilon = 0.0001f);
 
-        block* world_data;
+        struct chunk_table_entry {
+            colideBox regon;
+            chunk* chunk_ptr;
+
+            bool operator==(const chunk_table_entry& other) const;
+        };
+
+        struct chunk_table_entry_hash {
+            std::size_t operator()(const chunk_table_entry& entry) const;
+        };
+
+        std::unordered_set<chunk_table_entry, chunk_table_entry_hash> chunk_table;
+        std::vector<chunk> chunks;
 
     public:
 
