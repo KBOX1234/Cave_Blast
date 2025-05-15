@@ -7,7 +7,7 @@ chunk::chunk(){
 }
 
 chunk::~chunk(){
-    delete blocks;
+    delete[] blocks;
 }
 
 void chunk::set_global_pos(Vector2 pos){
@@ -36,7 +36,7 @@ int chunk::set_block(block b, Vector2 pos){
     return 0;
 }
 
-int chunk::set_block_index(block b, int index){
+int chunk::set_block_index(block_type* b, int index){
     if(index > CHUNK_SIZE*CHUNK_SIZE){
         return -1;
 
@@ -45,7 +45,8 @@ int chunk::set_block_index(block b, int index){
         #endif
     }
 
-    blocks[index] = b;
+    blocks[index].state = 0;
+    blocks[index].attr = b;
 
     return 0;
 }
@@ -79,26 +80,120 @@ block* chunk::get_block_index(int index){
 
 }
 
-bool world_class::approx_equal(float a, float b, float epsilon) {
-    return std::fabs(a - b) < epsilon;
+Vector2 chunk::get_chunk_pos(){
+    return global_pos;
 }
 
-// Equality operator for chunk_table_entry
-bool world_class::chunk_table_entry::operator==(const chunk_table_entry& other) const {
-    return chunk_ptr == other.chunk_ptr &&
-        world_class::approx_equal(regon.a.x, other.regon.a.x) &&
-        world_class::approx_equal(regon.a.y, other.regon.a.y) &&
-        world_class::approx_equal(regon.b.x, other.regon.b.x) &&
-        world_class::approx_equal(regon.b.y, other.regon.b.y);
+int world_class::look_up_chunk_index(Vector2 coord){
+    int x = (int)round(coord.x);
+    int y = (int)round(coord.y);
+
+    int abs_x = abs((int)round(coord.x));
+    int abs_y = abs((int)round(coord.y));
+
+    //MAKE SURE TO CHECK THIS OTHERWISE YOU MIGHT CRASH
+    if (abs_x >= MAX_TABLE_SIZE|| abs_y >= MAX_TABLE_SIZE) return -1;
+
+    if (x >= 0 && y >= 0) return pos_x_pos_y[x][y];
+    if (x <  0 && y >= 0) return neg_x_pos_y[abs_x][y];
+    if (x >= 0 && y <  0) return pos_x_neg_y[x][abs_y];
+    if (x <  0 && y <  0) return neg_x_neg_y[abs_x][abs_y];
+
+    //Btw 1852142180 is the same as 'nerd' and fits into an integer.
+    #define NERD 1852142180
+
+    //satify compiler 
+    return NERD;
 }
 
-// Hash function for chunk_table_entry
-std::size_t world_class::chunk_table_entry_hash::operator()(const chunk_table_entry& entry) const {
-    std::size_t h1 = std::hash<float>()(entry.regon.a.x);
-    std::size_t h2 = std::hash<float>()(entry.regon.a.y);
-    std::size_t h3 = std::hash<float>()(entry.regon.b.x);
-    std::size_t h4 = std::hash<float>()(entry.regon.b.y);
-    std::size_t h5 = std::hash<chunk*>()(entry.chunk_ptr); // Hash the pointer
+bool world_class::is_chunk_index_valid(int index){
+    if(index >= chunks.size()){
+        #ifdef DEBUG
+        std::cout << "index: " + std::to_string(index) + " is not valid becaus it is out of range\n";
 
-    return (((((h1 ^ (h2 << 1)) ^ (h3 << 1)) ^ (h4 << 1)) ^ (h5 << 1)));
+        #endif
+
+        return false;
+    }
+
+    return true;
+}
+
+chunk* world_class::get_chunk(Vector2 chunk_cord){
+    int chunk_index = look_up_chunk_index(chunk_cord);
+
+    if(is_chunk_index_valid(chunk_index) == true){
+        return &chunks[chunk_index];
+    }
+
+    return nullptr;
+}
+
+int world_class::add_look_up(Vector2 coord, int index){
+    int x = (int)round(coord.x);
+    int y = (int)round(coord.y);
+
+    int abs_x = abs((int)round(coord.x));
+    int abs_y = abs((int)round(coord.y));
+
+    //MAKE SURE TO CHECK THIS OTHERWISE YOU MIGHT CRASH
+    if (abs_x >= MAX_TABLE_SIZE|| abs_y >= MAX_TABLE_SIZE) return -1;
+
+    if (x >= 0 && y >= 0) pos_x_pos_y[x][y] = index;
+    if (x <  0 && y >= 0) neg_x_pos_y[abs_x][y] = index;
+    if (x >= 0 && y <  0) pos_x_neg_y[x][abs_y] = index;
+    if (x <  0 && y <  0) neg_x_neg_y[abs_x][abs_y] = index;
+
+    return 0;
+}
+
+int world_class::add_chunk(chunk* chnk){
+
+    chunks.push_back(*chnk);
+
+    int latest_index = chunks.size() - 1;
+
+    return add_look_up(chnk->get_chunk_pos(), latest_index);
+
+}
+
+Vector2 world_class::get_chunk_coord(Vector2 real_coord){
+    Vector2 rtv;
+
+
+    rtv.x = std::floor(real_coord.x / (float)CHUNK_SIZE);
+    rtv.y = std::floor(real_coord.y / (float)CHUNK_SIZE);
+
+    return rtv;
+}
+
+Vector2 world_class::get_sub_chunk_pos(Vector2 real_coord) {
+    Vector2 rtv;
+
+    float mod_x = std::fmod(real_coord.x, static_cast<float>(CHUNK_SIZE));
+    if (mod_x < 0) mod_x += CHUNK_SIZE;
+    rtv.x = mod_x;
+
+    float mod_y = std::fmod(real_coord.y, static_cast<float>(CHUNK_SIZE));
+    if (mod_y < 0) mod_y += CHUNK_SIZE;
+    rtv.y = mod_y;
+
+    return rtv;
+}
+
+int world_class::place_block(Vector2 pos, block b){
+
+    int chunk_index = look_up_chunk_index(get_chunk_coord(pos));
+
+    if(chunk_index == -1) return -1;
+
+    return chunks[chunk_index].set_block(b, get_sub_chunk_pos(pos));
+}
+
+block* world_class::get_block(Vector2 pos){
+    int chunk_index = look_up_chunk_index(get_chunk_coord(pos));
+
+    if(chunk_index == -1) return nullptr;
+
+    return chunks[chunk_index].get_block(get_sub_chunk_pos(pos));
 }

@@ -4,10 +4,12 @@
 #include <string>
 #include <vector>
 #include <unordered_set>
+#include <math.h>
+#include "defines.hpp"
 
 #define CHUNK_SIZE 16
 
-struct block_attr{
+struct block_type{
     colideBox collision_box;
     short type;
     int texture_id;
@@ -15,7 +17,7 @@ struct block_attr{
 
 struct block{
     char state;
-    block_attr* attr;
+    block_type* attr;
 };
 
 class chunk{
@@ -26,42 +28,64 @@ class chunk{
 
         int chunk_id;
 
-        chunk();
-        ~chunk();
-
     public:
+
+    chunk();
+    ~chunk();
 
     void set_global_pos(Vector2 pos);
 
     int set_block(block b, Vector2 pos);
 
-    int set_block_index(block b, int index);
+    int set_block_index(block_type* b, int index);
 
     block* get_block(Vector2 pos);
     
     block* get_block_index(int index);
 
+    Vector2 get_chunk_pos();
+
 
 };
 
+class world_gen;
+
 class world_class {
+    friend class world_gen;
     private:
-        static bool approx_equal(float a, float b, float epsilon = 0.0001f);
+    
 
-        struct chunk_table_entry {
-            colideBox regon;
-            chunk* chunk_ptr;
-
-            bool operator==(const chunk_table_entry& other) const;
-        };
-
-        struct chunk_table_entry_hash {
-            std::size_t operator()(const chunk_table_entry& entry) const;
-        };
-
-        std::unordered_set<chunk_table_entry, chunk_table_entry_hash> chunk_table;
         std::vector<chunk> chunks;
 
+        #define MAX_TABLE_SIZE 128
+
+        int pos_x_neg_y[MAX_TABLE_SIZE][MAX_TABLE_SIZE];
+        int neg_x_neg_y[MAX_TABLE_SIZE][MAX_TABLE_SIZE];
+        int neg_x_pos_y[MAX_TABLE_SIZE][MAX_TABLE_SIZE];
+        int pos_x_pos_y[MAX_TABLE_SIZE][MAX_TABLE_SIZE];
+
+        int look_up_chunk_index(Vector2 coord);
+
+        int add_look_up(Vector2 coord, int index);
+
+        bool is_chunk_index_valid(int index);
+
+        chunk* get_chunk(Vector2 chunk_cord);
+
+        int add_chunk(chunk* chnk);
+
+        Vector2 get_chunk_coord(Vector2 real_coord);
+
+        Vector2 get_sub_chunk_pos(Vector2 real_coord);
+
+
     public:
+
+        int place_block(Vector2 pos, block b);
+
+        block* get_block(Vector2 pos);
+};
+
+class world_gen{
 
 };
