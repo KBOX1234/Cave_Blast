@@ -1,148 +1,6 @@
 #include "world.hpp"
 
-#include <iostream>
-
 #include "rng.hpp"
-
-chunk::chunk(){
-    blocks = new block[CHUNK_SIZE*CHUNK_SIZE];
-    chunk_id = random_num.get_random_int();
-}
-
-chunk::~chunk(){
-    delete[] blocks;
-}
-
-void chunk::set_global_pos(Vector2 pos){
-
-    global_pos.x = round(pos.x);
-    global_pos.y = round(pos.y);
-
-    #ifdef DEBUG
-    std::cout << "Global Position Set: " + to_string((int)global_pos.x) + ", " + to_string((int)global_pos.y) + "\n";
-    #endif
-}
-
-int chunk::set_block(block b, Vector2 pos){
-    int index = ((int)round(pos.y)*CHUNK_SIZE) + (int)round(pos.x);
-
-    if(index > CHUNK_SIZE*CHUNK_SIZE){
-        return -1;
-
-        #ifdef DEBUG
-            std::cout << "Can't place block there!\nOut of Bounds: " + to_string((int)pos.x) + ", " + to_string((int)pos.y) + "\n";
-        #endif
-    }
-
-    blocks[index] = b;
-
-    return 0;
-}
-
-int chunk::set_block_index(block_type* b, int index){
-    if(index > CHUNK_SIZE*CHUNK_SIZE){
-        return -1;
-
-        #ifdef DEBUG
-            std::cout << "Can't place block there!\nOut of Bounds: " + to_string((int)pos.x) + ", " + to_string((int)pos.y) + "\n";
-        #endif
-    }
-
-    blocks[index].state = 0;
-    blocks[index].attr = b;
-
-    return 0;
-}
-
-block* chunk::get_block(Vector2 pos){
-    int index = ((int)round(pos.y)*CHUNK_SIZE) + (int)round(pos.x);
-
-    if(index > CHUNK_SIZE*CHUNK_SIZE){
-        return nullptr;
-
-        #ifdef DEBUG
-            std::cout << "Can't place block there!\nOut of Bounds: " + to_string((int)pos.x) + ", " + to_string((int)pos.y) + "\n";
-        #endif
-    }
-
-    return &blocks[index];
-
-}
-
-block* chunk::get_block_index(int index){
-
-    if(index > CHUNK_SIZE*CHUNK_SIZE){
-        return nullptr;
-
-        #ifdef DEBUG
-            std::cout << "Can't place block there!\nOut of Bounds: " + to_string((int)pos.x) + ", " + to_string((int)pos.y) + "\n";
-        #endif
-    }
-
-    return &blocks[index];
-
-}
-
-Vector2 chunk::get_chunk_pos(){
-    return global_pos;
-}
-
-json chunk::serialize_chunk() {
-    json j;
-    json pos;
-    pos["x"] = global_pos.x;
-    pos["y"] = global_pos.y;
-
-    j["pos"] = pos;
-    j["chunk_id"] = chunk_id;
-
-    json block_data;
-    //only shares block type val for simplicity and size
-    for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
-        block_data[i] = blocks[i].attr->type;
-    }
-    j["block_data"] = block_data;
-
-    return j;
-}
-
-#define NO_POS -1
-#define NO_CHUNK_ID -2
-#define NO_BLOCKS -3
-int chunk::new_chunk_from_json(json j) {
-    if (j.contains("pos")) {
-        json pos = j["pos"];
-        Vector2 tmp_pos;
-        tmp_pos.x = pos["x"];
-        tmp_pos.y = pos["y"];
-
-        set_global_pos(tmp_pos);
-    }
-
-    else return NO_POS;
-
-    if (j.contains("chunk_id")) {
-        chunk_id = j["chunk_id"];
-    }
-    else return NO_CHUNK_ID;
-
-    if (j.contains("block_data")) {
-
-        if (blocks == nullptr) {
-            std::cout << "Can't deserialize chunk blocks becaus the world data (blocks var) is not allocated.\nAllocating now\n";
-            blocks = new block[CHUNK_SIZE*CHUNK_SIZE];
-        }
-
-        json data = j["block_data"];
-        for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
-            blocks[i].attr->type = data[i];
-        }
-    }
-
-    else return NO_BLOCKS;
-
-    return 0;
-}
 
 int world_class::look_up_chunk_index(Vector2 coord){
     int x = (int)round(coord.x);
@@ -256,4 +114,34 @@ block* world_class::get_block(Vector2 pos){
     if(chunk_index == -1) return nullptr;
 
     return chunks[chunk_index].get_block(get_sub_chunk_pos(pos));
+}
+
+int world_class::new_chunk_from_json(json j) {
+
+
+    chunk chnk;
+    int return_v = chnk.new_chunk_from_json(j);
+
+    if (return_v == 0) {
+        chunks.push_back(std::move(chnk));
+
+        int chunk_id = j["chunk_id"];
+
+        Vector2 chunk_pos;
+
+        chunk_pos.x = j["pos"]["x"];
+        chunk_pos.y = j["pos"]["y"];
+
+        int latest_index = chunks.size() - 1;
+
+        add_look_up(chunk_pos, latest_index);
+
+    }
+
+    return 0;
+
+}
+
+const block* world_class::blocks_buffer(Vector2 pos){
+    return chunks[look_up_chunk_index(pos)].blocks_buffer();
 }

@@ -18,7 +18,7 @@ class texture_master{
 
     public:
 
-        void add_texture(std::string path, int id);
+        int add_texture(std::string path);
 
         Texture2D* grab_texture_pointer(int id);
 
