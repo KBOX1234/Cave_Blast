@@ -7,6 +7,9 @@
 #include "raylib.h"
 #include "imgui.h"
 #include "rlImGui.h"
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 #include "rng.hpp"
 #include "world.hpp"

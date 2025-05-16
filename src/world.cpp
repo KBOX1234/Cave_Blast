@@ -1,4 +1,7 @@
 #include "world.hpp"
+
+#include <iostream>
+
 #include "rng.hpp"
 
 chunk::chunk(){
@@ -82,6 +85,63 @@ block* chunk::get_block_index(int index){
 
 Vector2 chunk::get_chunk_pos(){
     return global_pos;
+}
+
+json chunk::serialize_chunk() {
+    json j;
+    json pos;
+    pos["x"] = global_pos.x;
+    pos["y"] = global_pos.y;
+
+    j["pos"] = pos;
+    j["chunk_id"] = chunk_id;
+
+    json block_data;
+    //only shares block type val for simplicity and size
+    for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
+        block_data[i] = blocks[i].attr->type;
+    }
+    j["block_data"] = block_data;
+
+    return j;
+}
+
+#define NO_POS -1
+#define NO_CHUNK_ID -2
+#define NO_BLOCKS -3
+int chunk::new_chunk_from_json(json j) {
+    if (j.contains("pos")) {
+        json pos = j["pos"];
+        Vector2 tmp_pos;
+        tmp_pos.x = pos["x"];
+        tmp_pos.y = pos["y"];
+
+        set_global_pos(tmp_pos);
+    }
+
+    else return NO_POS;
+
+    if (j.contains("chunk_id")) {
+        chunk_id = j["chunk_id"];
+    }
+    else return NO_CHUNK_ID;
+
+    if (j.contains("block_data")) {
+
+        if (blocks == nullptr) {
+            std::cout << "Can't deserialize chunk blocks becaus the world data (blocks var) is not allocated.\nAllocating now\n";
+            blocks = new block[CHUNK_SIZE*CHUNK_SIZE];
+        }
+
+        json data = j["block_data"];
+        for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
+            blocks[i].attr->type = data[i];
+        }
+    }
+
+    else return NO_BLOCKS;
+
+    return 0;
 }
 
 int world_class::look_up_chunk_index(Vector2 coord){

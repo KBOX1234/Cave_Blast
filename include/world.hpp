@@ -5,8 +5,9 @@
 #include <vector>
 #include <unordered_set>
 #include <math.h>
+#include "json.hpp"
 #include "defines.hpp"
-
+using json = nlohmann::json;
 #define CHUNK_SIZE 16
 
 struct block_type{
@@ -44,6 +45,10 @@ class chunk{
     block* get_block_index(int index);
 
     Vector2 get_chunk_pos();
+
+    json serialize_chunk();
+
+    int new_chunk_from_json(json j);
 
 
 };
