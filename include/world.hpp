@@ -9,6 +9,7 @@
 #include "json.hpp"
 #include "defines.hpp"
 #include "rng.hpp"
+#include "FastNoiseLite.h"
 using json = nlohmann::json;
 #define CHUNK_SIZE 16
 

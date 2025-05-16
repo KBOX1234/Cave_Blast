@@ -17,6 +17,9 @@ using json = nlohmann::json;
 int main() {
     InitWindow(800, 450, "Raylib Test");
     rlImGuiSetup(true);
+
+    world_class world;
+
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
