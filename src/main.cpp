@@ -14,7 +14,7 @@ using json = nlohmann::json;
 #include "texture_master.hpp"
 extern texture_master texture_manager;
 #include "item_master.hpp"
-extern item_master item_manager;
+item_master item_manager;
 
 #include "rng.hpp"
 #include "world.hpp"

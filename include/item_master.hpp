@@ -48,3 +48,4 @@ public:
 
 
 
+extern item_master item_manager;

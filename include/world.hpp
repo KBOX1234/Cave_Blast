@@ -13,7 +13,6 @@
 #include "item_master.hpp"
 
 #pragma once
-item_master item_manager;
 
 using json = nlohmann::json;
 #define CHUNK_SIZE 16
