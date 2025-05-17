@@ -10,6 +10,11 @@
 #include "defines.hpp"
 #include "rng.hpp"
 #include "FastNoiseLite.h"
+#include "item_master.hpp"
+
+#pragma once
+item_master item_manager;
+
 using json = nlohmann::json;
 #define CHUNK_SIZE 16
 
@@ -17,6 +22,7 @@ struct block_type{
     colideBox collision_box;
     short type;
     int texture_id;
+    item* item_ptr;
 };
 
 struct block{

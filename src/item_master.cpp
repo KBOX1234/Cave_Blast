@@ -46,7 +46,7 @@ int item_master::load_items_from_json(json j) {
 
         new_item.texture_path = json_item.value("texture_path", "");
         if (!new_item.texture_path.empty()) {
-            new_item.texture_id = texture_manager.add_texture(new_item.texture_path);
+            new_item.texture_id = texture_manager.add_texture(new_item.texture_path, true);
         } else {
             new_item.texture_id = texture_manager.default_texture();
         }
@@ -62,4 +62,22 @@ int item_master::load_items_from_json(json j) {
         }
     }
     return count;
+}
+
+int item_master::load_item_declaration_file(const std::string& path) {
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open items.json\n";
+        return -1;
+    }
+
+    json j;
+    file >> j;
+
+    if (!j.is_array()) {
+        std::cerr << "Expected JSON array at top level\n";
+        return -1;
+    }
+
+    return load_items_from_json(j);
 }

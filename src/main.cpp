@@ -13,6 +13,8 @@ using json = nlohmann::json;
 
 #include "texture_master.hpp"
 extern texture_master texture_manager;
+#include "item_master.hpp"
+extern item_master item_manager;
 
 #include "rng.hpp"
 #include "world.hpp"
@@ -22,6 +24,7 @@ int main() {
     rlImGuiSetup(true);
 
     texture_manager.set_default_texture("reasource/gfx/default.png");
+    item_manager.load_item_declaration_file("reasource/items.json");
 
     world_class world;
 

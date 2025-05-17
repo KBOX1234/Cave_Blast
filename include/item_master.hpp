@@ -1,7 +1,11 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <fstream>
+
 #include "json.hpp"
+
+#pragma once
 
 using json = nlohmann::json;
 
@@ -38,8 +42,9 @@ public:
 
     int load_items_from_json(json j);
 
+    int load_item_declaration_file(const std::string& path);
+
 };
 
-#pragma once
-extern item_master item_manager;
+
 
