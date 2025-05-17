@@ -17,6 +17,8 @@ extern texture_master texture_manager;
 item_master item_manager;
 #include "block_master.hpp"
 block_master block_manager;
+#include "world.hpp"
+world_class world;
 
 #include "rng.hpp"
 #include "world.hpp"

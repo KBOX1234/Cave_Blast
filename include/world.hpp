@@ -57,11 +57,7 @@ class chunk{
 
     const block* blocks_buffer();
 };
-
-class world_gen;
-
 class world_class {
-    friend class world_gen;
     private:
     
 
@@ -95,10 +91,11 @@ class world_class {
         //gets the sub chunk coordinate from a global block coordiante
         Vector2 get_sub_chunk_pos(Vector2 real_coord);
 
-        int generate_chunk(Vector2 pos);
+        chunk* generate_chunk(Vector2 pos);
 
 
     public:
+        world_class();
 
         //adds a new chunk from json
         int new_chunk_from_json(json j);
@@ -110,6 +107,6 @@ class world_class {
         block* get_block(Vector2 pos);
 
         const block* chunk_buffer(Vector2 pos);
-
-
 };
+
+extern world_class world;

@@ -40,7 +40,7 @@ bool world_class::is_chunk_index_valid(int index){
 chunk* world_class::get_chunk(Vector2 chunk_cord){
     int chunk_index = look_up_chunk_index(chunk_cord);
 
-    if(is_chunk_index_valid(chunk_index) == true){
+    if(is_chunk_index_valid(chunk_index) == true && chunk_index != -1){
         return &chunks[chunk_index];
     }
 
@@ -142,6 +142,41 @@ int world_class::new_chunk_from_json(json j) {
 
 }
 
+world_class::world_class() {
+    for (int i = 0; i < MAX_TABLE_SIZE; i++) {
+        for (int j = 0; j < MAX_TABLE_SIZE; j++) {
+            pos_x_pos_y[i][j] = -1;
+            neg_x_pos_y[i][j] = -1;
+            pos_x_neg_y[i][j] = -1;
+            neg_x_neg_y[i][j] = -1;
+        }
+    }
+}
+
+chunk *world_class::generate_chunk(Vector2 pos) {
+    chunk* chnk = new chunk;
+
+    for (int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
+        chnk->set_block_index(item_manager.fetch_item("stone")->block_type_ptr, i);
+    }
+
+    chnk->set_global_pos(pos);
+
+    add_chunk(chnk);
+
+    delete[] chnk;
+
+    return get_chunk(pos);
+}
+
+
 const block* world_class::chunk_buffer(Vector2 pos){
-    return chunks[look_up_chunk_index(pos)].blocks_buffer();
+
+    chunk* tmp_chunk = get_chunk(pos);
+
+    if(tmp_chunk == nullptr) {
+        tmp_chunk = generate_chunk(pos);
+    }
+
+    return tmp_chunk->blocks_buffer();
 }
