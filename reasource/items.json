@@ -5,6 +5,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/stone.png",
-        "description": "A basic building block."
+        "description": "A basic building block.",
+        "block_texture_path": "reasource/gfx/block/stone.png"
     }
 ]

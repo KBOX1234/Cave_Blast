@@ -3,6 +3,7 @@
 #include <string>
 
 #include "texture_master.hpp"
+#include "../include/block_master.hpp"
 
 texture_master texture_manager;
 
@@ -35,6 +36,9 @@ int item_master::load_items_from_json(json j) {
     int count = 0;
     for (auto& json_item : j) {
         item new_item;
+        new_item.item_id = items.size();
+
+
 
         new_item.is_liquid = json_item.value("is_liquid", false);
         new_item.is_solid = json_item.value("is_solid", false);
@@ -60,6 +64,22 @@ int item_master::load_items_from_json(json j) {
         } else {
             std::cout << "Item name not found\n";
         }
+
+        if (json_item.contains("is_block")) {
+            block_type new_block;
+            new_block.type = new_item.item_id;
+            new_block.item_id = new_item.item_id;
+
+            if (json_item.contains("block_texture_path")) {
+                new_block.texture_id = texture_manager.add_texture(json_item["block_texture_path"]);
+            } else new_block.texture_id = texture_manager.default_texture();
+
+            int index = block_manager.add_block_type(new_block);
+
+
+            new_item.block_type_ptr = block_manager.fetch_block_type(new_block.type);
+
+        }
     }
     return count;
 }
@@ -80,4 +100,8 @@ int item_master::load_item_declaration_file(const std::string& path) {
     }
 
     return load_items_from_json(j);
+}
+
+item* item_master::fetch_item_by_id(short id) {
+    return &items[id];
 }

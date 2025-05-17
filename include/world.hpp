@@ -11,23 +11,12 @@
 #include "rng.hpp"
 #include "FastNoiseLite.h"
 #include "item_master.hpp"
+#include "block_master.hpp"
 
 #pragma once
 
 using json = nlohmann::json;
 #define CHUNK_SIZE 16
-
-struct block_type{
-    colideBox collision_box;
-    short type;
-    int texture_id;
-    item* item_ptr;
-};
-
-struct block{
-    char state;
-    block_type* attr;
-};
 
 class chunk{
     private:

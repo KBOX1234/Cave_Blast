@@ -2,9 +2,9 @@
 #include <vector>
 #include <unordered_map>
 #include <fstream>
-
 #include "json.hpp"
 
+#include "block_master.hpp"
 #pragma once
 
 using json = nlohmann::json;
@@ -26,6 +26,8 @@ struct item {
     bool is_usable;
     bool is_solid;
     bool is_liquid;
+
+    block_type* block_type_ptr;
 };
 
 class item_master {
@@ -39,6 +41,8 @@ private:
 public:
 
     item* fetch_item(std::string name);
+
+    item* fetch_item_by_id(short id);
 
     int load_items_from_json(json j);
 
