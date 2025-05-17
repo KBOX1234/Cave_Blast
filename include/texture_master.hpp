@@ -3,11 +3,14 @@
 #include <chrono>
 #include "raylib.h"
 
+#pragma once
+
 struct texture_archive{
     int id;
     Texture2D texture;
     std::string origin;
     bool loaded;
+    bool locked;
 
     std::time_t expiration;
 };
@@ -15,12 +18,17 @@ struct texture_archive{
 class texture_master{
     private:
         std::vector<texture_archive> textures;
+        int default_texture_id;
 
     public:
 
-        int add_texture(std::string path);
+        int default_texture();
+
+        int add_texture(std::string path, bool locked = false);
 
         Texture2D* grab_texture_pointer(int id);
+
+        int set_default_texture(std::string path);
 
         void update();
 };

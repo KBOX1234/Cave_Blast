@@ -2,7 +2,7 @@
 
 #include "rng.hpp"
 
-int texture_master::add_texture(std::string path){
+int texture_master::add_texture(std::string path, bool locked){
 
     const int id = random_num.get_random_int();
     texture_archive texture;
@@ -10,6 +10,7 @@ int texture_master::add_texture(std::string path){
     texture.texture = LoadTexture(path.c_str());
     texture.origin = path;
     texture.loaded = true;
+    texture.locked = locked;
 
     const auto now = std::chrono::system_clock::now();
     const auto future_time = now + std::chrono::minutes(1);
@@ -48,10 +49,20 @@ void texture_master::update(){
         auto now = std::chrono::system_clock::now();
         std::time_t current_time = std::chrono::system_clock::to_time_t(now);
 
-        if(textures[i].expiration < current_time){
+        if(textures[i].expiration < current_time && textures[i].loaded == true && textures[i].locked == false){
             textures[i].loaded = false;
             UnloadTexture(textures[i].texture);
         }
 
     }
+}
+
+int texture_master::default_texture() {
+    return default_texture_id;
+}
+
+int texture_master::set_default_texture(std::string path) {
+    default_texture_id = add_texture(path, true);
+
+    return default_texture_id;
 }

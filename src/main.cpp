@@ -11,12 +11,17 @@
 
 using json = nlohmann::json;
 
+#include "texture_master.hpp"
+extern texture_master texture_manager;
+
 #include "rng.hpp"
 #include "world.hpp"
 
 int main() {
     InitWindow(800, 450, "Raylib Test");
     rlImGuiSetup(true);
+
+    texture_manager.set_default_texture("reasource/gfx/default.png");
 
     world_class world;
 

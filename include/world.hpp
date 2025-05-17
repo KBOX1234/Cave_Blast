@@ -101,6 +101,8 @@ class world_class {
         //gets the sub chunk coordinate from a global block coordiante
         Vector2 get_sub_chunk_pos(Vector2 real_coord);
 
+        int generate_chunk(Vector2 pos);
+
 
     public:
 
@@ -113,9 +115,7 @@ class world_class {
         //gets a block in the world
         block* get_block(Vector2 pos);
 
-        const block* blocks_buffer(Vector2 pos);
-};
+        const block* chunk_buffer(Vector2 pos);
 
-class world_gen{
 
 };

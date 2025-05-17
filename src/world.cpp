@@ -142,6 +142,6 @@ int world_class::new_chunk_from_json(json j) {
 
 }
 
-const block* world_class::blocks_buffer(Vector2 pos){
+const block* world_class::chunk_buffer(Vector2 pos){
     return chunks[look_up_chunk_index(pos)].blocks_buffer();
 }
