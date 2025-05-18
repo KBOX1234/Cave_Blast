@@ -2,12 +2,11 @@
 
 
 chunk::chunk(){
-    blocks = new block[CHUNK_SIZE*CHUNK_SIZE];
     chunk_id = random_num.get_random_int();
 }
 
 chunk::~chunk(){
-    delete[] blocks;
+
 }
 
 void chunk::set_global_pos(Vector2 pos){
@@ -43,6 +42,10 @@ int chunk::set_block_index(block_type* b, int index){
         #ifdef DEBUG
             std::cout << "Can't place block there!\nOut of Bounds: " + to_string((int)pos.x) + ", " + to_string((int)pos.y) + "\n";
         #endif
+    }
+
+    if (index >= blocks.size()) {
+        blocks.resize(index + 1);
     }
 
     blocks[index].state = 0;
@@ -125,11 +128,6 @@ int chunk::new_chunk_from_json(json j) {
 
     if (j.contains("block_data")) {
 
-        if (blocks == nullptr) {
-            std::cout << "Can't deserialize chunk blocks becaus the world data (blocks var) is not allocated.\nAllocating now\n";
-            blocks = new block[CHUNK_SIZE*CHUNK_SIZE];
-        }
-
         json data = j["block_data"];
         for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
             blocks[i].attr->type = data[i];
@@ -141,6 +139,7 @@ int chunk::new_chunk_from_json(json j) {
     return 0;
 }
 
-const block *chunk::blocks_buffer(){
-    return blocks;
+const block* chunk::blocks_buffer() const {
+    return blocks.data();
 }
+

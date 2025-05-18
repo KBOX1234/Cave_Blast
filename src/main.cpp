@@ -12,13 +12,15 @@
 using json = nlohmann::json;
 
 #include "texture_master.hpp"
-extern texture_master texture_manager;
+texture_master texture_manager;
 #include "item_master.hpp"
 item_master item_manager;
 #include "block_master.hpp"
 block_master block_manager;
 #include "world.hpp"
 world_class world;
+#include "render.hpp"
+render render_master;
 
 #include "rng.hpp"
 #include "world.hpp"
@@ -32,10 +34,19 @@ int main() {
 
     world_class world;
 
+    SetTargetFPS(165);
+
     while (!WindowShouldClose()) {
+        texture_manager.update();
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText("Hello from Raylib!", 190, 200, 20, LIGHTGRAY);
+
+        render_master.update();
+
+        if (IsKeyDown(KEY_W)) render_master.move_camera_y(-1);
+        if (IsKeyDown(KEY_S)) render_master.move_camera_y(1);
+        if (IsKeyDown(KEY_D)) render_master.move_camera_x(-1);
+        if (IsKeyDown(KEY_A)) render_master.move_camera_x(1);
 
         rlImGuiBegin();
         ImGui::Text("Hello, world %d", 123);

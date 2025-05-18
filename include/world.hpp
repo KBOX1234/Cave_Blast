@@ -20,7 +20,7 @@ using json = nlohmann::json;
 
 class chunk{
     private:
-        block* blocks;
+        std::vector<block> blocks;
 
         Vector2 global_pos;
 
@@ -55,7 +55,7 @@ class chunk{
     //creates new chunk from json
     int new_chunk_from_json(json j);
 
-    const block* blocks_buffer();
+    const block* blocks_buffer() const;
 };
 class world_class {
     private:

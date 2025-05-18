@@ -34,13 +34,13 @@ class item_master {
 private:
     std::unordered_map<std::string, int> item_map;
 
-    std::vector<item> items;
+    std::vector<std::unique_ptr<item>> items;
 
-    int add_item(item i);
+    int add_item(std::unique_ptr<item> i);
 
 public:
 
-    item* fetch_item(std::string name);
+    item* fetch_item(const std::string& name);
 
     item* fetch_item_by_id(short id);
 

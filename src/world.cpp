@@ -164,7 +164,7 @@ chunk *world_class::generate_chunk(Vector2 pos) {
 
     add_chunk(chnk);
 
-    delete[] chnk;
+    //delete chnk;
 
     return get_chunk(pos);
 }

@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <chrono>
+#include <memory>
 #include "raylib.h"
 
 #pragma once
@@ -17,7 +18,8 @@ struct texture_archive{
 
 class texture_master{
     private:
-        std::vector<texture_archive> textures;
+    std::vector<std::unique_ptr<texture_archive>> textures;
+
         int default_texture_id;
 
     public:
@@ -32,3 +34,5 @@ class texture_master{
 
         void update();
 };
+
+extern texture_master texture_manager;

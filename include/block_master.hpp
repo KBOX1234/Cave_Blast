@@ -1,5 +1,6 @@
 #include <vector>
 #include <sphysics.h>
+#include <memory>
 #pragma once
 
 struct block_type{
@@ -16,13 +17,14 @@ struct block{
 
 class block_master {
     private:
-    std::vector<block_type> block_types;
+    std::vector<std::unique_ptr<block_type>> block_types;
 
     public:
 
-    int add_block_type(block_type b);
+    int add_block_type(const block_type& b);
 
     block_type* fetch_block_type(short type);
+
 
 
 };
