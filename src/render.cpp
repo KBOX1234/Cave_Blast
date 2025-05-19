@@ -38,14 +38,16 @@ void render::render_world() {
     Vector2 pointer = {0, 0};
 
     for (int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
+
+        if (pointer.x >= CHUNK_SIZE) {
+            pointer.x = 0;
+            pointer.y++;
+        }
+        pointer.x++;
+
         if (render_chnk == nullptr) {
             std::cout << "somthing went wrong" << std::endl;
             break;
-        }
-
-        if (pointer.x > CHUNK_SIZE) {
-            pointer.x = 0;
-            pointer.y++;
         }
         //std::cout << "pointer.x = " << pointer.x << ", pointer.y = " << pointer.y << std::endl;
         //*texture_manager.grab_texture_pointer(render_chnk[i].attr->texture_id)
@@ -61,7 +63,6 @@ void render::render_world() {
         }
 
         DrawTextureEx(*t, {pointer.x*BLOCK_SIZE, pointer.y*BLOCK_SIZE}, 0, 1,  WHITE);
-        pointer.x++;
 
     }
 }

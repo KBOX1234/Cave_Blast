@@ -22,6 +22,8 @@ class texture_master{
 
         int default_texture_id;
 
+        Texture2D default_texture_T;
+
     public:
 
         ~texture_master();

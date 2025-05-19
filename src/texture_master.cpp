@@ -40,7 +40,9 @@ Texture2D* texture_master::grab_texture_pointer(int id) {
             return &tex->texture;
         }
     }
-    return nullptr;
+
+    return &default_texture_T;
+
 }
 
 
@@ -63,6 +65,8 @@ int texture_master::default_texture() {
 
 int texture_master::set_default_texture(std::string path) {
     default_texture_id = add_texture(path, true);
+
+    default_texture_T = LoadTexture(path.c_str());
 
     return default_texture_id;
 }

@@ -26,7 +26,8 @@ render render_master;
 #include "world.hpp"
 
 int main() {
-    InitWindow(800, 450, "Raylib Test");
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(800, 450, "Cave Blast");
     rlImGuiSetup(true);
 
     texture_manager.set_default_texture("reasource/gfx/default.png");
