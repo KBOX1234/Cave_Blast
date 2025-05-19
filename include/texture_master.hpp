@@ -24,6 +24,8 @@ class texture_master{
 
     public:
 
+        ~texture_master();
+
         int default_texture();
 
         int add_texture(std::string path, bool locked = false);

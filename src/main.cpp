@@ -45,8 +45,8 @@ int main() {
 
         if (IsKeyDown(KEY_W)) render_master.move_camera_y(-1);
         if (IsKeyDown(KEY_S)) render_master.move_camera_y(1);
-        if (IsKeyDown(KEY_D)) render_master.move_camera_x(-1);
-        if (IsKeyDown(KEY_A)) render_master.move_camera_x(1);
+        if (IsKeyDown(KEY_D)) render_master.move_camera_x(1);
+        if (IsKeyDown(KEY_A)) render_master.move_camera_x(-1);
 
         rlImGuiBegin();
         ImGui::Text("Hello, world %d", 123);
