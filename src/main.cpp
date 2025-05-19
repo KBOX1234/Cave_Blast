@@ -23,6 +23,7 @@ world_class world;
 #include "render.hpp"
 render render_master;
 
+
 #include "rng.hpp"
 #include "world.hpp"
 
@@ -50,9 +51,63 @@ int main() {
         if (IsKeyDown(KEY_D)) render_master.move_camera_x(1);
         if (IsKeyDown(KEY_A)) render_master.move_camera_x(-1);
 
+        bool my_tool_active = true;
+        float my_color[4];
         rlImGuiBegin();
-        ImGui::Text("Hello, world %d", 123);
+        ImGui::Begin("My First Tool", &my_tool_active, ImGuiWindowFlags_MenuBar);
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("Open..", "Ctrl+O")) {
+
+                }
+                if (ImGui::MenuItem("Save", "Ctrl+S"))   { /* Do stuff */ }
+                if (ImGui::MenuItem("Close", "Ctrl+W"))  { my_tool_active = false; }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
+
+
+        ImGui::BeginChild("Scrolling");
+
+        std::vector<std::string> entries = item_manager.get_existing_items();
+
+        for (int n = 0; n < entries.size(); n++) {
+            item* itm = item_manager.fetch_item(entries[n]);
+
+            ImGui::Text("Item Entry %d",  n);
+            ImGui::Text("   Name: %s",  itm->name.c_str());
+            ImGui::Text("   Description: %s",  itm->description.c_str());
+            ImGui::Text("   Item texture path: %s",  itm->texture_path.c_str());
+
+            ImGui::Text("   Item id: %d",  itm->item_id);
+            ImGui::Text("   Item texture id: %d",  itm->texture_id);
+
+            ImGui::Text("   Item texture:");
+            rlImGuiImage((const Texture*)texture_manager.grab_texture_pointer(itm->texture_id));
+
+            if (itm->is_block) {
+                ImGui::Text("   Block texture id: %d",  itm->block_type_ptr->texture_id);
+
+                ImGui::Text("   Block type: %d",   itm->block_type_ptr->type);
+
+                ImGui::Text("   Block texture:");
+                rlImGuiImage((const Texture*)texture_manager.grab_texture_pointer(itm->block_type_ptr->texture_id));
+
+            }
+
+
+
+
+
+        }
+
+        ImGui::EndChild();
+        ImGui::End();
         rlImGuiEnd();
+
 
         EndDrawing();
     }

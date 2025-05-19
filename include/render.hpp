@@ -8,7 +8,7 @@ private:
 
     Camera2D camera;
 
-    Vector2 chunks_pos_to_draw[9];
+    Vector2 chunks_pos_to_draw[12];
 
     void update_drawing_coords();
 

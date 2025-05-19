@@ -34,9 +34,9 @@ void render::update_drawing_coords() {
     chunks_pos_to_draw[7] = {static_cast<float>(cx + 1), static_cast<float>(cy - 1)};
     chunks_pos_to_draw[8] = {static_cast<float>(cx - 1), static_cast<float>(cy - 1)};
 
-    chunks_pos_to_draw[6] = {static_cast<float>(cx + 1), static_cast<float>(cy)};
-    chunks_pos_to_draw[7] = {static_cast<float>(cx + 1), static_cast<float>(cy + 1)};
-    chunks_pos_to_draw[8] = {static_cast<float>(cx + 1), static_cast<float>(cy - 1)};
+    chunks_pos_to_draw[9] = {static_cast<float>(cx + 2), static_cast<float>(cy)};
+    chunks_pos_to_draw[10] = {static_cast<float>(cx + 2), static_cast<float>(cy + 1)};
+    chunks_pos_to_draw[11] = {static_cast<float>(cx + 2), static_cast<float>(cy - 1)};
 
 }
 
@@ -79,7 +79,7 @@ void render::draw_chunk(Vector2 chnk_pos) {
 
 void render::render_world() {
 
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 12; i++) {
         //std::cout << "i = " + std::to_string(i) + ", chunk_pos_to_draw = {" + std::to_string(chunks_pos_to_draw[i].x) + ", " + std::to_string(chunks_pos_to_draw[i].y) + "}\n";
         draw_chunk(chunks_pos_to_draw[i]);
     }

@@ -4,6 +4,7 @@
 
 #include "texture_master.hpp"
 #include "../include/block_master.hpp"
+#include "rng.hpp"
 
 
 
@@ -50,6 +51,8 @@ int item_master::load_items_from_json(json j) {
 
         new_item->description = json_item.value("description", "no description");
 
+        new_item->item_id = random_num.get_random_int();
+
         if (json_item.contains("name")) {
             new_item->name = json_item["name"];
 
@@ -59,7 +62,10 @@ int item_master::load_items_from_json(json j) {
                 new_block.item_id = new_item->item_id;
 
                 if (json_item.contains("block_texture_path")) {
+                    std::cout << "\nblock texture: " << json_item["block_texture_path"].get<std::string>() << std::endl;
                     new_block.texture_id = texture_manager.add_texture(json_item["block_texture_path"]);
+                    std::cout << "\nblock texture id: " << new_block.texture_id << std::endl;
+                    std::cout << "\nblock type: " << new_block.type << std::endl;
                 } else {
                     new_block.texture_id = texture_manager.default_texture();
                 }
@@ -101,4 +107,15 @@ item* item_master::fetch_item_by_id(short id) {
         return items[id].get();
     }
     return nullptr;
+}
+
+std::vector<std::string> item_master::get_existing_items() {
+    std::vector<std::string> item_names;
+    for (const auto& it : items) {
+        if (it) {
+            item_names.push_back(it->name);
+        }
+    }
+
+    return item_names;
 }

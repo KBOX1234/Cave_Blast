@@ -48,6 +48,8 @@ public:
 
     int load_item_declaration_file(const std::string& path);
 
+    std::vector<std::string> get_existing_items();
+
 };
 
 

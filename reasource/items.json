@@ -1,5 +1,14 @@
 [
     {
+        "name": "dirt",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/dirt.png",
+        "description": "A basic building block.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
         "name": "stone",
         "is_solid": true,
         "is_block": true,
@@ -9,3 +18,4 @@
         "block_texture_path": "reasource/gfx/block/stone.png"
     }
 ]
+
