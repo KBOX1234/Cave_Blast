@@ -54,16 +54,15 @@ int main() {
         bool my_tool_active = true;
         float my_color[4];
         rlImGuiBegin();
-        ImGui::Begin("My First Tool", &my_tool_active, ImGuiWindowFlags_MenuBar);
+        ImGui::Begin("Items/Blocks list", &my_tool_active, ImGuiWindowFlags_MenuBar);
         if (ImGui::BeginMenuBar())
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem("Open..", "Ctrl+O")) {
-
+                if (ImGui::MenuItem("Reload Items", "Ctrl+R")) {
+                    item_manager.load_item_declaration_file("reasource/items.json");
                 }
-                if (ImGui::MenuItem("Save", "Ctrl+S"))   { /* Do stuff */ }
-                if (ImGui::MenuItem("Close", "Ctrl+W"))  { my_tool_active = false; }
+
                 ImGui::EndMenu();
             }
             ImGui::EndMenuBar();
