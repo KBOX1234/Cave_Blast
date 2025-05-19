@@ -18,6 +18,28 @@ void render::move_camera_y(float amount) {
     camera.target.y += amount;
 }
 
+void render::update_drawing_coords() {
+    int cx = (int)floor(camera.target.x / (BLOCK_SIZE * CHUNK_SIZE));
+    int cy = (int)floor(camera.target.y / (BLOCK_SIZE * CHUNK_SIZE));
+
+    chunks_pos_to_draw[0] = {static_cast<float>(cx), static_cast<float>(cy)};
+    chunks_pos_to_draw[1] = {static_cast<float>(cx + 1), static_cast<float>(cy)};
+    chunks_pos_to_draw[2] = {static_cast<float>(cx - 1), static_cast<float>(cy)};
+
+    chunks_pos_to_draw[3] = {static_cast<float>(cx), static_cast<float>(cy + 1)};
+    chunks_pos_to_draw[4] = {static_cast<float>(cx + 1), static_cast<float>(cy + 1)};
+    chunks_pos_to_draw[5] = {static_cast<float>(cx - 1), static_cast<float>(cy + 1)};
+
+    chunks_pos_to_draw[6] = {static_cast<float>(cx), static_cast<float>(cy - 1)};
+    chunks_pos_to_draw[7] = {static_cast<float>(cx + 1), static_cast<float>(cy - 1)};
+    chunks_pos_to_draw[8] = {static_cast<float>(cx - 1), static_cast<float>(cy - 1)};
+
+    chunks_pos_to_draw[6] = {static_cast<float>(cx + 1), static_cast<float>(cy)};
+    chunks_pos_to_draw[7] = {static_cast<float>(cx + 1), static_cast<float>(cy + 1)};
+    chunks_pos_to_draw[8] = {static_cast<float>(cx + 1), static_cast<float>(cy - 1)};
+
+}
+
 void render::draw_chunk(Vector2 chnk_pos) {
 
     chnk_pos.x = round(chnk_pos.x);
@@ -53,10 +75,15 @@ void render::draw_chunk(Vector2 chnk_pos) {
 }
 
 
+
+
 void render::render_world() {
-    draw_chunk({0, 0});
-    draw_chunk({1, 1});
-    draw_chunk({2, 2});
+
+    for (int i = 0; i < 9; i++) {
+        //std::cout << "i = " + std::to_string(i) + ", chunk_pos_to_draw = {" + std::to_string(chunks_pos_to_draw[i].x) + ", " + std::to_string(chunks_pos_to_draw[i].y) + "}\n";
+        draw_chunk(chunks_pos_to_draw[i]);
+    }
+    //draw_chunk({0, 0});
 
 }
 
@@ -65,6 +92,8 @@ void render::update() {
     camera.zoom = 3;
 
     BeginMode2D(camera);
+
+    update_drawing_coords();
 
     render_world();
 

@@ -1,5 +1,4 @@
 #include "rng.hpp"
-rng_device random_num;
 
 bool rng_device::is_unique(int number) {
     return history.find(number) == history.end();

@@ -8,6 +8,10 @@ private:
 
     Camera2D camera;
 
+    Vector2 chunks_pos_to_draw[9];
+
+    void update_drawing_coords();
+
     void draw_chunk(Vector2 chnk_pos);
 
     void render_world();

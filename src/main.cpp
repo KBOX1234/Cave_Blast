@@ -10,7 +10,8 @@
 #include "json.hpp"
 
 using json = nlohmann::json;
-
+#include "rng.hpp"
+rng_device random_num;
 #include "texture_master.hpp"
 texture_master texture_manager;
 #include "item_master.hpp"
