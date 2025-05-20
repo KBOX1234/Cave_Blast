@@ -3,14 +3,35 @@
 #include "rng.hpp"
 
 int world_class::look_up_chunk_index(Vector2 coord){
+
+    //std::cout << "\nLooking up chunk: " << std::to_string(coord.x) << "," << std::to_string(coord.y) << std::endl;
+
     int x = (int)round(coord.x);
     int y = (int)round(coord.y);
 
-    int abs_x = abs((int)round(coord.x));
-    int abs_y = abs((int)round(coord.y));
+    if (x < -2147483648 || y < -2147483648) {
+        std::cout << "intager underflow\n";
+
+        return -1;
+    }
+
+    int abs_x = std::abs(x);
+    int abs_y = std::abs(y);
+
+
 
     //MAKE SURE TO CHECK THIS OTHERWISE YOU MIGHT CRASH
-    if (abs_x >= MAX_TABLE_SIZE|| abs_y >= MAX_TABLE_SIZE) return -1;
+
+    //std::cout << "befor size check\n";
+    if (abs_x >= MAX_TABLE_SIZE || abs_y >= MAX_TABLE_SIZE) {
+        std::cout << "\nTOO BIG!\n";
+
+        Sound s = LoadSound("reasource/mfx/extra/tuco-get-out.mp3");
+        PlaySound(s);
+        return -1;
+    }
+    //std::cout << "after size check\n";
+    //std::cout << "abs size: " << std::to_string(abs_x) << ", " << std::to_string(abs_y) << std::endl;
 
     if (x >= 0 && y >= 0) return pos_x_pos_y[x][y];
     if (x <  0 && y >= 0) return neg_x_pos_y[abs_x][y];
@@ -99,13 +120,14 @@ Vector2 world_class::get_sub_chunk_pos(Vector2 real_coord) {
     return rtv;
 }
 
+//does not set state yet
 int world_class::place_block(Vector2 pos, block b){
 
     int chunk_index = look_up_chunk_index(get_chunk_coord(pos));
 
     if(chunk_index == -1) return -1;
 
-    return chunks[chunk_index].set_block(b, get_sub_chunk_pos(pos));
+    return chunks[chunk_index].set_block(b.attr, get_sub_chunk_pos(pos));
 }
 
 block* world_class::get_block(Vector2 pos){
@@ -143,6 +165,7 @@ int world_class::new_chunk_from_json(json j) {
 }
 
 world_class::world_class() {
+    noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
     for (int i = 0; i < MAX_TABLE_SIZE; i++) {
         for (int j = 0; j < MAX_TABLE_SIZE; j++) {
             pos_x_pos_y[i][j] = -1;
@@ -156,8 +179,19 @@ world_class::world_class() {
 chunk *world_class::generate_chunk(Vector2 pos) {
     chunk* chnk = new chunk;
 
-    for (int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
+    /*for (int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
         chnk->set_block_index(item_manager.fetch_item("stone")->block_type_ptr, i);
+    }*/
+
+    for (int x  = 0; x < CHUNK_SIZE; x++) {
+        for (int y = 0; y < CHUNK_SIZE; y++) {
+            float n = noise.GetNoise(((float)x + (pos.x*CHUNK_SIZE))*NOISE_SCALE, ((float)y + (pos.y*CHUNK_SIZE))*NOISE_SCALE);
+
+            if (n <= 0.5) {
+                chnk->set_block(item_manager.fetch_item("stone")->block_type_ptr, {(float)x, (float)y});
+            }
+            else chnk->set_block(item_manager.fetch_item("dirt")->block_type_ptr, {(float)x, (float)y});
+        }
     }
 
     chnk->set_global_pos(pos);
@@ -180,3 +214,4 @@ const block* world_class::chunk_buffer(Vector2 pos){
 
     return tmp_chunk->blocks_buffer();
 }
+

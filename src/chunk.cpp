@@ -3,6 +3,7 @@
 
 chunk::chunk(){
     chunk_id = random_num.get_random_int();
+    blocks.resize(CHUNK_SIZE*CHUNK_SIZE);
 }
 
 chunk::~chunk(){
@@ -19,10 +20,13 @@ void chunk::set_global_pos(Vector2 pos){
     #endif
 }
 
-int chunk::set_block(block b, Vector2 pos){
+int chunk::set_block(block_type* b, Vector2 pos){
     int index = ((int)round(pos.y)*CHUNK_SIZE) + (int)round(pos.x);
 
-    if(index > CHUNK_SIZE*CHUNK_SIZE){
+        //std::cout << "\nindex = " + std::to_string(index) + "\n";
+
+
+    if(index > CHUNK_SIZE*CHUNK_SIZE || index < 0){
         return -1;
 
         #ifdef DEBUG
@@ -30,7 +34,11 @@ int chunk::set_block(block b, Vector2 pos){
         #endif
     }
 
-    blocks[index] = b;
+    block new_blk;
+    new_blk.state = 0;
+    new_blk.attr = b;
+
+    blocks[index] = new_blk;
 
     return 0;
 }

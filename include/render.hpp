@@ -19,6 +19,7 @@ private:
 
 
 public:
+    render();
 
     void set_camera_target(Vector2 pos);
 

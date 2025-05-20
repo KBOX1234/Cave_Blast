@@ -2,6 +2,11 @@
 
 #define BLOCK_SIZE 32
 
+render::render() {
+    camera.target = {1, 1};
+}
+
+
 void render::set_camera_target(Vector2 pos) {
     camera.target = pos;
 }
@@ -19,8 +24,12 @@ void render::move_camera_y(float amount) {
 }
 
 void render::update_drawing_coords() {
+
     int cx = (int)floor(camera.target.x / (BLOCK_SIZE * CHUNK_SIZE));
     int cy = (int)floor(camera.target.y / (BLOCK_SIZE * CHUNK_SIZE));
+
+    //std::cout << "camera.target = {" << std::to_string(camera.target.x) << ", " << std::to_string(camera.target.y) << "}" << std::endl;
+    //std::cout << "cx = " << std::to_string(cx) << ", "  << std::to_string(cy) << std::endl;
 
     chunks_pos_to_draw[0] = {static_cast<float>(cx), static_cast<float>(cy)};
     chunks_pos_to_draw[1] = {static_cast<float>(cx + 1), static_cast<float>(cy)};
@@ -41,6 +50,7 @@ void render::update_drawing_coords() {
 }
 
 void render::draw_chunk(Vector2 chnk_pos) {
+    //std::cout << "\ndrawing chunk " << std::to_string(chnk_pos.x) << " " << std::to_string(chnk_pos.y) << std::endl;
 
     chnk_pos.x = round(chnk_pos.x);
     chnk_pos.y = round(chnk_pos.y);

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <unordered_set>
 #include <math.h>
+#include <climits>
 #include "json.hpp"
 #include "defines.hpp"
 #include "rng.hpp"
@@ -13,13 +14,17 @@
 #include "item_master.hpp"
 #include "block_master.hpp"
 
+
+
 #pragma once
 
 using json = nlohmann::json;
 #define CHUNK_SIZE 16
+#define NOISE_SCALE 4
 
 class chunk{
     private:
+
         std::vector<block> blocks;
 
         Vector2 global_pos;
@@ -35,7 +40,7 @@ class chunk{
     void set_global_pos(Vector2 pos);
 
     //sets a block inside of itself (pass sub chunk coords (example a corner of a chunk it 0, 0))
-    int set_block(block b, Vector2 pos);
+    int set_block(block_type* b, Vector2 pos);
 
     //same as befor but with an index and not a Vector2
     int set_block_index(block_type* b, int index);
@@ -60,7 +65,7 @@ class chunk{
 class world_class {
     private:
     
-
+        FastNoiseLite noise;
         std::vector<chunk> chunks;
 
         #define MAX_TABLE_SIZE 128

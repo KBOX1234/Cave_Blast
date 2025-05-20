@@ -16,6 +16,15 @@
         "texture_path": "reasource/gfx/item/stone.png",
         "description": "A basic building block.",
         "block_texture_path": "reasource/gfx/block/stone.png"
+    },
+    {
+        "name": "air",
+        "is_solid": false,
+        "is_block": true,
+        "is_liquid": true,
+        "texture_path": "reasource/gfx/item/air.png",
+        "description": "just air",
+        "block_texture_path": "reasource/gfx/block/air.png"
     }
 ]
 
