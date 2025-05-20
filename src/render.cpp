@@ -68,8 +68,10 @@ void render::draw_chunk(Vector2 chnk_pos) {
         if (t  == nullptr) {
             std::cout << "texture is invalid" << std::endl;
         }
+        float texture_scale = BLOCK_SIZE / (float)t->width;
+        //std::cout << "\ntexture scale: " << std::to_string(texture_scale) + ", Height is: " << std::to_string(t->height) << ", BLOCK_SIZE is: " << std::to_string(BLOCK_SIZE)<< std::endl;
 
-        DrawTextureEx(*t, {(pointer.x + (chnk_pos.x * CHUNK_SIZE))*BLOCK_SIZE, (pointer.y + (chnk_pos.y * CHUNK_SIZE))*BLOCK_SIZE}, 0, 1,  WHITE);
+        DrawTextureEx(*t, {(pointer.x + (chnk_pos.x * CHUNK_SIZE))*BLOCK_SIZE, (pointer.y + (chnk_pos.y * CHUNK_SIZE))*BLOCK_SIZE}, 0, texture_scale,  WHITE);
 
     }
 }

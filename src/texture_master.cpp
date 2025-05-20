@@ -18,6 +18,10 @@ int texture_master::add_texture(std::string path, bool locked) {
     tex->loaded = true;
     tex->locked = locked;
 
+    if (tex->texture.id == 0) {
+        return default_texture();
+    }
+
     auto now = std::chrono::system_clock::now();
     tex->expiration = std::chrono::system_clock::to_time_t(now + std::chrono::minutes(1));
     std::cout << "Added texture " << std::to_string(id) << " to the texture archive" << std::endl << "index is: " + std::to_string(textures.size());
