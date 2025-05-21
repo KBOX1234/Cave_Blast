@@ -25,7 +25,6 @@ class texture_master{
 
     public:
 
-        ~texture_master();
 
         int default_texture();
 
@@ -36,6 +35,8 @@ class texture_master{
         int set_default_texture(std::string path);
 
         void update();
+
+        void clean_up();
 };
 
 extern texture_master texture_manager;

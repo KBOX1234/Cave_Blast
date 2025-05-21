@@ -66,7 +66,7 @@ int main() {
 
         EndDrawing();
     }
-
+    texture_manager.clean_up();
     CloseWindow();
     rlImGuiShutdown();
     return 0;

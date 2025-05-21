@@ -2,12 +2,6 @@
 
 #include "rng.hpp"
 
-texture_master::~texture_master() {
-    for (int i = 0; i < textures.size(); i++) {
-        UnloadTexture(textures[i]->texture);
-    }
-}
-
 int texture_master::add_texture(std::string path, bool locked) {
     int id = random_num.get_random_int();
 
@@ -73,4 +67,10 @@ int texture_master::set_default_texture(std::string path) {
     default_texture_T = LoadTexture(path.c_str());
 
     return default_texture_id;
+}
+
+void texture_master::clean_up() {
+    for (int i = 0; i < textures.size(); i++) {
+        UnloadTexture(textures[i]->texture);
+    }
 }
