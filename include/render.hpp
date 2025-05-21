@@ -4,6 +4,9 @@
 #include "texture_master.hpp"
 #include <cmath>
 
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGTH 720
+
 class render {
 private:
 

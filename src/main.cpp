@@ -34,7 +34,7 @@ imgui_win imgui_master;
 
 int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(800, 450, "Cave Blast");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGTH, "Cave Blast");
     rlImGuiSetup(true);
 
     texture_manager.set_default_texture("reasource/gfx/default.png");
@@ -51,10 +51,10 @@ int main() {
 
         render_master.update();
 
-        if (IsKeyDown(KEY_W)) render_master.move_camera_y(-1);
-        if (IsKeyDown(KEY_S)) render_master.move_camera_y(1);
-        if (IsKeyDown(KEY_D)) render_master.move_camera_x(1);
-        if (IsKeyDown(KEY_A)) render_master.move_camera_x(-1);
+        if (IsKeyDown(KEY_W)) player_manager.host->move_player_y(-1);
+        if (IsKeyDown(KEY_S)) player_manager.host->move_player_y(1);
+        if (IsKeyDown(KEY_D)) player_manager.host->move_player_x(1);
+        if (IsKeyDown(KEY_A)) player_manager.host->move_player_x(-1);
 
         bool my_tool_active = true;
         float my_color[4];
