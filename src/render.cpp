@@ -30,8 +30,8 @@ void render::update_drawing_coords() {
     camera.target.x = player_manager.host->get_pos().x - ((((float)SCREEN_WIDTH / camera.zoom) / 2.0f) - (BLOCK_SIZE / 2));
     camera.target.y = player_manager.host->get_pos().y - ((((float)SCREEN_HEIGTH / camera.zoom) / 2.0f) - BLOCK_SIZE);
 
-    std::cout << "player pos: " << std::to_string(player_manager.host->get_pos().x) << ", " << std::to_string(player_manager.host->get_pos().y) << std::endl;
-    std::cout << "camera pos: " << std::to_string(camera.target.x) << ", " << std::to_string(camera.target.y) << std::endl;
+    //std::cout << "player pos: " << std::to_string(player_manager.host->get_pos().x) << ", " << std::to_string(player_manager.host->get_pos().y) << std::endl;
+    //std::cout << "camera pos: " << std::to_string(camera.target.x) << ", " << std::to_string(camera.target.y) << std::endl;
 
 
 

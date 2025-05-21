@@ -26,7 +26,9 @@ player_master player_manager;
 render render_master;
 #include "imgui_window.hpp"
 imgui_win imgui_master;
-
+#include "input.hpp"
+keybind_master keybind_manager;
+input input_manager;
 
 
 #include "rng.hpp"
@@ -46,15 +48,14 @@ int main() {
 
     while (!WindowShouldClose()) {
         texture_manager.update();
+
+        input_manager.update();
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
         render_master.update();
 
-        if (IsKeyDown(KEY_W)) player_manager.host->move_player_y(-1);
-        if (IsKeyDown(KEY_S)) player_manager.host->move_player_y(1);
-        if (IsKeyDown(KEY_D)) player_manager.host->move_player_x(1);
-        if (IsKeyDown(KEY_A)) player_manager.host->move_player_x(-1);
 
         bool my_tool_active = true;
         float my_color[4];

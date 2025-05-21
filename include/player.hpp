@@ -17,7 +17,7 @@ struct stat_s {
 class player_master;
 
 class player {
-    friend player_master;
+    friend class player_master;
     private:
         Vector2 pos;
 
@@ -52,7 +52,7 @@ class player {
 };
 
 class player_master {
-    friend input;
+    friend class input;
     private:
         std::vector<player*> players;
 
