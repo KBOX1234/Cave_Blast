@@ -21,6 +21,7 @@
 
 using json = nlohmann::json;
 #define CHUNK_SIZE 16
+#define BLOCK_SIZE 32
 #define NOISE_SCALE 4
 
 class chunk{

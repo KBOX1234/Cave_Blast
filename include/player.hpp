@@ -7,6 +7,7 @@
 #include "input.hpp"
 #include "texture_master.hpp"
 #include "../external/raylib/src/raylib.h"
+#include "imgui_window.hpp"
 
 struct stat_s {
     int health;
@@ -52,6 +53,7 @@ class player {
 };
 
 class player_master {
+    friend class imgui_win;
     friend class input;
     private:
         std::vector<player*> players;

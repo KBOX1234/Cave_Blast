@@ -1,8 +1,8 @@
 #include "../include/render.hpp"
 
 #include "player.hpp"
+#include "input.hpp"
 
-#define BLOCK_SIZE 32
 
 render::render() {
     camera.target = {1, 1};
@@ -111,6 +111,11 @@ void render::render_world() {
 
 }
 
+void render::draw_cursor(Vector2 pos) {
+    DrawRectangleLines(pos.x*BLOCK_SIZE, pos.y*BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, WHITE);
+}
+
+
 
 void render::update() {
     camera.zoom = 3;
@@ -121,8 +126,18 @@ void render::update() {
 
     render_world();
 
+    draw_cursor(input_manager.cursor);
+
     EndMode2D();
 
     //std::cout << "camera pos.x = " << camera.target.x << ", camera pos.y = " << camera.target.y << std::endl;
 
+}
+
+Vector2 render::get_camera_pos() {
+    return camera.target;
+}
+
+float render::get_camera_zoom() {
+    return camera.zoom;
 }

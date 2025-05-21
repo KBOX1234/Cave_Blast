@@ -57,15 +57,16 @@ int main() {
         render_master.update();
 
 
-        bool my_tool_active = true;
-        float my_color[4];
         rlImGuiBegin();
         imgui_master.items_menu();
+
+        imgui_master.player_data_menu();
         rlImGuiEnd();
 
 
         EndDrawing();
     }
+
     CloseWindow();
     rlImGuiShutdown();
     return 0;

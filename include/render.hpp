@@ -33,6 +33,12 @@ public:
 
     void set_camera_zoom(float zoom);
 
+    void draw_cursor(Vector2 pos);
+
+    Vector2 get_camera_pos();
+
+    float get_camera_zoom();
+
     void update();
 };
 

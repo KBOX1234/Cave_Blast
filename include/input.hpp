@@ -1,7 +1,9 @@
 #pragma once
 #include "json.hpp"
 #include "raylib.h"
+#include "world.hpp"
 #include "player.hpp"
+#include "imgui_window.hpp"
 
 struct key_bind {
     int org_key;
@@ -33,13 +35,21 @@ class keybind_master {
 extern keybind_master keybind_manager;
 
 class input {
-private:
+    friend class imgui_win;
 
-    void update_movement();
+    private:
+
+        void update_movement();
+
+        void mine_controles();
 
     public:
 
-    void update();
+        Vector2 cursor = {0, 0};
+
+        Vector2 cursor_offset = {0, 0};
+
+        void update();
 };
 
 extern input input_manager;
