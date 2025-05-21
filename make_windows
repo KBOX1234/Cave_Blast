@@ -1,26 +1,40 @@
+# Compiler and general settings
 CC = g++
-CFLAGS = -lraylib -lgdi32 -lwinmm -lm -lrlImGui -lenet -lsphysics
 INCLUDE = -I./include -I./external/rl_imgui/ -I./external/raylib/src/ -I./external/imgui/ -I./external/enet/include/ -I./external/sphysics/
 LINKS = -L./lib
+LIBS = -lraylib -lgdi32 -lwinmm -lm -lrlImGui -lenet -lsphysics
 
 SRC_DIR = src
 OBJ_DIR = obj
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
-TARGET = main
+TARGET = main.exe
 
-all: $(TARGET)
+# Default to debug
+all: debug
 
+# Debug build: includes symbols, no optimization
+debug: CFLAGS = -g -O0 $(INCLUDE)
+debug: $(TARGET)
+
+# Release build: optimized, no symbols, stripped
+release: CFLAGS = -O2 -s $(INCLUDE)
+release: $(TARGET)
+	strip $(TARGET)
+
+# Final link step
 $(TARGET): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LINKS) $(CFLAGS)
+	$(CC) -o $@ $(OBJS) $(LINKS) $(LIBS) $(CFLAGS)
 
-# Create obj/ if it doesn't exist and compile each .cpp to .o
+# Compile each source file to object
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	$(CC) -c $< -o $@ $(INCLUDE)
+	$(CC) -c $< -o $@ $(CFLAGS)
 
+# Create obj directory if not exists
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
+# Clean all build files
 clean:
 	rm -rf $(OBJ_DIR) $(TARGET)

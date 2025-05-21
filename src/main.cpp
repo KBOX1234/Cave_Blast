@@ -46,13 +46,14 @@ int main() {
 
     SetTargetFPS(165);
 
+
     while (!WindowShouldClose()) {
         texture_manager.update();
 
         input_manager.update();
 
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
 
         render_master.update();
 
@@ -62,6 +63,8 @@ int main() {
 
         imgui_master.player_data_menu();
         rlImGuiEnd();
+
+        DrawFPS(10, 10);
 
 
         EndDrawing();

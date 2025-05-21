@@ -1,7 +1,8 @@
-CC = g++
-CFLAGS = -lraylib -lm -ldl -lpthread -lGL -lX11 -lrlImGui -lenet -lsphysics
+# Compiler and general settings
+CC = c++
 INCLUDE = -I./include -I./external/rl_imgui/ -I./external/raylib/src/ -I./external/imgui/ -I./external/enet/include/ -I./external/sphysics/
 LINKS = -L./lib
+LIBS = -lraylib -lm -ldl -lpthread -lGL -lX11 -lrlImGui -lenet -lsphysics
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -10,18 +11,29 @@ OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
 TARGET = main
 
-all: $(TARGET)
+# Default to debug build
+all: debug
+
+# Debug build: includes -g and no optimization
+debug: CFLAGS = -g -O0 $(INCLUDE)
+debug: $(TARGET)
+
+# Release build: optimized and stripped
+release: CFLAGS = -O2 -s $(INCLUDE)
+release: $(TARGET)
+	strip $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LINKS) $(CFLAGS)
+	$(CC) -o $@ $(OBJS) $(LINKS) $(LIBS) $(CFLAGS)
 
-# Create obj/ if it doesn't exist and compile each .cpp to .o
+# Compile each source file to object
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	$(CC) -c $< -o $@ $(INCLUDE)
+	$(CC) -c $< -o $@ $(CFLAGS)
 
+# Create obj directory if not exists
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
+# Clean build files
 clean:
 	rm -rf $(OBJ_DIR) $(TARGET)
-
