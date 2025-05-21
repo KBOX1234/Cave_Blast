@@ -1,10 +1,9 @@
+#pragma once
 #include <vector>
 #include <iostream>
 #include <chrono>
 #include <memory>
 #include "raylib.h"
-
-#pragma once
 
 struct texture_archive{
     int id;

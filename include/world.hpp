@@ -1,3 +1,4 @@
+#pragma once
 #include "raylib.h"
 //#include "sphysics.h"
 #include <cmath>

@@ -20,8 +20,11 @@ item_master item_manager;
 block_master block_manager;
 #include "world.hpp"
 world_class world;
+#include "player.hpp"
+player_master player_manager;
 #include "render.hpp"
 render render_master;
+
 
 
 #include "rng.hpp"

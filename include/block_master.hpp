@@ -1,7 +1,8 @@
+#pragma once
 #include <vector>
 #include <sphysics.h>
 #include <memory>
-#pragma once
+
 
 struct block_type{
     colideBox collision_box;

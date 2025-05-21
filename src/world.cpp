@@ -190,7 +190,7 @@ chunk *world_class::generate_chunk(Vector2 pos) {
             if (n <= 0.5) {
                 chnk->set_block(item_manager.fetch_item("stone")->block_type_ptr, {(float)x, (float)y});
             }
-            else chnk->set_block(item_manager.fetch_item("dirt")->block_type_ptr, {(float)x, (float)y});
+            else chnk->set_block(item_manager.fetch_item("air")->block_type_ptr, {(float)x, (float)y});
         }
     }
 

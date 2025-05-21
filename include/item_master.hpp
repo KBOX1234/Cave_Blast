@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -5,7 +6,7 @@
 #include "json.hpp"
 
 #include "block_master.hpp"
-#pragma once
+
 
 using json = nlohmann::json;
 
