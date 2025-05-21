@@ -1,3 +1,55 @@
-//
-// Created by kboxk on 5/21/2025.
-//
+#include "imgui_window.hpp"
+
+void imgui_win::items_menu() {
+    ImGui::Begin("Items/Blocks list", &items_menu_active, ImGuiWindowFlags_MenuBar);
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Reload Items", "Ctrl+R")) {
+                item_manager.load_item_declaration_file("reasource/items.json");
+            }
+
+            ImGui::EndMenu();
+        }
+        ImGui::EndMenuBar();
+    }
+
+
+    ImGui::BeginChild("Scrolling");
+
+    std::vector<std::string> entries = item_manager.get_existing_items();
+
+    for (int n = 0; n < entries.size(); n++) {
+        item* itm = item_manager.fetch_item(entries[n]);
+
+        ImGui::Text("Item Entry %d",  n);
+        ImGui::Text("   Name: %s",  itm->name.c_str());
+        ImGui::Text("   Description: %s",  itm->description.c_str());
+        ImGui::Text("   Item texture path: %s",  itm->texture_path.c_str());
+
+        ImGui::Text("   Item id: %d",  itm->item_id);
+        ImGui::Text("   Item texture id: %d",  itm->texture_id);
+
+        ImGui::Text("   Item texture:");
+        rlImGuiImage((const Texture*)texture_manager.grab_texture_pointer(itm->texture_id));
+
+        if (itm->is_block) {
+            ImGui::Text("   Block texture id: %d",  itm->block_type_ptr->texture_id);
+
+            ImGui::Text("   Block type: %d",   itm->block_type_ptr->type);
+
+            ImGui::Text("   Block texture:");
+            rlImGuiImage((const Texture*)texture_manager.grab_texture_pointer(itm->block_type_ptr->texture_id));
+
+        }
+
+
+
+
+
+    }
+
+    ImGui::EndChild();
+    ImGui::End();
+}

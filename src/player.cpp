@@ -1,5 +1,6 @@
 #include "../include/player.hpp"
 #include "../include/texture_master.hpp"
+#include "../include/world.hpp"
 
 void player::set_id(int id2) {
     id = id2;
@@ -60,6 +61,13 @@ player_master::player_master() {
     host = new player;
 }
 
+void player_master::init() {
+    host->give_texture("reasource/gfx/other/player.png");
+    host->set_id(0);
+    host->set_name("default name");
+    host->pos = {0, 0};
+}
+
 std::vector<std::string> player_master::get_player_names() {
     std::vector<std::string> names;
 
@@ -94,4 +102,11 @@ player_master::~player_master() {
 }
 
 
+void player_master::draw_player(player *pl) {
+    Texture2D* txt = pl->get_texture();
+
+    float scale = (float)txt->width/32;
+
+    DrawTextureEx(*txt, pl->get_pos(), 0, scale, WHITE);
+}
 

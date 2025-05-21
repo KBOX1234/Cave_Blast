@@ -14,7 +14,10 @@ struct stat_s {
     int thirst;
 };
 
+class player_master;
+
 class player {
+    friend player_master;
     private:
         Vector2 pos;
 
@@ -27,6 +30,7 @@ class player {
 
 
     public:
+
         void set_id(int id);
 
         void set_name(std::string name);
@@ -51,9 +55,13 @@ class player_master {
     friend input;
     private:
         std::vector<player*> players;
-        player* host;
+
 
     public:
+
+        player* host;
+
+        void init();
 
         player_master();
         ~player_master();
@@ -65,6 +73,8 @@ class player_master {
         int get_player_id_by_name(std::string name);
 
         const player* fetch_player_data(int id);
+
+        static void draw_player(player* pl);
 
 
 };

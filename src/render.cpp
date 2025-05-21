@@ -1,5 +1,7 @@
 #include "../include/render.hpp"
 
+#include "player.hpp"
+
 #define BLOCK_SIZE 32
 
 render::render() {
@@ -95,6 +97,8 @@ void render::render_world() {
         //std::cout << "i = " + std::to_string(i) + ", chunk_pos_to_draw = {" + std::to_string(chunks_pos_to_draw[i].x) + ", " + std::to_string(chunks_pos_to_draw[i].y) + "}\n";
         draw_chunk(chunks_pos_to_draw[i]);
     }
+
+    player_master::draw_player(player_manager.host);
     //draw_chunk({0, 0});
 
 }
