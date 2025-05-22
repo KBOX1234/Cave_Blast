@@ -32,3 +32,29 @@ char* net_utills::convert_to_buffer(packet* p) {
 
     return buffer;
 }
+
+packet* net_utills::convert_from_buffer(char* buffer, size_t buffer_size) {
+    if (buffer_size < sizeof(int) + sizeof(size_t)) return nullptr;
+
+    size_t offset = 0;
+    int type;
+    size_t size;
+
+    std::memcpy(&type, buffer + offset, sizeof(int));
+    offset += sizeof(int);
+
+    std::memcpy(&size, buffer + offset, sizeof(size_t));
+    offset += sizeof(size_t);
+
+    if (buffer_size < offset + size) return nullptr; // Invalid/malformed
+
+    char* data = new char[size];
+    std::memcpy(data, buffer + offset, size);
+
+    packet* p = new packet;
+    p->type = type;
+    p->size = size;
+    p->data = data;
+
+    return p;
+}

@@ -30,6 +30,8 @@ network::network() {
             std::exit(EXIT_FAILURE);
         }
 
+        std::cout << "Server listening on port: " << std::to_string(address.port) << std::endl;
+
 
     }
     else {
@@ -55,6 +57,15 @@ network::network() {
             std::cerr << "Error connecting to server" << std::endl;
             std::exit(EXIT_FAILURE);
         }
+        std::cout << "connected to server port: " << std::to_string(address.port) << std::endl;
+
+        ENetEvent event;
+
+        if (enet_host_service(local_instance, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
+            std::cout << "Connection established" << std::endl;
+            player_creation_request("BINLADEN");
+            move_myself({3, 3});
+        }
     }
 
 }
@@ -69,48 +80,84 @@ void network::handle_connect(ENetEvent *event) {
     event->peer->address.port);
 }
 
-void network::handle_request(ENetEvent *event) {
-    packet* p = reinterpret_cast<packet*>(event->packet->data);
+void network::handle_request(ENetEvent* event) {
+    ENetPacket* epacket = event->packet;
+    char* buffer = reinterpret_cast<char*>(epacket->data);
+    size_t buffer_size = epacket->dataLength;
+
+    packet* p = net_utills::convert_from_buffer(buffer, buffer_size);
+    if (!p) {
+        std::cerr << "[network] Failed to deserialize packet" << std::endl;
+        return;
+    }
 
     if (p->type == CREATE_PLAYER) {
-        char* name =  reinterpret_cast<char*>(p->data);
+        // Assume null-terminated string for name
+        std::string new_name(p->data, p->size);  // safer than p->size - 1 unless you guarantee null-term
 
-        name[p->size - 1] = '\0';
+        int p_id = player_manager.add_player(new_name);
 
-        std::string new_name(name);
-
-        int p_id = player_manager.add_player(name);
-
-        int* p_id_ptr = new int;
-
-        memcpy(p_id_ptr, &p_id, sizeof(int));
-
-        event->peer->data = p_id_ptr;
-
-
+        int* p_id_ptr = new int(p_id);
+        event->peer->data = p_id_ptr;  // Store player ID on peer
     }
 
-    if (p->type == MOVE) {
+    else if (p->type == MOVE) {
         int* id_ptr = static_cast<int*>(event->peer->data);
-        if (id_ptr) {
+        if (id_ptr && p->size >= sizeof(Vector2)) {
             int id = *id_ptr;
-
-            Vector2 pos = *reinterpret_cast<Vector2*>(p->data);
+            Vector2 pos;
+            std::memcpy(&pos, p->data, sizeof(Vector2));
             player_manager.players[id]->set_pos(pos);
+
+            std::cout << "player \"" << id << "\" moved to " << pos.x << ", " << pos.y << "." << std::endl;
+        } else {
+            std::cerr << "[network] MOVE packet malformed or peer ID missing" << std::endl;
         }
-
-
     }
 
-
-
-    /* Clean up the packet now that we're done using it. */
-
+    delete[] p->data;
+    delete p;
 }
+
+
 
 void network::handle_disconnect(ENetEvent *event) {
-
+    std::cout <<  "A client disconnected" << std::endl;
 }
+
+void network::move_myself(Vector2 pos1) {
+    packet* p = new packet;
+
+    p->type = MOVE;
+    p->size = sizeof(Vector2);
+
+    p->data = new char[p->size];
+
+    memcpy(p->data, &pos1, p->size);
+
+    send_msg_fast((char*)p, net_utills::get_packet_size(p), remote_instance, 0);
+    //delete[] static_cast<char*>(p->data);
+
+    //delete p;
+}
+
+void network::player_creation_request(std::string name) {
+    packet* p = new packet;
+
+    p->type = CREATE_PLAYER;
+    p->size = name.size() + 1;  // include null terminator
+
+    p->data = new char[p->size];
+    memcpy(p->data, name.c_str(), p->size);
+
+    send_msg_safe((char*)p, net_utills::get_packet_size(p), remote_instance, 0);
+
+    //delete[] static_cast<char*>(p->data);
+    //delete p;
+}
+
+
+
 
 void network::update_server() {
     ENetEvent event = {};
@@ -153,10 +200,41 @@ void network::update_server() {
     }
 }
 
+void network::update_client() {
+
+    ENetEvent event;
+    /* Wait up to 0 milliseconds for an event. */
+    while (enet_host_service(local_instance, &event, 0) > 0)
+    {
+        switch (event.type)
+        {
+            case ENET_EVENT_TYPE_CONNECT:
+                break;
+
+            case ENET_EVENT_TYPE_RECEIVE:
+                printf("A packet of length %u containing %s was received on channel %u.\n",
+                    event.packet->dataLength,
+                    event.packet->data,
+                    event.channelID);
+                /* Clean up the packet now that we're done using it. */
+                enet_packet_destroy(event.packet);
+
+                break;
+
+            case ENET_EVENT_TYPE_DISCONNECT:
+                std::cout << "Server Disconected\n";
+                break;
+        }
+    }
+}
+
 
 void network::update() {
     if (is_server == true) {
         update_server();
+    }
 
+    else {
+        update_client();
     }
 }

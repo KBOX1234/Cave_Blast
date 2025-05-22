@@ -23,7 +23,7 @@
 struct __attribute__((packed)) packet {
     int type;
     size_t size;
-    void* data;
+    char* data;
 };
 
 class net_utills {
@@ -35,6 +35,8 @@ public:
     static size_t get_packet_size(packet* p);
 
     static char* convert_to_buffer(packet* p);
+
+    static packet* convert_from_buffer(char* buffer, size_t buffer_size);
 
 };
 
@@ -49,7 +51,11 @@ private:
     void handle_disconnect(ENetEvent *event);
     void handle_request(ENetEvent *event);
 
+    void move_myself(Vector2 pos1);
+    void player_creation_request(std::string name);
+
     void update_server();
+    void update_client();
 
 public:
     network();
