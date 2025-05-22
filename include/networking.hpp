@@ -1,7 +1,22 @@
 #pragma once
+
+
+/*
+ * it is the servers job to handle data fetch requests
+ * it is the clients job to fetch the data
+ */
+
 #include "world.hpp"
+#include "rng.hpp"
 
 #define PORT 8089
+
+#define NOTHING 0
+#define MOVE 1
+#define GET_CHUNK 2
+#define CREATE_PLAYER 3
+#define GET_PLAYER_LIST 4
+#define GET_PLAYER 5
 
 #include <enet/enet.h>
 
@@ -30,11 +45,17 @@ private:
     ENetHost *local_instance = nullptr;
     ENetPeer *remote_instance = nullptr;
 
+    void handle_connect(ENetEvent *event);
+    void handle_disconnect(ENetEvent *event);
+    void handle_request(ENetEvent *event);
+
+    void update_server();
+
 public:
     network();
     ~network();
 
-    void sync_world_data();
+    void update();
 
 };
 

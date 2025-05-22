@@ -12,25 +12,23 @@ void net_utills::send_msg_fast(char *data, size_t s, ENetPeer *to, char channel)
     enet_peer_send(to, channel, packet);
 }
 
-size_t net_utills::get_packet_size(packet *p) {
-    size_t type_val_size = sizeof(int);
-    size_t total_size = type_val_size + p->size;
-
-    return total_size;
+size_t net_utills::get_packet_size(packet* p) {
+    return sizeof(int) + sizeof(size_t) + p->size;
 }
 
 char* net_utills::convert_to_buffer(packet* p) {
-    int pointer = 0;
+    size_t total_size = get_packet_size(p);
+    char* buffer = new char[total_size];
 
-    char* buffer = new char[get_packet_size(p)];
+    size_t offset = 0;
 
-    memcpy(buffer, &p->type,  sizeof(int));
-    pointer = pointer + sizeof(int);
-    memcpy(&buffer[pointer], &p->size, sizeof(size_t));
-    pointer = pointer + sizeof(size_t);
+    std::memcpy(buffer + offset, &p->type, sizeof(int));
+    offset += sizeof(int);
 
-    memcpy(&buffer[pointer], p->data, p->size);
+    std::memcpy(buffer + offset, &p->size, sizeof(size_t));
+    offset += sizeof(size_t);
+
+    std::memcpy(buffer + offset, p->data, p->size);
 
     return buffer;
-
 }

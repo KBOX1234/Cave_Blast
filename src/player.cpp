@@ -121,3 +121,7 @@ serialized_player player::serialize() {
     ser.name[MAX_NAME_LENGTH - 1] = '\0';
     return ser;
 }
+
+void player::set_pos(Vector2 pos2) {
+    pos = pos2;
+}

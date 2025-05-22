@@ -75,6 +75,7 @@ int main() {
 
 
     while (!WindowShouldClose()) {
+        networking.update();
         texture_manager.update();
 
         input_manager.update();

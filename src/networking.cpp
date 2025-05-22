@@ -2,13 +2,15 @@
 
 #include <iostream>
 
+#include "../include/player.hpp"
+
 network::network() {
     std::string input;
     std::cout << "Server or Client (1, 2): ";
     std::cin >> input;
 
     if (input == "1") {
-        bool is_server = true;
+        is_server = true;
     }
     else is_server = false;
 
@@ -59,4 +61,102 @@ network::network() {
 
 network::~network() {
     enet_host_destroy(local_instance);
+}
+
+void network::handle_connect(ENetEvent *event) {
+    printf("A new client connected from %x:%u.\n",
+    event->peer->address.host,
+    event->peer->address.port);
+}
+
+void network::handle_request(ENetEvent *event) {
+    packet* p = reinterpret_cast<packet*>(event->packet->data);
+
+    if (p->type == CREATE_PLAYER) {
+        char* name =  reinterpret_cast<char*>(p->data);
+
+        name[p->size - 1] = '\0';
+
+        std::string new_name(name);
+
+        int p_id = player_manager.add_player(name);
+
+        int* p_id_ptr = new int;
+
+        memcpy(p_id_ptr, &p_id, sizeof(int));
+
+        event->peer->data = p_id_ptr;
+
+
+    }
+
+    if (p->type == MOVE) {
+        int* id_ptr = static_cast<int*>(event->peer->data);
+        if (id_ptr) {
+            int id = *id_ptr;
+
+            Vector2 pos = *reinterpret_cast<Vector2*>(p->data);
+            player_manager.players[id]->set_pos(pos);
+        }
+
+
+    }
+
+
+
+    /* Clean up the packet now that we're done using it. */
+
+}
+
+void network::handle_disconnect(ENetEvent *event) {
+
+}
+
+void network::update_server() {
+    ENetEvent event = {};
+
+    while (enet_host_service(local_instance, &event, 0) > 0)
+    {
+        switch (event.type)
+        {
+
+            case ENET_EVENT_TYPE_CONNECT:
+            {
+
+                handle_connect(&event);
+
+                break;
+            }
+            case ENET_EVENT_TYPE_RECEIVE:
+            {
+                /*printf("A packet of length %u containing %s was received on channel %u.\n",
+                    event.packet->dataLength,
+                    event.packet->data,
+                    event.channelID);*/
+                handle_request(&event);
+                enet_packet_destroy(event.packet);
+
+
+                break;
+            }
+
+            case ENET_EVENT_TYPE_DISCONNECT:
+            {
+                printf("client disconnected.\n");
+
+                break;
+            }
+
+        }
+
+
+    }
+}
+
+
+void network::update() {
+    if (is_server == true) {
+        update_server();
+
+    }
 }

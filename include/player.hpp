@@ -8,6 +8,7 @@
 #include "texture_master.hpp"
 #include "../external/raylib/src/raylib.h"
 #include "imgui_window.hpp"
+#include "networking.hpp"
 
 struct stat_s {
     int health;
@@ -46,6 +47,8 @@ class player {
 
         void set_id(int id);
 
+        void set_pos(Vector2 pos);
+
         void set_name(std::string name);
 
         int give_texture(std::string path);
@@ -69,6 +72,7 @@ class player {
 class player_master {
     friend class imgui_win;
     friend class input;
+    friend class network;
     private:
         std::vector<player*> players;
 
