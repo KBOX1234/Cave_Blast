@@ -215,3 +215,8 @@ const block* world_class::chunk_buffer(Vector2 pos){
     return tmp_chunk->blocks_buffer();
 }
 
+json world_class::serialize_chunk(Vector2 pos) {
+    chunk* chnk = get_chunk(pos);
+
+    return chnk->serialize_chunk();
+}

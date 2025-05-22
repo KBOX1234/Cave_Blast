@@ -12,9 +12,14 @@ int item_master::add_item(std::unique_ptr<item> i) {
 
     i->item_id = static_cast<short>(items.size());
 
+    //quick fix 
+    i->block_type_ptr->item_id = i->item_id;
+
     item_map[i->name] = i->item_id;
 
     items.push_back(std::move(i));
+
+    //std::cout << "from add_item() -> Item id is: " << std::to_string(i->item_id) << std::endl;
 
     return static_cast<int>(items.size() - 1);
 }
@@ -69,12 +74,15 @@ int item_master::load_items_from_json(json j) {
                 } else {
                     new_block.texture_id = texture_manager.default_texture();
                 }
-
+                std::cout << "block item id is: " + std::to_string(new_block.item_id) << "\n item id is: " << std::to_string(new_item->item_id) << std::endl;
                 block_manager.add_block_type(new_block);
                 new_item->block_type_ptr = block_manager.fetch_block_type(new_block.type);
             }
 
+            std::cout << "item id: " << std::to_string(new_item->item_id) << "\n";
+
             add_item(std::move(new_item));
+
             count++;
         } else {
             std::cout << "Item name not found\n";
@@ -102,11 +110,21 @@ int item_master::load_item_declaration_file(const std::string& path) {
     return load_items_from_json(j);
 }
 
-item* item_master::fetch_item_by_id(short id) {
+item* item_master::fetch_item_by_id(int id) {
     if (id >= 0 && id < items.size()) {
         return items[id].get();
     }
     return nullptr;
+}
+
+std::string item_master::get_item_name_by_id(int id) {
+    for (int i = 0; i < items.size(); i++) {
+        if (items[i]->item_id == id) {
+            return items[i]->name;
+        }
+    }
+
+    return "null";
 }
 
 std::vector<std::string> item_master::get_existing_items() {

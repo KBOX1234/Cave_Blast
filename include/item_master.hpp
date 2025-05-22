@@ -17,7 +17,7 @@ struct item {
     std::string description;
     std::string texture_path;
 
-    short item_id;
+    int item_id;
     int texture_id;
 
     bool is_weapon;
@@ -43,13 +43,15 @@ public:
 
     item* fetch_item(const std::string& name);
 
-    item* fetch_item_by_id(short id);
+    item* fetch_item_by_id(int id);
 
     int load_items_from_json(json j);
 
     int load_item_declaration_file(const std::string& path);
 
     std::vector<std::string> get_existing_items();
+
+    std::string get_item_name_by_id(int id);
 
 };
 

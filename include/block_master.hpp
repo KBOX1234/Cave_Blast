@@ -8,7 +8,7 @@ struct block_type{
     colideBox collision_box;
     short type;
     int texture_id;
-    short item_id;
+    int item_id;
 };
 
 struct block{
@@ -24,7 +24,7 @@ class block_master {
 
     int add_block_type(const block_type& b);
 
-    block_type* fetch_block_type(short type);
+    block_type* fetch_block_type(int type);
 
 
 

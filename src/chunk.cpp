@@ -107,7 +107,14 @@ json chunk::serialize_chunk() {
     json block_data;
     //only shares block type val for simplicity and size
     for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
-        block_data[i] = blocks[i].attr->type;
+        std::string name = item_manager.get_item_name_by_id(blocks[i].attr->item_id);
+        if (name == "null") {
+            block_data[i] = blocks[i].attr->item_id;
+
+        }
+        else {
+            block_data[i] = name;
+        }
     }
     j["block_data"] = block_data;
 

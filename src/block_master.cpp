@@ -6,7 +6,7 @@ int block_master::add_block_type(const block_type& b) {
 }
 
 
-block_type* block_master::fetch_block_type(short type) {
+block_type* block_master::fetch_block_type(int type) {
     for (const auto& bt : block_types) {
         if (bt->type == type)
             return bt.get();

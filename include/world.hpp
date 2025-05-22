@@ -114,6 +114,8 @@ class world_class {
         block* get_block(Vector2 pos);
 
         const block* chunk_buffer(Vector2 pos);
+
+        json serialize_chunk(Vector2 pos);
 };
 
 extern world_class world;
