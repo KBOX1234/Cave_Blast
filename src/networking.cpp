@@ -64,7 +64,7 @@ network::network() {
         if (enet_host_service(local_instance, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
             std::cout << "Connection established" << std::endl;
             player_creation_request("BINLADEN");
-            move_myself({3, 3});
+            move_myself({10, 3});
         }
     }
 
@@ -92,6 +92,7 @@ void network::handle_request(ENetEvent* event) {
     }
 
     if (p->type == CREATE_PLAYER) {
+        std::cout  << "Player created" << std::endl;
         // Assume null-terminated string for name
         std::string new_name(p->data, p->size);  // safer than p->size - 1 unless you guarantee null-term
 
@@ -99,6 +100,8 @@ void network::handle_request(ENetEvent* event) {
 
         int* p_id_ptr = new int(p_id);
         event->peer->data = p_id_ptr;  // Store player ID on peer
+
+        std::cout << "player id: " << std::to_string(p_id) << std::endl;
     }
 
     else if (p->type == MOVE) {
@@ -109,7 +112,7 @@ void network::handle_request(ENetEvent* event) {
             std::memcpy(&pos, p->data, sizeof(Vector2));
             player_manager.players[id]->set_pos(pos);
 
-            std::cout << "player \"" << id << "\" moved to " << pos.x << ", " << pos.y << "." << std::endl;
+            std::cout << "player \"" << id << "\" moved to " << std::to_string(pos.x) << ", " << std::to_string(pos.y) << "." << std::endl;
         } else {
             std::cerr << "[network] MOVE packet malformed or peer ID missing" << std::endl;
         }
@@ -135,7 +138,7 @@ void network::move_myself(Vector2 pos1) {
 
     memcpy(p->data, &pos1, p->size);
 
-    send_msg_fast((char*)p, net_utills::get_packet_size(p), remote_instance, 0);
+    send_msg_safe((char*)p, net_utills::get_packet_size(p), remote_instance, 0);
     //delete[] static_cast<char*>(p->data);
 
     //delete p;

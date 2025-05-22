@@ -115,6 +115,12 @@ void render::draw_cursor(Vector2 pos) {
     DrawRectangleLines(pos.x*BLOCK_SIZE, pos.y*BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, WHITE);
 }
 
+void render::render_players() {
+    for (int i = 0; i < player_manager.players.size(); i++) {
+        player_manager.draw_player(player_manager.players[i]);
+    }
+}
+
 
 
 void render::update() {
@@ -125,6 +131,8 @@ void render::update() {
     update_drawing_coords();
 
     render_world();
+
+    render_players();
 
     draw_cursor(input_manager.cursor);
 

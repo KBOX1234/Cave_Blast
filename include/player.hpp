@@ -73,6 +73,7 @@ class player_master {
     friend class imgui_win;
     friend class input;
     friend class network;
+    friend class render;
     private:
         std::vector<player*> players;
 

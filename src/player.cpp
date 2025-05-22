@@ -54,6 +54,8 @@ int player_master::add_player(std::string name) {
 
     players.push_back(new_player);
 
+    std::cout << "Player " << name << " added" << std::endl;
+
     return players.size() - 1;
 }
 

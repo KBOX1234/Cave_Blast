@@ -20,6 +20,8 @@ private:
 
     void render_world();
 
+    void render_players();
+
 
 
 public:
