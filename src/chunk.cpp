@@ -157,4 +157,3 @@ int chunk::new_chunk_from_json(json j) {
 const block* chunk::blocks_buffer() const {
     return blocks.data();
 }
-

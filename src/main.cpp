@@ -91,10 +91,6 @@ int main() {
 
         DrawFPS(10, 10);
 
-        if (IsKeyPressed(KEY_E)) {
-            std:: cout << "\n" + world.serialize_chunk({0, 0}).dump(4) << "\n";
-
-        }
 
 
         EndDrawing();

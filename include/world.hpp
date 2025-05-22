@@ -59,6 +59,7 @@ class chunk{
     //serializes the chunk
     json serialize_chunk();
 
+
     //creates new chunk from json
     int new_chunk_from_json(json j);
 
@@ -116,6 +117,8 @@ class world_class {
         const block* chunk_buffer(Vector2 pos);
 
         json serialize_chunk(Vector2 pos);
+
+        int load_chunk(json j);
 };
 
 extern world_class world;

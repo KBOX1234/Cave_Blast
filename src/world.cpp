@@ -220,3 +220,21 @@ json world_class::serialize_chunk(Vector2 pos) {
 
     return chnk->serialize_chunk();
 }
+
+int world_class::load_chunk(json j) {
+    if (j.contains("pos")) {
+        json pos = j["pos"];
+
+        Vector2 chnk_pos;
+        chnk_pos.x = pos["x"];
+        chnk_pos.y = pos["y"];
+
+        chunk* chnk = get_chunk(chnk_pos);
+
+        chnk->new_chunk_from_json(j);
+
+        return 0;
+    }
+
+    return -1;
+}
