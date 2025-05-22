@@ -15,6 +15,18 @@ struct stat_s {
     int thirst;
 };
 
+#define MAX_NAME_LENGTH
+
+struct serialized_player {
+    Vector2 pos;
+
+    stat_s stats;
+
+    int id;
+
+    char name[MAX_NAME_LENGTH];
+};
+
 class player_master;
 
 class player {
@@ -50,6 +62,8 @@ class player {
         std::string get_name();
 
         stat_s get_stats();
+
+        serialized_player serialize();
 };
 
 class player_master {

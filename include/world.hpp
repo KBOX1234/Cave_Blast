@@ -14,6 +14,7 @@
 #include "FastNoiseLite.h"
 #include "item_master.hpp"
 #include "block_master.hpp"
+#include "networking.hpp"
 
 
 
@@ -66,6 +67,7 @@ class chunk{
     const block* blocks_buffer() const;
 };
 class world_class {
+    friend class network;
     private:
     
         FastNoiseLite noise;

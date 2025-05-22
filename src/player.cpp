@@ -110,3 +110,14 @@ void player_master::draw_player(player *pl) {
     DrawTextureEx(*txt, pl->get_pos(), 0, scale, WHITE);
 }
 
+serialized_player player::serialize() {
+    serialized_player ser;
+
+    ser.pos = pos;
+    ser.id = id;
+    ser.stats = stats;
+
+    std::strncpy(ser.name, name.c_str(), MAX_NAME_LENGTH - 1);
+    ser.name[MAX_NAME_LENGTH - 1] = '\0';
+    return ser;
+}

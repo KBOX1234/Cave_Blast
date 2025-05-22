@@ -54,6 +54,8 @@ imgui_win imgui_master;
 #include "input.hpp"
 keybind_master keybind_manager;
 input input_manager;
+#include "networking.hpp"
+network networking;
 
 
 #include "rng.hpp"
