@@ -5,6 +5,31 @@
 #include <cmath>
 
 #include "raylib.h"
+
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOGDI          // Avoid GDI definitions like Rectangle()
+#define NOMINMAX       // Avoid min/max macros
+#define NOSERVICE
+#define NOHELP
+#define NOATOM
+#define NOCOMM
+#define NOKANJI
+#define NOWH
+#define NOUSER
+#define NOMCX
+#define NOTAPE
+#endif
+
+#include <enet/enet.h>
+
+/*#ifdef _WIN32
+#define PlaySound WindowsPlaySound
+#undef PlaySound
+
+#endif*/
+
+
 #include "imgui.h"
 #include "rlImGui.h"
 #include "json.hpp"

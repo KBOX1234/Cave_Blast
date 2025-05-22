@@ -24,7 +24,7 @@ void input::mine_controles() {
         block new_block;
         new_block.state = 0;
 
-        new_block.attr = item_manager.fetch_item("air")->block_type_ptr;
+        new_block.attr = item_manager.fetch_item("dirt")->block_type_ptr;
 
         //the coord should just be able to be directly passed but some logic error makes the block be placed 1 to the side
         //PLS FIX
