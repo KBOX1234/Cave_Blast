@@ -70,7 +70,7 @@ network::network() {
         if (enet_host_service(local_instance, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
             std::cout << "Connection established" << std::endl;
             player_creation_request("BINLADEN");
-            //move_myself({10, 3});
+            move_myself({10, 3});
         }
     }
 
@@ -146,7 +146,14 @@ void network::move_myself(Vector2 pos1) {
 
     memcpy(p->data, &pos1, p->size);
 
-    send_msg_safe((char*)p, net_utills::get_packet_size(p), remote_instance, 0);
+    char* buff = net_utills::convert_to_buffer(p);
+
+    if (buff == nullptr) {
+        std::cout << "\nissue packing packet\n";
+        return;
+    }
+
+    send_msg_safe(buff, net_utills::get_packet_size(p), remote_instance, 0);
     //delete[] static_cast<char*>(p->data);
 
     //delete p;
