@@ -39,11 +39,15 @@ class input {
 
     private:
 
+        bool is_inp_update;
+
         void update_movement();
 
         void mine_controles();
 
     public:
+
+        bool is_there_input_update();
 
         Vector2 cursor = {0, 0};
 

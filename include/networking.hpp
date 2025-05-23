@@ -66,7 +66,6 @@ private:
     void handle_disconnect(ENetEvent *event);
     void handle_request(ENetEvent *event);
 
-    void move_myself(Vector2 pos1);
     void player_creation_request(std::string name);
 
     void send_player_list_request();
@@ -76,6 +75,7 @@ private:
     void update_client();
 
 public:
+    void move_myself(Vector2 pos1);
     network();
     ~network();
 

@@ -344,7 +344,7 @@ void network::update_server() {
 
 void network::update_client() {
 
-    if (player_manager.get_host() != nullptr) move_myself(player_manager.get_host()->get_pos());
+    if (player_manager.get_host() != nullptr && input_manager.is_there_input_update() == true) move_myself(player_manager.get_host()->get_pos());
     send_player_list_request();
 
     ENetEvent event;
@@ -367,7 +367,7 @@ void network::update_client() {
                 if (player_manager.get_host() != nullptr) {
                     //std::cout << "my id is: " + std::to_string(player_manager.host_id) + "\n";
                     //std::cout << "my official id is: " + std::to_string(player_manager.get_host()->get_id()) << std::endl;
-                    //std::cout << "my pos is: " + std::to_string(player_manager.get_host()->get_pos().x) + ", " + std::to_string(player_manager.get_host()->get_pos().x) << std::endl;
+                    std::cout << "my pos is: " + std::to_string(player_manager.get_host()->get_pos().x) + ", " + std::to_string(player_manager.get_host()->get_pos().x) << std::endl;
                     if (p->type == GET_PLAYER_LIST) {
                         std::vector<int> ids;
 
