@@ -131,7 +131,12 @@ void player_master::draw_player(player *pl) {
 
     scale = 1;
 
-    DrawTextureEx(*txt, pl->get_pos(), 0, scale, WHITE);
+    Vector2 drcd;
+
+    drcd.x = round(pl->get_pos().x);
+    drcd.y = round(pl->get_pos().y);
+
+    DrawTextureEx(*txt, drcd, 0, scale, WHITE);
 }
 
 serialized_player player::serialize() {
