@@ -120,10 +120,18 @@ void network::handle_request(ENetEvent* event) {
             std::memcpy(&pos, p->data, sizeof(Vector2));
             player_manager.players[id]->set_pos(pos);
 
-            std::cout << "player \"" << id << "\" moved to " << std::to_string(pos.x) << ", " << std::to_string(pos.y) << "." << std::endl;
+            //std::cout << "player \"" << id << "\" moved to " << std::to_string(pos.x) << ", " << std::to_string(pos.y) << "." << std::endl;
         } else {
             std::cerr << "[network] MOVE packet malformed or peer ID missing" << std::endl;
         }
+    }
+
+    else if (p->type == GET_PLAYER_LIST) {
+        packet* send_p = new packet;
+
+        send_p->type = GET_PLAYER_LIST;
+
+
     }
 
     delete[] p->data;
@@ -232,10 +240,14 @@ void network::update_server() {
 
 void network::update_client() {
 
+    move_myself(player_manager.host->get_pos());
+
     ENetEvent event;
     /* Wait up to 0 milliseconds for an event. */
     while (enet_host_service(local_instance, &event, 0) > 0)
     {
+
+
         switch (event.type)
         {
             case ENET_EVENT_TYPE_CONNECT:

@@ -80,6 +80,8 @@ class player_master {
 
     public:
 
+        int default_texture_id;
+
         player* host;
 
         void init();
@@ -95,7 +97,7 @@ class player_master {
 
         const player* fetch_player_data(int id);
 
-        static void draw_player(player* pl);
+        void draw_player(player* pl);
 
 
 };

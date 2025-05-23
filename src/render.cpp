@@ -106,7 +106,7 @@ void render::render_world() {
         draw_chunk(chunks_pos_to_draw[i]);
     }
 
-    player_master::draw_player(player_manager.host);
+    player_manager.draw_player(player_manager.host);
     //draw_chunk({0, 0});
 
 }

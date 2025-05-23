@@ -64,7 +64,10 @@ player_master::player_master() {
 }
 
 void player_master::init() {
-    host->give_texture("reasource/gfx/other/player.png");
+
+
+    default_texture_id = host->give_texture("reasource/gfx/other/player.png");
+
     host->set_id(0);
     host->set_name("default name");
     host->pos = {0, 0};
@@ -105,9 +108,12 @@ player_master::~player_master() {
 
 
 void player_master::draw_player(player *pl) {
-    Texture2D* txt = pl->get_texture();
+    Texture2D* txt = texture_manager.grab_texture_pointer(default_texture_id);
+
 
     float scale = (float)txt->width/32;
+
+    scale = 1;
 
     DrawTextureEx(*txt, pl->get_pos(), 0, scale, WHITE);
 }
@@ -127,3 +133,4 @@ serialized_player player::serialize() {
 void player::set_pos(Vector2 pos2) {
     pos = pos2;
 }
+
