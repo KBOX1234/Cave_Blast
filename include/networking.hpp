@@ -70,6 +70,7 @@ private:
     void player_creation_request(std::string name);
 
     void send_player_list_request();
+    void fetch_player(int id);
 
     void update_server();
     void update_client();

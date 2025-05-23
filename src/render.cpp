@@ -27,10 +27,10 @@ void render::move_camera_y(float amount) {
 
 void render::update_drawing_coords() {
 
-    camera.target.x = player_manager.host->get_pos().x - ((((float)SCREEN_WIDTH / camera.zoom) / 2.0f) - (BLOCK_SIZE / 2));
-    camera.target.y = player_manager.host->get_pos().y - ((((float)SCREEN_HEIGTH / camera.zoom) / 2.0f) - BLOCK_SIZE);
+    camera.target.x = player_manager.get_host()->get_pos().x - ((((float)SCREEN_WIDTH / camera.zoom) / 2.0f) - (BLOCK_SIZE / 2));
+    camera.target.y = player_manager.get_host()->get_pos().y - ((((float)SCREEN_HEIGTH / camera.zoom) / 2.0f) - BLOCK_SIZE);
 
-    //std::cout << "player pos: " << std::to_string(player_manager.host->get_pos().x) << ", " << std::to_string(player_manager.host->get_pos().y) << std::endl;
+    //std::cout << "player pos: " << std::to_string(player_manager.get_host()->get_pos().x) << ", " << std::to_string(player_manager.get_host()->get_pos().y) << std::endl;
     //std::cout << "camera pos: " << std::to_string(camera.target.x) << ", " << std::to_string(camera.target.y) << std::endl;
 
 
@@ -106,7 +106,7 @@ void render::render_world() {
         draw_chunk(chunks_pos_to_draw[i]);
     }
 
-    player_manager.draw_player(player_manager.host);
+    //player_manager.draw_player(player_manager.get_host());
     //draw_chunk({0, 0});
 
 }

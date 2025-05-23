@@ -9,15 +9,15 @@ int kb(key_bind kbind) {
 }
 
 void input::update_movement() {
-    if (IsKeyDown(KEY_W)) player_manager.host->move_player_y(-1);
-    if (IsKeyDown(KEY_S)) player_manager.host->move_player_y(1);
-    if (IsKeyDown(KEY_D)) player_manager.host->move_player_x(1);
-    if (IsKeyDown(KEY_A)) player_manager.host->move_player_x(-1);
+    if (IsKeyDown(KEY_W)) player_manager.get_host()->move_player_y(-1);
+    if (IsKeyDown(KEY_S)) player_manager.get_host()->move_player_y(1);
+    if (IsKeyDown(KEY_D)) player_manager.get_host()->move_player_x(1);
+    if (IsKeyDown(KEY_A)) player_manager.get_host()->move_player_x(-1);
 }
 
 void input::mine_controles() {
-    cursor.x = round(player_manager.host->get_pos().x / BLOCK_SIZE) + cursor_offset.x;
-    cursor.y = round(player_manager.host->get_pos().y / BLOCK_SIZE) + cursor_offset.y;
+    cursor.x = round(player_manager.get_host()->get_pos().x / BLOCK_SIZE) + cursor_offset.x;
+    cursor.y = round(player_manager.get_host()->get_pos().y / BLOCK_SIZE) + cursor_offset.y;
 
     if (IsKeyPressed(KEY_ENTER)) {
 

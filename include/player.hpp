@@ -16,7 +16,7 @@ struct stat_s {
     int thirst;
 };
 
-#define MAX_NAME_LENGTH
+#define MAX_NAME_LENGTH 40
 
 struct serialized_player {
     Vector2 pos;
@@ -50,6 +50,10 @@ class player {
 
     public:
 
+        player();
+        //~player();
+
+
         void set_id(int id);
 
         void set_pos(Vector2 pos);
@@ -72,6 +76,8 @@ class player {
         stat_s get_stats();
 
         serialized_player serialize();
+
+        void set_stats(stat_s st);
 };
 
 class player_master {
@@ -82,17 +88,21 @@ class player_master {
     private:
         std::vector<player*> players;
 
+        int add_player_from_serialised_player(serialized_player* spl);
+
 
     public:
 
         int default_texture_id;
 
-        player* host;
+        int host_id;
 
         void init();
 
         player_master();
         ~player_master();
+
+        player* get_host();
 
         int add_player(std::string name);
 
@@ -100,9 +110,11 @@ class player_master {
 
         int get_player_id_by_name(std::string name);
 
-        const player* fetch_player_data(int id);
+        player* fetch_player_data(int id);
 
         void draw_player(player* pl);
+
+        bool does_player_exist(int id);
 
 
 };

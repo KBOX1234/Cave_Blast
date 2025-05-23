@@ -78,18 +78,27 @@ int main() {
         networking.update();
         texture_manager.update();
 
-        input_manager.update();
+        if (player_manager.get_host() != nullptr) {
+            input_manager.update();
+        }
+
 
         BeginDrawing();
         ClearBackground(BLACK);
 
-        render_master.update();
+        if (player_manager.get_host() != nullptr) {
+
+            render_master.update();
+
+        }
 
 
         rlImGuiBegin();
-        imgui_master.items_menu();
+        if (player_manager.get_host() != nullptr) {
+            imgui_master.items_menu();
 
-        imgui_master.player_data_menu();
+            imgui_master.player_data_menu();
+        }
         rlImGuiEnd();
 
         DrawFPS(10, 10);

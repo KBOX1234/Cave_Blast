@@ -2,6 +2,11 @@
 #include "../include/texture_master.hpp"
 #include "../include/world.hpp"
 
+player::player() {
+    pos = {0, 0};
+}
+
+
 void player::set_id(int id2) {
     id = id2;
 }
@@ -60,17 +65,24 @@ int player_master::add_player(std::string name) {
 }
 
 player_master::player_master() {
-    host = new player;
+    host_id = random_num.get_random_int();
 }
+
+player *player_master::get_host() {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->get_id() == host_id) {
+            return players[i];
+        }
+    }
+
+    return nullptr;
+}
+
 
 void player_master::init() {
 
 
-    default_texture_id = host->give_texture("reasource/gfx/other/player.png");
-
-    host->set_id(random_num.get_random_int());
-    host->set_name("default name");
-    host->pos = {0, 0};
+    default_texture_id = texture_manager.add_texture("reasource/gfx/other/player.png", true);
 }
 
 std::vector<std::string> player_master::get_player_names() {
@@ -93,8 +105,12 @@ int player_master::get_player_id_by_name(std::string name) {
     return -1;
 }
 
-const player *player_master::fetch_player_data(int id) {
-    return (const player *)players[id];
+player *player_master::fetch_player_data(int id) {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->get_id() == id) return players[i];
+    }
+
+    return nullptr;
 }
 
 
@@ -134,3 +150,34 @@ void player::set_pos(Vector2 pos2) {
     pos = pos2;
 }
 
+bool player_master::does_player_exist(int id) {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->get_id() == id) return true;
+    }
+
+    return false;
+}
+
+void player::set_stats(stat_s st) {
+    stats = st;
+}
+
+
+int player_master::add_player_from_serialised_player(serialized_player *spl) {
+    player* new_player = new player;
+
+    new_player->set_id(spl->id);
+
+    new_player->set_name(spl->name);
+
+    new_player->set_pos(spl->pos);
+
+    new_player->set_stats(spl->stats);
+
+
+    players.push_back(new_player);
+
+    std::cout << "Player " << spl->name << " added" << std::endl;
+
+    return players.size() - 1;
+}

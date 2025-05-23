@@ -76,7 +76,7 @@ void imgui_win::player_data_menu() {
     ImGui::BeginChild("Scrolling");
 
     //ImGui::Text("Player pos is: %f, %f", player_manager.host->get_pos().x, player_manager.host->get_pos().y);
-    ImGui::Text("Player pos is: %f, %f", player_manager.host->get_pos().x / BLOCK_SIZE, player_manager.host->get_pos().y / BLOCK_SIZE);
+    ImGui::Text("Player pos is: %f, %f", player_manager.get_host()->get_pos().x / BLOCK_SIZE, player_manager.get_host()->get_pos().y / BLOCK_SIZE);
     ImGui::Text("Cursor pos is: %f, %f", input_manager.cursor.x, input_manager.cursor.y);
 
     ImGui::EndChild();

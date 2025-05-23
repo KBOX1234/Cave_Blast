@@ -22,6 +22,15 @@ network::network() {
 
 
     if (is_server) {
+        player* pla = new player;
+
+        pla->set_id(random_num.get_random_int());
+        pla->set_name("MASTER");
+        pla->set_pos({0, 0});
+        player_manager.players.push_back(pla);
+
+        player_manager.host_id = pla->get_id();
+
         address.host = ENET_HOST_ANY;
         address.port = PORT;
 
@@ -116,17 +125,26 @@ void network::handle_request(ENetEvent* event) {
     }
 
     if (p->type == CREATE_PLAYER) {
-        std::cout  << "Player created" << std::endl;
-
         std::string new_name(p->data, p->size);
-
         int p_id = player_manager.add_player(new_name);
 
-        int* p_id_ptr = new int(p_id);
+        auto* p_id_ptr = new int(p_id);
         event->peer->data = p_id_ptr;
 
+        player* plr = player_manager.fetch_player_data(p_id);
 
-        std::cout << "player id: " << std::to_string(p_id) << std::endl;
+        serialized_player splr = plr->serialize();
+
+        packet* send_p = new packet;
+        send_p->type = CREATE_PLAYER;
+        send_p->size = sizeof(serialized_player);
+        send_p->data = (char*)&splr;
+
+        char* buffer = net_utills::convert_to_buffer(send_p);
+        send_msg_safe(buffer, net_utills::get_packet_size(send_p), event->peer, 0);
+
+        //delete[] send_p->data;
+        delete send_p;
     }
 
     else if (p->type == MOVE) {
@@ -150,7 +168,7 @@ void network::handle_request(ENetEvent* event) {
 
         std::vector<int> ids;
 
-        ids.push_back(player_manager.host->get_id());
+        ids.push_back(player_manager.get_host()->get_id());
 
         for (int i = 0; i < player_manager.players.size(); i++) {
             ids.push_back(player_manager.players[i]->get_id());
@@ -164,6 +182,31 @@ void network::handle_request(ENetEvent* event) {
         char* buffer = net_utills::convert_to_buffer(send_p);
 
         send_msg_safe(buffer, net_utills::get_packet_size(send_p), event->peer, 0);
+
+    }
+
+    else if (p->type == GET_PLAYER) {
+        packet* send_p = new packet;
+
+        send_p->type = GET_PLAYER;
+
+        int* id = (int*)p->data;
+
+        if (player_manager.fetch_player_data(*id) == nullptr) {
+            std::cout << "id: " << std::to_string(*id) << "does not exist\n";
+        }
+
+        else {
+            serialized_player srp = player_manager.fetch_player_data(*id)->serialize();
+
+            send_p->size = sizeof(serialized_player);
+
+            send_p->data = (char*)&srp;
+
+            char* buffer = net_utills::convert_to_buffer(send_p);
+
+            send_msg_safe(buffer, net_utills::get_packet_size(send_p), event->peer, 0);
+        }
 
     }
 
@@ -240,6 +283,22 @@ void network::player_creation_request(std::string name) {
     //delete p;
 }
 
+void network::fetch_player(int id) {
+    packet* send_p = new packet;
+
+    send_p->type = GET_PLAYER;
+    send_p->size = sizeof(int);
+
+    send_p->data = new char[sizeof(int)];
+
+    memcpy(send_p->data, &id, sizeof(int));
+
+    char* buffer = net_utills::convert_to_buffer(send_p);
+
+    send_msg_safe(buffer, net_utills::get_packet_size(send_p), remote_instance, 0);
+}
+
+
 
 
 void network::update_server() {
@@ -285,7 +344,7 @@ void network::update_server() {
 
 void network::update_client() {
 
-    move_myself(player_manager.host->get_pos());
+    if (player_manager.get_host() != nullptr) move_myself(player_manager.get_host()->get_pos());
     send_player_list_request();
 
     ENetEvent event;
@@ -304,14 +363,57 @@ void network::update_client() {
                 // Begin a new scope here
                 packet* p = net_utills::convert_from_buffer((char*)event.packet->data, event.packet->dataLength);
 
-                if (p->type == GET_PLAYER_LIST) {
-                    std::vector<int> ids;
 
-                    ids = deserializeIntVector(p->data, p->size);
+                if (player_manager.get_host() != nullptr) {
+                    std::cout << "my id is: " + std::to_string(player_manager.host_id) + "\n";
+                    std::cout << "my official id is: " + std::to_string(player_manager.get_host()->get_id()) << std::endl;
+                    std::cout << "my pos is: " + std::to_string(player_manager.get_host()->get_pos().x) + ", " + std::to_string(player_manager.get_host()->get_pos().x) << std::endl;
+                    if (p->type == GET_PLAYER_LIST) {
+                        std::vector<int> ids;
 
-                    for (int i = 0; i < ids.size(); i++) {
-                        std::cout << "id: " << std::to_string(ids[i]) << std::endl;
+                        ids = deserializeIntVector(p->data, p->size);
+
+                        for (int i = 0; i < ids.size(); i++) {
+                            //std::cout << "id: " << std::to_string(ids[i]) << std::endl;
+
+                            fetch_player(ids[i]);
+                        }
                     }
+
+                    if (p->type == GET_PLAYER) {
+                        serialized_player spl;
+
+                        memcpy(&spl, p->data, sizeof(serialized_player));
+
+                        if (player_manager.does_player_exist(spl.id) == false) {
+                            player_manager.add_player_from_serialised_player(&spl);
+                        }
+
+                        else {
+                            player* pl = player_manager.fetch_player_data(spl.id);
+                            if (pl != nullptr) {
+                                pl->set_pos(spl.pos);
+                                pl->set_stats(spl.stats);
+
+                            }
+                            else {
+                                std::cout << "player id: " + std::to_string(spl.id) + " does not exist\n";
+                            }
+                        }
+                    }
+                }
+
+                if (p->type == CREATE_PLAYER) {
+
+                    serialized_player splr;
+
+                    std::cout << "got player creation response from server.\nplayer id: " << std::to_string(splr.id) << std::endl;
+
+                    memcpy(&splr, p->data, sizeof(serialized_player));
+
+                    player_manager.add_player_from_serialised_player(&splr);
+
+                    player_manager.host_id = splr.id;
                 }
 
                 enet_packet_destroy(event.packet);
