@@ -156,12 +156,24 @@ void network::player_creation_request(std::string name) {
     packet* p = new packet;
 
     p->type = CREATE_PLAYER;
-    p->size = name.size() + 1;  // include null terminator
+
+    const char* new_str = name.c_str();
+    p->size = strlen(new_str) + 1;
 
     p->data = new char[p->size];
-    memcpy(p->data, name.c_str(), p->size);
 
-    send_msg_safe((char*)p, net_utills::get_packet_size(p), remote_instance, 0);
+
+    printf("requesting new player: %s", new_str);
+    memcpy(p->data, new_str, p->size);
+
+    char* buff = net_utills::convert_to_buffer(p);
+
+    if (buff == nullptr) {
+        std::cout << "\nissue packing packet\n";
+        return;
+    }
+
+    send_msg_safe(buff, net_utills::get_packet_size(p), remote_instance, 0);
 
     //delete[] static_cast<char*>(p->data);
     //delete p;

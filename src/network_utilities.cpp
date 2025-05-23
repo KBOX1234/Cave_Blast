@@ -30,6 +30,12 @@ char* net_utills::convert_to_buffer(packet* p) {
 
     std::memcpy(buffer + offset, p->data, p->size);
 
+    offset += p->size;
+
+    if (offset > total_size) {
+        return nullptr;
+    }
+
     return buffer;
 }
 
