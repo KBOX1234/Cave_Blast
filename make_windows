@@ -2,7 +2,7 @@
 CC = g++
 INCLUDE = -I./include -I./external/rl_imgui/ -I./external/raylib/src/ -I./external/imgui/ -I./external/enet/include/ -I./external/sphysics/
 LINKS = -L./lib
-LIBS = -lraylib -lgdi32 -lwinmm -lm -lrlImGui -lenet -lsphysics
+LIBS = -lraylib -lgdi32 -lm -lrlImGui -lenet -lsphysics -lws2_32 -lwinmm
 
 SRC_DIR = src
 OBJ_DIR = obj

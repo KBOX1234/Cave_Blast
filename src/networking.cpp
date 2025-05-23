@@ -14,6 +14,12 @@ network::network() {
     }
     else is_server = false;
 
+    if (enet_initialize() != 0) {
+        std::cerr << "Failed to initialize ENet." << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+
 
     if (is_server) {
         address.host = ENET_HOST_ANY;
@@ -72,6 +78,8 @@ network::network() {
 
 network::~network() {
     enet_host_destroy(local_instance);
+    enet_deinitialize();
+
 }
 
 void network::handle_connect(ENetEvent *event) {

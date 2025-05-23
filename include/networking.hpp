@@ -1,6 +1,5 @@
 #pragma once
 
-
 /*
  * it is the servers job to handle data fetch requests
  * it is the clients job to fetch the data
@@ -8,6 +7,22 @@
 
 #include "world.hpp"
 #include "rng.hpp"
+
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOGDI          // Avoid GDI definitions like Rectangle()
+#define NOMINMAX       // Avoid min/max macros
+#define NOSERVICE
+#define NOHELP
+#define NOATOM
+#define NOCOMM
+#define NOKANJI
+#define NOWH
+#define NOUSER
+#define NOMCX
+#define NOTAPE
+extern "C" __declspec(dllimport) unsigned int __stdcall timeGetTime(void);
+#endif
 
 #define PORT 8089
 
