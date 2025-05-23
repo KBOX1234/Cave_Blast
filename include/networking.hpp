@@ -69,6 +69,8 @@ private:
     void move_myself(Vector2 pos1);
     void player_creation_request(std::string name);
 
+    void send_player_list_request();
+
     void update_server();
     void update_client();
 

@@ -28,6 +28,11 @@ struct serialized_player {
     char name[MAX_NAME_LENGTH];
 };
 
+struct serialized_vector_int {
+    char* buffer;
+    size_t size;
+};
+
 class player_master;
 
 class player {

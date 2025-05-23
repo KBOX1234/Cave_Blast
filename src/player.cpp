@@ -68,7 +68,7 @@ void player_master::init() {
 
     default_texture_id = host->give_texture("reasource/gfx/other/player.png");
 
-    host->set_id(0);
+    host->set_id(random_num.get_random_int());
     host->set_name("default name");
     host->pos = {0, 0};
 }

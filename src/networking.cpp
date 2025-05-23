@@ -88,6 +88,22 @@ void network::handle_connect(ENetEvent *event) {
     event->peer->address.port);
 }
 
+serialized_vector_int serializeIntVector(const std::vector<int>& vec) {
+    serialized_vector_int result;
+    result.size = vec.size() * sizeof(int);
+    result.buffer = new char[result.size];
+    std::memcpy(result.buffer, vec.data(), result.size);
+    return result;
+}
+
+std::vector<int> deserializeIntVector(const char* buffer, size_t bufferSize) {
+    size_t numInts = bufferSize / sizeof(int);
+    std::vector<int> vec(numInts);
+    std::memcpy(vec.data(), buffer, bufferSize);
+    return vec;
+}
+
+
 void network::handle_request(ENetEvent* event) {
     ENetPacket* epacket = event->packet;
     char* buffer = reinterpret_cast<char*>(epacket->data);
@@ -101,13 +117,14 @@ void network::handle_request(ENetEvent* event) {
 
     if (p->type == CREATE_PLAYER) {
         std::cout  << "Player created" << std::endl;
-        // Assume null-terminated string for name
-        std::string new_name(p->data, p->size);  // safer than p->size - 1 unless you guarantee null-term
+
+        std::string new_name(p->data, p->size);
 
         int p_id = player_manager.add_player(new_name);
 
         int* p_id_ptr = new int(p_id);
-        event->peer->data = p_id_ptr;  // Store player ID on peer
+        event->peer->data = p_id_ptr;
+
 
         std::cout << "player id: " << std::to_string(p_id) << std::endl;
     }
@@ -131,6 +148,22 @@ void network::handle_request(ENetEvent* event) {
 
         send_p->type = GET_PLAYER_LIST;
 
+        std::vector<int> ids;
+
+        ids.push_back(player_manager.host->get_id());
+
+        for (int i = 0; i < player_manager.players.size(); i++) {
+            ids.push_back(player_manager.players[i]->get_id());
+        }
+
+        serialized_vector_int datad = serializeIntVector(ids);
+
+        send_p->size = datad.size;
+        send_p->data = datad.buffer;
+
+        char* buffer = net_utills::convert_to_buffer(send_p);
+
+        send_msg_safe(buffer, net_utills::get_packet_size(send_p), event->peer, 0);
 
     }
 
@@ -143,6 +176,19 @@ void network::handle_request(ENetEvent* event) {
 void network::handle_disconnect(ENetEvent *event) {
     std::cout <<  "A client disconnected" << std::endl;
 }
+
+void network::send_player_list_request() {
+    packet* p = new packet;
+
+    p->type = GET_PLAYER_LIST;
+    p->size = 0;
+    p->data = nullptr;
+
+    char* buffer = net_utills::convert_to_buffer(p);
+
+    send_msg_safe(buffer, net_utills::get_packet_size(p), remote_instance, 0);
+}
+
 
 void network::move_myself(Vector2 pos1) {
     packet* p = new packet;
@@ -196,7 +242,6 @@ void network::player_creation_request(std::string name) {
 
 
 
-
 void network::update_server() {
     ENetEvent event = {};
 
@@ -241,6 +286,7 @@ void network::update_server() {
 void network::update_client() {
 
     move_myself(player_manager.host->get_pos());
+    send_player_list_request();
 
     ENetEvent event;
     /* Wait up to 0 milliseconds for an event. */
@@ -254,19 +300,29 @@ void network::update_client() {
                 break;
 
             case ENET_EVENT_TYPE_RECEIVE:
-                printf("A packet of length %u containing %s was received on channel %u.\n",
-                    event.packet->dataLength,
-                    event.packet->data,
-                    event.channelID);
-                /* Clean up the packet now that we're done using it. */
-                enet_packet_destroy(event.packet);
+            {
+                // Begin a new scope here
+                packet* p = net_utills::convert_from_buffer((char*)event.packet->data, event.packet->dataLength);
 
+                if (p->type == GET_PLAYER_LIST) {
+                    std::vector<int> ids;
+
+                    ids = deserializeIntVector(p->data, p->size);
+
+                    for (int i = 0; i < ids.size(); i++) {
+                        std::cout << "id: " << std::to_string(ids[i]) << std::endl;
+                    }
+                }
+
+                enet_packet_destroy(event.packet);
                 break;
+            } // End of scope for RECEIVE case
 
             case ENET_EVENT_TYPE_DISCONNECT:
-                std::cout << "Server Disconected\n";
+                std::cout << "Server Disconnected\n";
                 break;
         }
+
     }
 }
 
