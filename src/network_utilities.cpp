@@ -64,3 +64,18 @@ packet* net_utills::convert_from_buffer(char* buffer, size_t buffer_size) {
 
     return p;
 }
+
+serialized_vector_int net_utills::serializeIntVector(const std::vector<int>& vec) {
+    serialized_vector_int result;
+    result.size = vec.size() * sizeof(int);
+    result.buffer = new char[result.size];
+    std::memcpy(result.buffer, vec.data(), result.size);
+    return result;
+}
+
+std::vector<int> net_utills::deserializeIntVector(const char* buffer, size_t bufferSize) {
+    size_t numInts = bufferSize / sizeof(int);
+    std::vector<int> vec(numInts);
+    std::memcpy(vec.data(), buffer, bufferSize);
+    return vec;
+}

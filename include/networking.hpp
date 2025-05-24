@@ -41,6 +41,11 @@ struct __attribute__((packed)) packet {
     char* data;
 };
 
+struct serialized_vector_int {
+    char* buffer;
+    size_t size;
+};
+
 class net_utills {
 public:
     static void send_msg_safe(char* data, size_t s, ENetPeer *to, char channel);
@@ -52,6 +57,10 @@ public:
     static char* convert_to_buffer(packet* p);
 
     static packet* convert_from_buffer(char* buffer, size_t buffer_size);
+
+    static serialized_vector_int serializeIntVector(const std::vector<int>& vec);
+
+    static std::vector<int> deserializeIntVector(const char* buffer, size_t bufferSize);
 
 };
 
