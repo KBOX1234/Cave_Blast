@@ -144,7 +144,11 @@ int world_class::new_chunk_from_json(json j) {
 
 
     chunk chnk;
+    //std::cout << j.dump(4);
+
     int return_v = chnk.new_chunk_from_json(j);
+
+    //std::cout << "added new chunk from network\n";
 
     if (return_v == 0) {
         chunks.push_back(std::move(chnk));
@@ -211,7 +215,35 @@ const block* world_class::chunk_buffer(Vector2 pos){
     chunk* tmp_chunk = get_chunk(pos);
 
     if(tmp_chunk == nullptr) {
-        tmp_chunk = generate_chunk(pos);
+        if (networking.is_host() == true) {
+            tmp_chunk = generate_chunk(pos);
+        }
+
+        else {
+            json sendJ;
+
+            sendJ["x"] = pos.x;
+            sendJ["y"] = pos.y;
+
+            auto res = networking.cli->Post("/chunk", sendJ.dump(), "application/json");
+
+            if (res && res->status == 200) {
+
+                //std::cout << "Response:\n" << res->body << std::endl;
+                json new_c = json::parse(res->body);
+                world.new_chunk_from_json(new_c);
+
+                tmp_chunk = world.get_chunk(pos);
+
+            }
+
+            else {
+
+                std::cout << "unable to fetch chunk json\n";
+                return nullptr;
+            }
+
+        }
     }
 
     return tmp_chunk->blocks_buffer();

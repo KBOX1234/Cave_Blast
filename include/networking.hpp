@@ -7,6 +7,7 @@
 
 #include "world.hpp"
 #include "rng.hpp"
+#include "httplib.h"
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -25,6 +26,7 @@ extern "C" __declspec(dllimport) unsigned int __stdcall timeGetTime(void);
 #endif
 
 #define PORT 8089
+#define API_PORT 8080
 
 #define NOTHING 0
 #define MOVE 1
@@ -35,6 +37,7 @@ extern "C" __declspec(dllimport) unsigned int __stdcall timeGetTime(void);
 #define GET_PLAYER 6
 
 #include <enet/enet.h>
+#include <thread>
 
 struct __attribute__((packed)) packet {
     int type;
@@ -81,11 +84,14 @@ class client_utls {
 
 class network : public net_utills {
     friend class client_utls;
+    friend class world_class;
 private:
     bool is_server;
     ENetAddress address = {};
     ENetHost *local_instance = nullptr;
     ENetPeer *remote_instance = nullptr;
+    std::unique_ptr<httplib::Client> cli;
+    httplib::Server svr;
 
     void handle_connect(ENetEvent *event);
     void handle_disconnect(ENetEvent *event);
@@ -93,6 +99,8 @@ private:
 
     void update_server();
     void update_client();
+
+    void start_api();
 
 public:
     network();

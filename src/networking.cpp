@@ -4,6 +4,11 @@
 
 #include "../include/player.hpp"
 
+void network::start_api() {
+    svr.listen("0.0.0.0", API_PORT);
+}
+
+
 network::network() {
     std::string input;
     std::cout << "Server or Client (1, 2): ";
@@ -47,9 +52,59 @@ network::network() {
 
         std::cout << "Server listening on port: " << std::to_string(address.port) << std::endl;
 
+        svr.Post("/chunk", [](const httplib::Request& req, httplib::Response& res) {
+
+            //std::cout << "got request:\n" + req.body;
+
+            json body = json::parse(req.body);
+
+            Vector2 pos;
+
+
+
+            pos.x = body["x"];
+
+            pos.y = body["y"];
+
+
+
+            chunk* chnk = world.get_chunk(pos);
+
+            if (chnk == nullptr) {
+                chnk = world.generate_chunk(pos);
+            }
+
+            json response = chnk->serialize_chunk();
+
+            std::cout << response.dump(4);
+            //std::cout << "got request for chunk: " << std::to_string(pos.x) + ", " + std::to_string(pos.y) << std::endl;
+
+
+            res.set_content(response.dump(4), "application/json");
+
+
+        });
+
+        std::cout << "API server at http://localhost:" << std::to_string(API_PORT) << std::endl;
+        std::thread server_thread(&network::start_api, this);
+        server_thread.detach();
+
 
     }
     else {
+        //httplib::Client cli("http://localhost:" + std::to_string(API_PORT));
+        std::string url = "http://localhost:" + std::to_string(API_PORT);
+
+
+        try {
+            cli = std::make_unique<httplib::Client>("localhost", API_PORT);
+
+        } catch (const std::exception& e) {
+            std::cerr << "Failed to initialize httplib::Client: " << e.what() << std::endl;
+        }
+
+
+
         local_instance = enet_host_create(NULL /* create a client host */,
             1 /* only allow 1 outgoing connection */,
             2 /* allow up 2 channels to be used, 0 and 1 */,
@@ -83,11 +138,16 @@ network::network() {
         }
     }
 
+
+
+
+
 }
 
 network::~network() {
     enet_host_destroy(local_instance);
     enet_deinitialize();
+    svr.stop();
 
 }
 

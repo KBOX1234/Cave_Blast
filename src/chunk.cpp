@@ -145,7 +145,7 @@ int chunk::new_chunk_from_json(json j) {
 
         json data = j["block_data"];
         for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
-            blocks[i].attr->type = data[i];
+            blocks[i].attr = item_manager.fetch_item(data[i])->block_type_ptr;
         }
     }
 
