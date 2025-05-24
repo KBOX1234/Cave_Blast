@@ -127,6 +127,14 @@ int world_class::place_block(Vector2 pos, block b){
 
     if(chunk_index == -1) return -1;
 
+    block_change bc;
+
+    bc.blk_name = item_manager.get_item_name_by_id(b.attr->item_id);
+
+    bc.pos = pos;
+
+    networking.add_block_change(bc);
+
     return chunks[chunk_index].set_block(b.attr, get_sub_chunk_pos(pos));
 
 

@@ -176,6 +176,43 @@ void network::update_server() {
 
         }
 
+    }
 
+    for (size_t i = 0; i < local_instance->peerCount; ++i) {
+        ENetPeer* peer = &local_instance->peers[i];
+
+        if (peer->state == ENET_PEER_STATE_CONNECTED) {
+            send_block_changes(peer);
+        }
     }
 }
+
+void network::add_block_change(block_change blk_chng) {
+    blk_change.push_back(blk_chng);
+}
+
+void network::send_block_changes(ENetPeer *to) {
+    for (int i = 0; i < blk_change.size(); i++) {
+        packet p;
+
+        p.type = SET_BLOCK;
+
+        size_t total_d_size = strlen(blk_change[i].blk_name.c_str()) + 1 + sizeof(Vector2);
+
+        char* data_b = new char[total_d_size];
+
+        memcpy(data_b, &blk_change[i].pos, sizeof(Vector2));
+        memcpy(data_b + sizeof(Vector2), blk_change[i].blk_name.c_str(), strlen(blk_change[i].blk_name.c_str()) + 1);
+
+        p.size = total_d_size;
+        p.data = data_b;
+
+        char* buffer = net_utills::convert_to_buffer(&p);
+
+        send_msg_safe(buffer,  net_utills::get_packet_size(&p), to, 0);
+
+    }
+    blk_change.clear();
+
+}
+

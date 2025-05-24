@@ -82,6 +82,12 @@ class client_utls {
         static void place_block(std::string name, Vector2 pos);
 };
 
+struct block_change {
+    std::string blk_name;
+
+    Vector2 pos;
+};
+
 class network : public net_utills {
     friend class client_utls;
     friend class world_class;
@@ -92,6 +98,10 @@ private:
     ENetPeer *remote_instance = nullptr;
     std::unique_ptr<httplib::Client> cli;
     httplib::Server svr;
+
+    std::vector<block_change> blk_change;
+
+    void send_block_changes(ENetPeer* to);
 
     void handle_connect(ENetEvent *event);
     void handle_disconnect(ENetEvent *event);
@@ -107,6 +117,7 @@ public:
     ~network();
 
     bool is_host();
+    void add_block_change(block_change blk_chng);
 
     void update();
 

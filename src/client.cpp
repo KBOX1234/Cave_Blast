@@ -78,6 +78,26 @@ void network::update_client() {
                     player_manager.host_id = splr.id;
                 }
 
+                if (p->type == SET_BLOCK) {
+                    char* name = new char[p->size - sizeof(Vector2)];
+
+                    Vector2 pos;
+
+                    memcpy(&pos, p->data, sizeof(Vector2));
+
+                    memcpy(name, p->data + sizeof(Vector2), p->size - sizeof(Vector2));
+
+                    block blk;
+
+                    blk.state = 0;
+
+                    blk.attr = item_manager.fetch_item(name)->block_type_ptr;
+
+                    world.place_block(pos, blk);
+
+                    std::cout << "set block\n";
+                }
+
                 enet_packet_destroy(event.packet);
                 break;
             } // End of scope for RECEIVE case
