@@ -64,7 +64,20 @@ public:
 
 };
 
+class client_utls {
+    public:
+
+        static void player_creation_request(std::string name);
+
+        static void move_myself(float angle);
+
+        static void send_player_list_request();
+
+        static void fetch_player(int id);
+};
+
 class network : public net_utills {
+    friend class client_utls;
 private:
     bool is_server;
     ENetAddress address = {};
@@ -75,16 +88,10 @@ private:
     void handle_disconnect(ENetEvent *event);
     void handle_request(ENetEvent *event);
 
-    void player_creation_request(std::string name);
-
-    void send_player_list_request();
-    void fetch_player(int id);
-
     void update_server();
     void update_client();
 
 public:
-    void move_myself(float angle);
     network();
     ~network();
 
