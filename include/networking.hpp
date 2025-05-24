@@ -5,25 +5,20 @@
  * it is the clients job to fetch the data
  */
 
-#include "world.hpp"
-#include "rng.hpp"
-#include "httplib.h"
-
+//trying to stop windows.h from poluting the namespace
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
-#define NOGDI          // Avoid GDI definitions like Rectangle()
-#define NOMINMAX       // Avoid min/max macros
-#define NOSERVICE
-#define NOHELP
-#define NOATOM
-#define NOCOMM
-#define NOKANJI
-#define NOWH
+#define NOGDI             // Prevent inclusion of GDI (Graphics Device Interface), including Rectangle()
+#define NOSYSMETRICS
+#define NOMINMAX
 #define NOUSER
+#define NOCOMM
+#define NOIME
+#define NOSERVICE
 #define NOMCX
-#define NOTAPE
-extern "C" __declspec(dllimport) unsigned int __stdcall timeGetTime(void);
 #endif
+
+#include <enet/enet.h>
 
 #define PORT 8089
 #define API_PORT 8080
@@ -36,7 +31,9 @@ extern "C" __declspec(dllimport) unsigned int __stdcall timeGetTime(void);
 #define GET_PLAYER_LIST 5
 #define GET_PLAYER 6
 
-#include <enet/enet.h>
+#include "world.hpp"
+#include "rng.hpp"
+#include "httplib.h"
 #include <thread>
 
 struct __attribute__((packed)) packet {
@@ -92,6 +89,11 @@ class network : public net_utills {
     friend class client_utls;
     friend class world_class;
 private:
+
+    bool async_chunk_fetch_on = false;
+
+    void fetch_chunk(Vector2 pos);
+
     bool is_server;
     ENetAddress address = {};
     ENetHost *local_instance = nullptr;

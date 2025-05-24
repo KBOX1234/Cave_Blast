@@ -76,7 +76,7 @@ network::network() {
 
             json response = chnk->serialize_chunk();
 
-            std::cout << response.dump(4);
+            //std::cout << response.dump(4);
             //std::cout << "got request for chunk: " << std::to_string(pos.x) + ", " + std::to_string(pos.y) << std::endl;
 
 
@@ -164,4 +164,23 @@ void network::update() {
 
 bool network::is_host() {
     return is_server;
+}
+
+void network::fetch_chunk(Vector2 pos) {
+    networking.async_chunk_fetch_on = true;
+    json sendJ;
+
+    sendJ["x"] = pos.x;
+    sendJ["y"] = pos.y;
+
+    auto res = networking.cli->Post("/chunk", sendJ.dump(), "application/json");
+
+    if (res && res->status == 200) {
+
+        //std::cout << "Response:\n" << res->body << std::endl;
+        json new_c = json::parse(res->body);
+        world.new_chunk_from_json(new_c);
+
+    }
+    networking.async_chunk_fetch_on = false;
 }

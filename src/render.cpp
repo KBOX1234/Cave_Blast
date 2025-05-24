@@ -79,7 +79,7 @@ void render::draw_chunk(Vector2 chnk_pos) {
         pointer.x++;
 
         if (render_chnk == nullptr) {
-            std::cout << "somthing went wrong" << std::endl;
+            //std::cout << "somthing went wrong" << std::endl;
             break;
         }
 

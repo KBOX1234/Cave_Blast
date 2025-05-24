@@ -95,7 +95,7 @@ void network::update_client() {
 
                     world.place_block(pos, blk);
 
-                    std::cout << "set block\n";
+                    //std::cout << "set block\n";
                 }
 
                 enet_packet_destroy(event.packet);

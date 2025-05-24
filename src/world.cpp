@@ -228,28 +228,9 @@ const block* world_class::chunk_buffer(Vector2 pos){
         }
 
         else {
-            json sendJ;
-
-            sendJ["x"] = pos.x;
-            sendJ["y"] = pos.y;
-
-            auto res = networking.cli->Post("/chunk", sendJ.dump(), "application/json");
-
-            if (res && res->status == 200) {
-
-                //std::cout << "Response:\n" << res->body << std::endl;
-                json new_c = json::parse(res->body);
-                world.new_chunk_from_json(new_c);
-
-                tmp_chunk = world.get_chunk(pos);
-
-            }
-
-            else {
-
-                std::cout << "unable to fetch chunk json\n";
-                return nullptr;
-            }
+            std::thread t(&network::fetch_chunk, &networking, pos);
+            t.detach();
+            return nullptr;
 
         }
     }
