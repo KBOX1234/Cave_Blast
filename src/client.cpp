@@ -6,7 +6,7 @@
 
 void network::update_client() {
 
-    if (player_manager.get_host() != nullptr && input_manager.is_there_input_update() == true) move_myself(player_manager.get_host()->get_pos());
+    if (player_manager.get_host() != nullptr && input_manager.is_there_input_update() == true) move_myself(player_manager.get_host()->get_rotation());
     send_player_list_request();
 
     ENetEvent event;
@@ -29,7 +29,7 @@ void network::update_client() {
                 if (player_manager.get_host() != nullptr) {
                     //std::cout << "my id is: " + std::to_string(player_manager.host_id) + "\n";
                     //std::cout << "my official id is: " + std::to_string(player_manager.get_host()->get_id()) << std::endl;
-                    std::cout << "my pos is: " + std::to_string(player_manager.get_host()->get_pos().x) + ", " + std::to_string(player_manager.get_host()->get_pos().x) << std::endl;
+                    //std::cout << "my pos is: " + std::to_string(player_manager.get_host()->get_pos().x) + ", " + std::to_string(player_manager.get_host()->get_pos().x) << std::endl;
                     if (p->type == GET_PLAYER_LIST) {
                         std::vector<int> ids;
 
@@ -118,15 +118,15 @@ void network::send_player_list_request() {
 }
 
 
-void network::move_myself(Vector2 pos1) {
+void network::move_myself(float angle) {
     packet* p = new packet;
 
     p->type = MOVE;
-    p->size = sizeof(Vector2);
+    p->size = sizeof(float);
 
     p->data = new char[p->size];
 
-    memcpy(p->data, &pos1, p->size);
+    memcpy(p->data, &angle, p->size);
 
     char* buff = net_utills::convert_to_buffer(p);
 

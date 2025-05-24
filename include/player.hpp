@@ -2,6 +2,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <cmath>
 
 #include "render.hpp"
 #include "input.hpp"
@@ -25,6 +26,8 @@ struct serialized_player {
 
     int id;
 
+    float angle;
+
     char name[MAX_NAME_LENGTH];
 };
 
@@ -39,6 +42,10 @@ class player {
 
         int id;
         int player_texture_id;
+
+        int speed = 1;
+
+        float rotation = 0;
 
         std::string name;
 
@@ -57,8 +64,7 @@ class player {
 
         int give_texture(std::string path);
 
-        void move_player_x(float x);
-        void move_player_y(float y);
+        void move_player();
 
         Vector2 get_pos();
 
@@ -73,6 +79,15 @@ class player {
         serialized_player serialize();
 
         void set_stats(stat_s st);
+
+        void increase_angle(float amount);
+
+        void decrease(float amount);
+
+        void zero_rotation();
+
+    float get_rotation();
+
 };
 
 class player_master {

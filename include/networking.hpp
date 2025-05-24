@@ -84,9 +84,11 @@ private:
     void update_client();
 
 public:
-    void move_myself(Vector2 pos1);
+    void move_myself(float angle);
     network();
     ~network();
+
+    bool is_host();
 
     void update();
 

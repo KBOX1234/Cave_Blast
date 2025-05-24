@@ -21,11 +21,34 @@ int player::give_texture(std::string path) {
     return player_texture_id;
 }
 
-void player::move_player_x(float x) {
-    pos.x = pos.x + x;
+void player::decrease(float amount) {
+    rotation = rotation - amount;
 }
-void player::move_player_y(float y) {
-    pos.y = pos.y + y;
+
+void player::increase_angle(float amount) {
+    rotation = rotation + amount;
+}
+
+void player::zero_rotation() {
+    rotation = 0;
+}
+
+float player::get_rotation() {
+    return rotation;
+}
+
+
+
+void player::move_player() {
+    Vector2 d;
+
+    float rad = rotation * (M_PI / 180.0f);
+
+    d.x = std::cos(rad) * speed;
+    d.y = std::sin(rad) * speed;
+
+    pos.x += d.x;
+    pos.y += d.y;
 }
 
 Vector2 player::get_pos() {
@@ -136,7 +159,7 @@ void player_master::draw_player(player *pl) {
     drcd.x = round(pl->get_pos().x);
     drcd.y = round(pl->get_pos().y);
 
-    DrawTextureEx(*txt, drcd, 0, scale, WHITE);
+    DrawTextureEx(*txt, drcd, pl->rotation, scale, WHITE);
 }
 
 serialized_player player::serialize() {

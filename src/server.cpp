@@ -47,11 +47,14 @@ void network::handle_request(ENetEvent* event) {
 
     else if (p->type == MOVE) {
         int* id_ptr = static_cast<int*>(event->peer->data);
-        if (id_ptr && p->size >= sizeof(Vector2)) {
+        if (id_ptr && p->size >= sizeof(float)) {
             int id = *id_ptr;
-            Vector2 pos;
-            std::memcpy(&pos, p->data, sizeof(Vector2));
-            player_manager.players[id]->set_pos(pos);
+            float angle;
+            std::memcpy(&angle, p->data, sizeof(float));
+            player_manager.players[id]->zero_rotation();
+            player_manager.players[id]->increase_angle(angle);
+            player_manager.players[id]->move_player();
+
 
             //std::cout << "player \"" << id << "\" moved to " << std::to_string(pos.x) << ", " << std::to_string(pos.y) << "." << std::endl;
         } else {
