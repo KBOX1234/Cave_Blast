@@ -1,6 +1,7 @@
 #include "../include/networking.hpp"
 
 void net_utills::send_msg_safe(char *data, size_t s, ENetPeer *to, char channel) {
+
     ENetPacket *packet = enet_packet_create(data, s, ENET_PACKET_FLAG_RELIABLE);
 
     enet_peer_send(to, channel, packet);

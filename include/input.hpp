@@ -41,6 +41,8 @@ class input {
 
         bool is_inp_update;
 
+        bool is_block_update;
+
         void update_movement();
 
         void mine_controles();

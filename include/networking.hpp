@@ -29,9 +29,10 @@ extern "C" __declspec(dllimport) unsigned int __stdcall timeGetTime(void);
 #define NOTHING 0
 #define MOVE 1
 #define GET_CHUNK 2
-#define CREATE_PLAYER 3
-#define GET_PLAYER_LIST 4
-#define GET_PLAYER 5
+#define SET_BLOCK 3
+#define CREATE_PLAYER 4
+#define GET_PLAYER_LIST 5
+#define GET_PLAYER 6
 
 #include <enet/enet.h>
 
@@ -74,6 +75,8 @@ class client_utls {
         static void send_player_list_request();
 
         static void fetch_player(int id);
+
+        static void place_block(std::string name, Vector2 pos);
 };
 
 class network : public net_utills {

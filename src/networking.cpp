@@ -78,7 +78,7 @@ network::network() {
 
         if (enet_host_service(local_instance, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
             std::cout << "Connection established" << std::endl;
-            client_utls::player_creation_request("BINLADEN");
+            client_utls::player_creation_request("Luke");
             //move_myself({10, 3});
         }
     }

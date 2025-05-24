@@ -55,6 +55,8 @@ void input::mine_controles() {
         //PLS FIX
 
         world.place_block({cursor.x - 1, cursor.y}, new_block);
+
+        client_utls::place_block("dirt", {cursor.x - 1, cursor.y});
     }
 
     if (IsKeyPressed(KEY_LEFT)) {

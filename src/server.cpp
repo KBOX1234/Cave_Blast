@@ -111,6 +111,23 @@ void network::handle_request(ENetEvent* event) {
 
     }
 
+    else if (p->type == SET_BLOCK) {
+        Vector2 b_p_pos;
+
+        memcpy(&b_p_pos, p->data, sizeof(Vector2));
+
+        char* name_b = new char[p->size - sizeof(Vector2)];
+
+        memcpy(name_b, p->data + sizeof(Vector2), p->size - sizeof(Vector2));
+
+        block blk;
+
+        blk.state = 0;
+        blk.attr = item_manager.fetch_item(name_b)->block_type_ptr;
+
+        world.place_block(b_p_pos, blk);
+    }
+
     delete[] p->data;
     delete p;
 }

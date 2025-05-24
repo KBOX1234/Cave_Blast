@@ -167,3 +167,31 @@ void client_utls::player_creation_request(std::string name) {
     //delete[] static_cast<char*>(p->data);
     //delete p;
 }
+
+void client_utls::place_block(std::string name, Vector2 pos) {
+    if (networking.is_server == false) {
+        size_t data_size = strlen(name.c_str()) + 1;
+
+        data_size = data_size + sizeof(Vector2);
+
+        packet* send_p = new packet;
+
+        send_p->type = SET_BLOCK;
+
+        send_p->size = data_size;
+
+        char* data_b = new char[data_size];
+
+        size_t point = sizeof(Vector2);
+
+        memcpy(data_b, &pos, point);
+
+        memcpy(data_b + point, name.c_str(), strlen(name.c_str()) + 1);
+
+        send_p->data = data_b;
+
+        char* buffer = net_utills::convert_to_buffer(send_p);
+
+        net_utills::send_msg_safe(buffer, net_utills::get_packet_size(send_p), networking.remote_instance, 0);
+    }
+}
