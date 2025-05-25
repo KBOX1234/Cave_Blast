@@ -135,7 +135,13 @@ void network::handle_request(ENetEvent* event) {
 
 
 void network::handle_disconnect(ENetEvent *event) {
-    std::cout <<  "A client disconnected" << std::endl;
+    int id;
+
+    memcpy(&id, event->peer->data, sizeof(int));
+
+    std::cout <<  "client disconnected: "<< std::to_string(id) << std::endl;
+
+    player_manager.remove_player(id);
 }
 
 
@@ -169,7 +175,7 @@ void network::update_server() {
 
             case ENET_EVENT_TYPE_DISCONNECT:
             {
-                printf("client disconnected.\n");
+                handle_disconnect(&event);
 
                 break;
             }

@@ -116,6 +116,8 @@ class player_master {
 
         int add_player(std::string name);
 
+        int remove_player(int id);
+
         std::vector<std::string> get_player_names();
 
         int get_player_id_by_name(std::string name);

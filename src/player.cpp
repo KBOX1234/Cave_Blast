@@ -159,7 +159,8 @@ void player_master::draw_player(player *pl) {
     drcd.x = round(pl->get_pos().x);
     drcd.y = round(pl->get_pos().y);
 
-    DrawTextureEx(*txt, drcd, pl->rotation, scale, WHITE);
+    DrawTextureEx(*txt, drcd, 0, scale, WHITE);
+    DrawText(pl->get_name().c_str(), drcd.x, drcd.y - 12, 10, WHITE);
 }
 
 serialized_player player::serialize() {
@@ -208,4 +209,16 @@ int player_master::add_player_from_serialised_player(serialized_player *spl) {
     std::cout << "Player " << spl->name << " added" << std::endl;
 
     return players.size() - 1;
+}
+
+int player_master::remove_player(int id) {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->get_id() == id) {
+            players.erase(players.begin() + i);
+
+            return 0;
+        }
+    }
+
+    return -1;
 }
