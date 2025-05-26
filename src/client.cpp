@@ -112,6 +112,7 @@ void network::update_client() {
 
             case ENET_EVENT_TYPE_DISCONNECT:
                 std::cout << "Server Disconnected\n";
+                exit(-2);
                 break;
         }
 
