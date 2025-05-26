@@ -8,6 +8,8 @@ void network::handle_connect(ENetEvent *event) {
     printf("A new client connected from %x:%u.\n",
     event->peer->address.host,
     event->peer->address.port);
+
+    clients.push_back(event->peer);
 }
 
 
@@ -142,6 +144,7 @@ void network::handle_disconnect(ENetEvent *event) {
     std::cout <<  "client disconnected: "<< std::to_string(id) << std::endl;
 
     player_manager.remove_player(id);
+    send_p_connection_loss(event);
 }
 
 
@@ -229,10 +232,13 @@ void network::send_p_connection_loss(ENetEvent *event) {
 
     pp.size = sizeof(int);
 
-    pp.data = event->peer->data;
+    pp.data = (char*)event->peer->data;
 
     char* buffer = net_utills::convert_to_buffer(&pp);
 
-    send_msg_safe(buffer, net_utills::get_packet_size(&pp), event->peer, 0);
+    for (int i = 0; i < clients.size(); i++) {
+        send_msg_safe(buffer, net_utills::get_packet_size(&pp), clients[i], 0);
+    }
+
 }
 

@@ -101,6 +101,7 @@ private:
     ENetPeer *remote_instance = nullptr;
     std::unique_ptr<httplib::Client> cli;
     httplib::Server svr;
+    std::vector<ENetPeer*> clients;
 
     std::vector<block_change> blk_change;
 

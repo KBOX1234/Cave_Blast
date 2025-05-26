@@ -4,7 +4,7 @@
 
 #include "../include/player.hpp"
 
-#define IP_ADRESS "192.168.137.12"
+#define IP_ADRESS "localhost"
 
 void network::start_api() {
     svr.listen(IP_ADRESS, API_PORT);
