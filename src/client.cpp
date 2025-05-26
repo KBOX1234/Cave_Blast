@@ -6,7 +6,7 @@
 
 void network::update_client() {
 
-    if (player_manager.get_host() != nullptr && input_manager.is_there_input_update() == true) client_utls::move_myself(player_manager.get_host()->get_rotation());
+    if (player_manager.get_host() != nullptr && input_manager.is_there_input_update() == true) client_utls::move_myself(player_manager.get_host()->get_rotation(), player_manager.get_host()->get_pos());
     client_utls::send_player_list_request();
 
     ENetEvent event;
@@ -76,6 +76,18 @@ void network::update_client() {
                     player_manager.add_player_from_serialised_player(&splr);
 
                     player_manager.host_id = splr.id;
+
+                    player_manager.myself->set_id(splr.id);
+
+                    if (player_manager.re_sync_timer < 2 * GetFPS()) {
+                        player_manager.re_sync_timer ++;
+                    }
+                    else {
+                        player_manager.myself->set_pos(player_manager.get_host()->get_pos());
+                        player_manager.myself->zero_rotation();
+                        player_manager.myself->increase_angle(player_manager.get_host()->get_rotation());
+                    }
+
                 }
 
                 if (p->type == SET_BLOCK) {
@@ -104,6 +116,14 @@ void network::update_client() {
                     memcpy(&id, p->data, sizeof(int));
 
                     player_manager.remove_player(id);
+                }
+
+                if (p->type == RE_CALIBRATE) {
+                    Vector2 n_pos;
+
+                    memcpy(&n_pos, p->data, sizeof(Vector2));
+
+                    player_manager.get_host()->set_pos(n_pos);
                 }
 
                 enet_packet_destroy(event.packet);
@@ -147,15 +167,16 @@ void client_utls::send_player_list_request() {
 }
 
 
-void client_utls::move_myself(float angle) {
+void client_utls::move_myself(float angle, Vector2 pos) {
     packet* p = new packet;
 
     p->type = MOVE;
-    p->size = sizeof(float);
+    p->size = sizeof(Vector2) + sizeof(float);
 
     p->data = new char[p->size];
 
-    memcpy(p->data, &angle, p->size);
+    memcpy(p->data, &pos, sizeof(Vector2));
+    memcpy(p->data + sizeof(Vector2), &pos, sizeof(float));
 
     char* buff = net_utills::convert_to_buffer(p);
 

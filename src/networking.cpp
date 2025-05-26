@@ -38,6 +38,8 @@ network::network() {
 
         player_manager.host_id = pla->get_id();
 
+        player_manager.myself->set_id(pla->get_id());
+
         address.host = ENET_HOST_ANY;
         address.port = PORT;
 

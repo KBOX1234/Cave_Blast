@@ -4,6 +4,10 @@
 
 player::player() {
     pos = {0, 0};
+    last_move = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::high_resolution_clock::now().time_since_epoch()
+    ).count();
+
 }
 
 
@@ -50,6 +54,17 @@ void player::move_player() {
     pos.x += d.x;
     pos.y += d.y;
 }
+void player::move_player_back() {
+    Vector2 d;
+
+    float rad = rotation * (M_PI / 180.0f);
+
+    d.x = std::cos(rad) * speed;
+    d.y = std::sin(rad) * speed;
+
+    pos.x -= d.x;
+    pos.y -= d.y;
+}
 
 Vector2 player::get_pos() {
     return pos;
@@ -89,6 +104,7 @@ int player_master::add_player(std::string name) {
 
 player_master::player_master() {
     host_id = random_num.get_random_int();
+    myself = new player;
 }
 
 player *player_master::get_host() {
@@ -138,6 +154,8 @@ player *player_master::fetch_player_data(int id) {
 
 
 player_master::~player_master() {
+
+    delete myself;
     for (int i = 0; i < players.size(); i++) {
         delete[] players[i];
     }
@@ -222,3 +240,45 @@ int player_master::remove_player(int id) {
 
     return -1;
 }
+
+void player_master::update_predicted_player() {
+    player* p = player_manager.get_host();
+
+    p->set_pos(myself->get_pos());
+    p->zero_rotation();
+    p->increase_angle(myself->get_rotation());
+}
+
+int64_t player::last_move_tsmp() {
+    return last_move;
+}
+
+void player::update_time_stamp() {
+    last_move = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::high_resolution_clock::now().time_since_epoch()
+    ).count();
+}
+
+bool player::is_valid_move(Vector2 pos2) {
+    double ms_per_frame = 1000.0 / (double)GetFPS();
+
+    // Assuming speed is pixels per frame
+    double speed_pixels_per_ms = speed / ms_per_frame;
+
+    speed_pixels_per_ms = speed_pixels_per_ms * 2;
+
+    double current_time = std::chrono::duration<double, std::milli>(
+        std::chrono::high_resolution_clock::now().time_since_epoch()
+    ).count();
+
+    double elapsed = current_time - last_move;  // last_move should also be in double ms
+
+    double max_possible_distance = elapsed * speed_pixels_per_ms;
+
+    if (Vector2Distance(pos2, pos) <= max_possible_distance) {
+        return true;
+    }
+
+    return false;
+}
+

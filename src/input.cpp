@@ -10,20 +10,22 @@ int kb(key_bind kbind) {
 
 void input::update_movement() {
     if (IsKeyDown(KEY_W)) {
-        player_manager.get_host()->move_player();
+        player_manager.myself->move_player();
 
         is_inp_update = true;
     }
     if (IsKeyDown(KEY_S)) {
 
-        //is_inp_update = true;
+        player_manager.myself->move_player_back();
+
+        is_inp_update = true;
     }
     if (IsKeyDown(KEY_D)) {
-        player_manager.get_host()->increase_angle(1);
+        player_manager.myself->increase_angle(1);
         //is_inp_update = true;
     }
     if (IsKeyDown(KEY_A)) {
-        player_manager.get_host()->decrease(1);
+        player_manager.myself->decrease(1);
         //is_inp_update = true;
     }
 

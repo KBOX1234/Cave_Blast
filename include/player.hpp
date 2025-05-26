@@ -2,6 +2,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <chrono>
 #include <cmath>
 
 #include "render.hpp"
@@ -10,6 +11,7 @@
 #include "../external/raylib/src/raylib.h"
 #include "imgui_window.hpp"
 #include "networking.hpp"
+#include "raymath.h"
 
 struct stat_s {
     int health;
@@ -49,22 +51,34 @@ class player {
 
         std::string name;
 
+        double last_move = (double)std::chrono::duration_cast<std::chrono::milliseconds>(
+std::chrono::high_resolution_clock::now().time_since_epoch()
+).count();
+
 
     public:
 
         player();
         //~player();
 
+        int64_t last_move_tsmp();
+
+        void update_time_stamp();
+
+        bool is_valid_move(Vector2 pos2);
+
 
         void set_id(int id);
 
-        void set_pos(Vector2 pos);
+        void set_pos(Vector2 pos2);
 
         void set_name(std::string name);
 
         int give_texture(std::string path);
 
         void move_player();
+
+        void move_player_back();
 
         Vector2 get_pos();
 
@@ -100,10 +114,14 @@ class player_master {
 
         int add_player_from_serialised_player(serialized_player* spl);
 
+        int re_sync_timer = 0;
+
 
     public:
 
         int default_texture_id;
+
+        player* myself;
 
         int host_id;
 
@@ -127,6 +145,8 @@ class player_master {
         void draw_player(player* pl);
 
         bool does_player_exist(int id);
+
+        void update_predicted_player();
 
 
 };

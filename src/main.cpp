@@ -62,6 +62,7 @@ network networking;
 #include "world.hpp"
 
 int main() {
+
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGTH, "Cave Blast");
     rlImGuiSetup(true);
@@ -80,6 +81,7 @@ int main() {
 
         if (player_manager.get_host() != nullptr) {
             input_manager.update();
+            player_manager.update_predicted_player();
         }
 
 

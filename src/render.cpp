@@ -27,9 +27,9 @@ void render::move_camera_y(float amount) {
 
 void render::update_drawing_coords() {
 
-    camera.target.x = player_manager.get_host()->get_pos().x - ((((float)SCREEN_WIDTH / camera.zoom) / 2.0f) - (BLOCK_SIZE / 2));
+    camera.target.x = player_manager.myself->get_pos().x - ((((float)SCREEN_WIDTH / camera.zoom) / 2.0f) - (BLOCK_SIZE / 2));
     camera.target.x = round(camera.target.x);
-    camera.target.y = player_manager.get_host()->get_pos().y - ((((float)SCREEN_HEIGTH / camera.zoom) / 2.0f) - BLOCK_SIZE);
+    camera.target.y = player_manager.myself->get_pos().y - ((((float)SCREEN_HEIGTH / camera.zoom) / 2.0f) - BLOCK_SIZE);
     camera.target.y = round(camera.target.y);
 
     //std::cout << "player pos: " << std::to_string(player_manager.get_host()->get_pos().x) << ", " << std::to_string(player_manager.get_host()->get_pos().y) << std::endl;
@@ -117,9 +117,17 @@ void render::draw_cursor(Vector2 pos) {
     DrawRectangleLines(pos.x*BLOCK_SIZE, pos.y*BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, WHITE);
 }
 
-void render::render_players() {
+void render::render_players(bool debug) {
     for (int i = 0; i < player_manager.players.size(); i++) {
-        player_manager.draw_player(player_manager.players[i]);
+
+        if (player_manager.host_id != player_manager.players[i]->get_id()) {
+            player_manager.draw_player(player_manager.players[i]);
+        }
+
+        else if (debug == true){
+            DrawRectangleLines(player_manager.players[i]->get_pos().x, player_manager.players[i]->get_pos().y, 32, 64, RED);
+        }
+
     }
 }
 
@@ -134,7 +142,9 @@ void render::update() {
 
     render_world();
 
-    render_players();
+    render_players(true);
+
+    player_manager.draw_player(player_manager.myself);
 
     draw_cursor(input_manager.cursor);
 

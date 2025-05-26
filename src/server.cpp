@@ -49,13 +49,40 @@ void network::handle_request(ENetEvent* event) {
 
     else if (p->type == MOVE) {
         int* id_ptr = static_cast<int*>(event->peer->data);
-        if (id_ptr && p->size >= sizeof(float)) {
+        if (id_ptr && p->size >= sizeof(float) + sizeof(Vector2)) {
             int id = *id_ptr;
+            Vector2 pos;
             float angle;
-            std::memcpy(&angle, p->data, sizeof(float));
+            std::memcpy(&pos, p->data, sizeof(Vector2));
+            memcpy(&angle, p->data + sizeof(Vector2), sizeof(float));
+
             player_manager.players[id]->zero_rotation();
             player_manager.players[id]->increase_angle(angle);
-            player_manager.players[id]->move_player();
+
+            packet back_p;
+
+            back_p.type = RE_CALIBRATE;
+            back_p.size = sizeof(Vector2);
+
+            //does not want to work so for now we will take client coords at face value
+            //if (player_manager.players[id]->is_valid_move(pos) == true) {
+            if (true) {
+                player_manager.players[id]->set_pos(pos);
+                player_manager.players[id]->update_time_stamp();
+                back_p.data = (char*)&pos;
+
+
+            }
+            else {
+                pos = player_manager.players[id]->get_pos();
+                back_p.data = (char*)&pos;
+
+                std::cout << "player: " << std::to_string(*(int*)event->peer->data) << " moved wrongly\n";
+            }
+
+            char* buffer = net_utills::convert_to_buffer(&back_p);
+
+            net_utills::send_msg_safe(buffer, net_utills::get_packet_size(&back_p), event->peer, 0);
 
 
             //std::cout << "player \"" << id << "\" moved to " << std::to_string(pos.x) << ", " << std::to_string(pos.y) << "." << std::endl;

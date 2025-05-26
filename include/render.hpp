@@ -20,7 +20,7 @@ private:
 
     void render_world();
 
-    void render_players();
+    void render_players(bool debug = false);
 
 
 

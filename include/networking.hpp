@@ -31,6 +31,7 @@
 #define GET_PLAYER_LIST 5
 #define GET_PLAYER 6
 #define DISCONNECT_PLAYER 7
+#define RE_CALIBRATE 8
 
 #include "world.hpp"
 #include "rng.hpp"
@@ -71,13 +72,14 @@ class client_utls {
 
         static void player_creation_request(std::string name);
 
-        static void move_myself(float angle);
+        static void move_myself(float angle, Vector2 pos);
 
         static void send_player_list_request();
 
         static void fetch_player(int id);
 
         static void place_block(std::string name, Vector2 pos);
+
 };
 
 struct block_change {
