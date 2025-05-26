@@ -108,7 +108,7 @@ void network::handle_request(ENetEvent* event) {
 
             char* buffer = net_utills::convert_to_buffer(send_p);
 
-            send_msg_safe(buffer, net_utills::get_packet_size(send_p), event->peer, 0);
+            send_msg_fast(buffer, net_utills::get_packet_size(send_p), event->peer, 0);
         }
 
     }

@@ -164,7 +164,7 @@ void client_utls::move_myself(float angle) {
         return;
     }
 
-    net_utills::send_msg_safe(buff, net_utills::get_packet_size(p), networking.remote_instance, 0);
+    net_utills::send_msg_fast(buff, net_utills::get_packet_size(p), networking.remote_instance, 0);
     //delete[] static_cast<char*>(p->data);
 
     //delete p;
