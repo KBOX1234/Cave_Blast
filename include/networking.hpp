@@ -30,6 +30,7 @@
 #define CREATE_PLAYER 4
 #define GET_PLAYER_LIST 5
 #define GET_PLAYER 6
+#define DISCONNECT_PLAYER 7
 
 #include "world.hpp"
 #include "rng.hpp"
@@ -108,6 +109,7 @@ private:
     void handle_connect(ENetEvent *event);
     void handle_disconnect(ENetEvent *event);
     void handle_request(ENetEvent *event);
+    void send_p_connection_loss(ENetEvent* event);
 
     void update_server();
     void update_client();

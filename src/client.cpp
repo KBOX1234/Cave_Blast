@@ -98,6 +98,14 @@ void network::update_client() {
                     //std::cout << "set block\n";
                 }
 
+                if (p->type == DISCONNECT_PLAYER) {
+                    int id;
+
+                    memcpy(&id, p->data, sizeof(int));
+
+                    player_manager.remove_player(id);
+                }
+
                 enet_packet_destroy(event.packet);
                 break;
             } // End of scope for RECEIVE case

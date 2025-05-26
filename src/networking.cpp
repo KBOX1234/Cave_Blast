@@ -4,8 +4,10 @@
 
 #include "../include/player.hpp"
 
+#define IP_ADRESS "192.168.137.12"
+
 void network::start_api() {
-    svr.listen("0.0.0.0", API_PORT);
+    svr.listen(IP_ADRESS, API_PORT);
 }
 
 
@@ -97,7 +99,7 @@ network::network() {
 
 
         try {
-            cli = std::make_unique<httplib::Client>("localhost", API_PORT);
+            cli = std::make_unique<httplib::Client>(IP_ADRESS, API_PORT);
 
         } catch (const std::exception& e) {
             std::cerr << "Failed to initialize httplib::Client: " << e.what() << std::endl;
@@ -118,7 +120,7 @@ network::network() {
 
         ENetAddress address = {};
         //enet_address_set_host(&address, "127.0.0.1");
-        enet_address_set_host(&address, "localhost");
+        enet_address_set_host(&address, IP_ADRESS);
         address.port = PORT;
 
         remote_instance = enet_host_connect(local_instance, &address, 2, 0);

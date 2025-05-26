@@ -222,3 +222,17 @@ void network::send_block_changes(ENetPeer *to) {
 
 }
 
+void network::send_p_connection_loss(ENetEvent *event) {
+    packet pp;
+
+    pp.type = DISCONNECT_PLAYER;
+
+    pp.size = sizeof(int);
+
+    pp.data = event->peer->data;
+
+    char* buffer = net_utills::convert_to_buffer(&pp);
+
+    send_msg_safe(buffer, net_utills::get_packet_size(&pp), event->peer, 0);
+}
+
