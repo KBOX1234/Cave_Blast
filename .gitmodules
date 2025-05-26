@@ -13,3 +13,6 @@
 [submodule "external/sphysics"]
 	path = external/sphysics
 	url = https://github.com/KBOX1234/sphysics.git
+[submodule "external/netem"]
+	path = external/netem
+	url = https://github.com/tum-lkn/tcgui.git
