@@ -56,11 +56,13 @@ void input::mine_controles() {
         //the coord should just be able to be directly passed but some logic error makes the block be placed 1 to the side
         //PLS FIX
 
-        if (networking.is_host() == true) {
-            world.place_block({cursor.x - 1, cursor.y}, new_block);
+        if (networking.is_host() == false) {
+            client_utls::place_block("dirt", {cursor.x - 1, cursor.y});
         }
 
-        client_utls::place_block("dirt", {cursor.x - 1, cursor.y});
+        world.place_block({cursor.x - 1, cursor.y}, new_block);
+
+
     }
 
     if (IsKeyPressed(KEY_LEFT)) {
