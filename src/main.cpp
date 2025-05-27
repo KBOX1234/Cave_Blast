@@ -72,7 +72,7 @@ int main() {
 
     player_manager.init();
 
-    SetTargetFPS(165);
+    SetTargetFPS(60);
 
 
     while (!WindowShouldClose()) {

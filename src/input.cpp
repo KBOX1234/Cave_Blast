@@ -21,11 +21,11 @@ void input::update_movement() {
         is_inp_update = true;
     }
     if (IsKeyDown(KEY_D)) {
-        player_manager.myself->increase_angle(1);
+        player_manager.myself->increase_angle(3);
         //is_inp_update = true;
     }
     if (IsKeyDown(KEY_A)) {
-        player_manager.myself->decrease(1);
+        player_manager.myself->decrease(3);
         //is_inp_update = true;
     }
 
