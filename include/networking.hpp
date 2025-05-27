@@ -83,7 +83,16 @@ class client_utls {
 };
 
 class server_utls {
+    public:
+        static void handle_player_creation(ENetEvent* event, packet* p);
 
+        static void handle_move_packet(ENetEvent* event, packet* p);
+
+        static void send_player_list(ENetEvent* event, packet* p);
+
+        static void send_player_data(ENetEvent* event, packet* p);
+
+        static void handle_player_block_placement(ENetEvent* event, packet* p);
 };
 
 struct block_change {

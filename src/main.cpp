@@ -88,9 +88,12 @@ int main() {
             texture_manager.update();
 
             if (player_manager.get_host() != nullptr) {
-                input_manager.update();
                 player_manager.update_predicted_player();
             }
+        }
+
+        if (player_manager.get_host() != nullptr) {
+            input_manager.update();
         }
 
 

@@ -34,36 +34,40 @@ void player::increase_angle(float amount) {
 }
 
 void player::zero_rotation() {
-    rotation = 0;
+    if (delta_time_master.can_game_continue() == true) rotation = 0;
 }
 
 float player::get_rotation() {
-    return rotation;
+    if (delta_time_master.can_game_continue() == true) return rotation;
 }
 
 
 
 void player::move_player() {
-    Vector2 d;
+    if (delta_time_master.can_game_continue() == true){
+        Vector2 d;
 
-    float rad = rotation * (M_PI / 180.0f);
+        float rad = rotation * (M_PI / 180.0f);
 
-    d.x = std::cos(rad) * speed;
-    d.y = std::sin(rad) * speed;
+        d.x = std::cos(rad) * speed;
+        d.y = std::sin(rad) * speed;
 
-    pos.x += d.x;
-    pos.y += d.y;
+        pos.x += d.x;
+        pos.y += d.y;
+    }
 }
 void player::move_player_back() {
-    Vector2 d;
+    if (delta_time_master.can_game_continue() == true){
+        Vector2 d;
 
-    float rad = rotation * (M_PI / 180.0f);
+        float rad = rotation * (M_PI / 180.0f);
 
-    d.x = std::cos(rad) * speed;
-    d.y = std::sin(rad) * speed;
+        d.x = std::cos(rad) * speed;
+        d.y = std::sin(rad) * speed;
 
-    pos.x -= d.x;
-    pos.y -= d.y;
+        pos.x -= d.x;
+        pos.y -= d.y;
+    }
 }
 
 Vector2 player::get_pos() {

@@ -12,6 +12,7 @@
 #include "imgui_window.hpp"
 #include "networking.hpp"
 #include "raymath.h"
+#include "delta_time.hpp"
 
 struct stat_s {
     int health;
@@ -109,6 +110,7 @@ class player_master {
     friend class input;
     friend class network;
     friend class render;
+    friend class server_utls;
     private:
         std::vector<player*> players;
 
