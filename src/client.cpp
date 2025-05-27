@@ -6,8 +6,8 @@
 
 void network::update_client() {
 
-    if (player_manager.get_host() != nullptr && input_manager.is_there_input_update() == true) client_utls::move_myself(player_manager.get_host()->get_rotation(), player_manager.get_host()->get_pos());
-    client_utls::send_player_list_request();
+    if (player_manager.get_host() != nullptr) client_utls::move_myself(player_manager.get_host()->get_rotation(), player_manager.get_host()->get_pos());
+    client_utls::fetch_all_players();
 
     ENetEvent event;
     /* Wait up to 0 milliseconds for an event. */
@@ -124,6 +124,37 @@ void network::update_client() {
                     memcpy(&n_pos, p->data, sizeof(Vector2));
 
                     player_manager.get_host()->set_pos(n_pos);
+                }
+
+                if (p->type == GET_ALL_PLAYERS) {
+                    size_t size = (size_t)round(p->size / sizeof(serialized_player));
+                    size_t inc = 0;
+
+
+
+                    while (inc < p->size) {
+                        serialized_player spl;
+
+                        memcpy(&spl, p->data + inc, sizeof(serialized_player));
+
+                        inc = inc + sizeof(serialized_player);
+
+                        player* player_p = player_manager.fetch_player_data(spl.id);
+
+                        if (player_p == nullptr) {
+                            player_p = player_manager.fetch_player_data(player_manager.add_player_from_serialised_player(&spl));
+                        }
+                        else {
+                            player_p->set_name(spl.name);
+                            player_p->set_pos(spl.pos);
+                            player_p->set_stats(spl.stats);
+
+                            player_p->zero_rotation(true);
+                            player_p->increase_angle(spl.angle, true);
+                        }
+                    }
+
+
                 }
 
                 enet_packet_destroy(event.packet);
@@ -244,4 +275,18 @@ void client_utls::place_block(std::string name, Vector2 pos) {
 
         net_utills::send_msg_safe(buffer, net_utills::get_packet_size(send_p), networking.remote_instance, 0);
     }
+}
+
+void client_utls::fetch_all_players() {
+    packet p;
+
+    p.type = GET_ALL_PLAYERS;
+    p.data = nullptr;
+    p.size = 0;
+
+    char* buffer = net_utills::convert_to_buffer(&p);
+
+    net_utills::send_msg_fast(buffer, net_utills::get_packet_size(&p), networking.remote_instance, 0);
+
+    delete[] buffer;
 }

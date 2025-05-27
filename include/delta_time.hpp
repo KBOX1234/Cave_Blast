@@ -27,6 +27,8 @@ public:
 
     void update();
 
+    int get_ticks_per_second();
+
 
 };
 

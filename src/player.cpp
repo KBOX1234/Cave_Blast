@@ -29,16 +29,18 @@ void player::decrease(float amount) {
     rotation = rotation - amount;
 }
 
-void player::increase_angle(float amount) {
-    rotation = rotation + amount;
+void player::increase_angle(float amount, bool no_delta) {
+    if (delta_time_master.can_game_continue() == true && no_delta == false) rotation = rotation + amount;
+    else rotation = rotation + amount;
 }
 
-void player::zero_rotation() {
-    if (delta_time_master.can_game_continue() == true) rotation = 0;
+void player::zero_rotation(bool no_delta) {
+    if (delta_time_master.can_game_continue() == true && no_delta == false) rotation = 0;
+    else rotation = 0;
 }
 
 float player::get_rotation() {
-    if (delta_time_master.can_game_continue() == true) return rotation;
+    return rotation;
 }
 
 
@@ -46,6 +48,7 @@ float player::get_rotation() {
 void player::move_player() {
     if (delta_time_master.can_game_continue() == true){
         Vector2 d;
+
 
         float rad = rotation * (M_PI / 180.0f);
 
@@ -58,6 +61,8 @@ void player::move_player() {
 }
 void player::move_player_back() {
     if (delta_time_master.can_game_continue() == true){
+
+
         Vector2 d;
 
         float rad = rotation * (M_PI / 180.0f);
@@ -171,6 +176,14 @@ player_master::~player_master() {
 void player_master::draw_player(player *pl) {
     Texture2D* txt = texture_manager.grab_texture_pointer(default_texture_id);
 
+    float catchup_speed = Vector2Distance(pl->pos, pl->interpolation) / ((delta_time_master.get_ticks_per_second() / 2) / (Vector2Distance(pl->pos, pl->interpolation) / 4));
+
+    if (pl->interpolation.x < pl->pos.x) pl->interpolation.x = pl->interpolation.x + catchup_speed;
+    if (pl->interpolation.x > pl->pos.x) pl->interpolation.x = pl->interpolation.x - catchup_speed;
+
+    if (pl->interpolation.y < pl->pos.y) pl->interpolation.y = pl->interpolation.y + catchup_speed;
+    if (pl->interpolation.y > pl->pos.y) pl->interpolation.y = pl->interpolation.y - catchup_speed;
+
 
     float scale = (float)txt->width/32;
 
@@ -178,8 +191,7 @@ void player_master::draw_player(player *pl) {
 
     Vector2 drcd;
 
-    drcd.x = round(pl->get_pos().x);
-    drcd.y = round(pl->get_pos().y);
+    drcd = pl->interpolation;
 
     DrawTextureEx(*txt, drcd, 0, scale, WHITE);
     DrawText(pl->get_name().c_str(), drcd.x, drcd.y - 12, 10, WHITE);
@@ -198,6 +210,7 @@ serialized_player player::serialize() {
 }
 
 void player::set_pos(Vector2 pos2) {
+
     pos = pos2;
 }
 
@@ -285,4 +298,6 @@ bool player::is_valid_move(Vector2 pos2) {
 
     return false;
 }
-
+Vector2 player::get_interpos() {
+    return interpolation;
+}

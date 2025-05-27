@@ -32,6 +32,7 @@
 #define GET_PLAYER 6
 #define DISCONNECT_PLAYER 7
 #define RE_CALIBRATE 8
+#define GET_ALL_PLAYERS 9
 
 #include "world.hpp"
 #include "rng.hpp"
@@ -80,6 +81,8 @@ class client_utls {
 
         static void place_block(std::string name, Vector2 pos);
 
+        static void fetch_all_players();
+
 };
 
 class server_utls {
@@ -93,6 +96,8 @@ class server_utls {
         static void send_player_data(ENetEvent* event, packet* p);
 
         static void handle_player_block_placement(ENetEvent* event, packet* p);
+
+        static void handle_all_player_fetch(ENetEvent* event);
 };
 
 struct block_change {
@@ -103,6 +108,7 @@ struct block_change {
 
 class network : public net_utills {
     friend class client_utls;
+    friend class server_utls;
     friend class world_class;
 private:
 

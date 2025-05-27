@@ -30,4 +30,7 @@ void delta_time::update() {
     }
 
 }
+int delta_time::get_ticks_per_second() {
+    return tick_speed;
+}
 

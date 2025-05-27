@@ -38,6 +38,7 @@ class player_master;
 
 class player {
     friend class player_master;
+    friend class render;
     private:
         Vector2 pos;
 
@@ -55,6 +56,9 @@ class player {
         double last_move = (double)std::chrono::duration_cast<std::chrono::milliseconds>(
 std::chrono::high_resolution_clock::now().time_since_epoch()
 ).count();
+        Vector2 last_pos;
+
+        Vector2 interpolation;
 
 
     public:
@@ -95,13 +99,15 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         void set_stats(stat_s st);
 
-        void increase_angle(float amount);
+        void increase_angle(float amount, bool no_delta = false);
 
         void decrease(float amount);
 
-        void zero_rotation();
+        void zero_rotation(bool no_delta = false);
 
     float get_rotation();
+
+        Vector2 get_interpos();
 
 };
 

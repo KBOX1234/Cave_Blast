@@ -12,7 +12,6 @@ void network::handle_connect(ENetEvent *event) {
     clients.push_back(event->peer);
 }
 
-
 void network::handle_request(ENetEvent* event) {
     ENetPacket* epacket = event->packet;
     char* buffer = reinterpret_cast<char*>(epacket->data);
@@ -29,13 +28,11 @@ void network::handle_request(ENetEvent* event) {
     else if (p->type == GET_PLAYER_LIST) server_utls::send_player_list(event, p);
     else if (p->type == GET_PLAYER) server_utls::send_player_data(event, p);
     else if (p->type == SET_BLOCK) server_utls::handle_player_block_placement(event, p);
-
+    else if (p->type == GET_ALL_PLAYERS) server_utls::handle_all_player_fetch(event);
 
     delete[] p->data;
     delete p;
 }
-
-
 
 void network::handle_disconnect(ENetEvent *event) {
     int id;
@@ -47,7 +44,6 @@ void network::handle_disconnect(ENetEvent *event) {
     player_manager.remove_player(id);
     send_p_connection_loss(event);
 }
-
 
 void network::update_server() {
     ENetEvent event = {};
@@ -269,4 +265,55 @@ void server_utls::handle_player_block_placement(ENetEvent *event, packet *p) {
     blk.attr = item_manager.fetch_item(name_b)->block_type_ptr;
 
     world.place_block(b_p_pos, blk);
+}
+
+void server_utls::handle_all_player_fetch(ENetEvent *event) {
+    packet send_p;
+
+    send_p.type = GET_ALL_PLAYERS;
+
+    serialized_player serialized_players[player_manager.players.size()];
+
+    size_t data_size = sizeof(serialized_player) * player_manager.players.size();
+
+    size_t inc = 0;
+
+    char* data_b = new char[data_size];
+
+
+    for (int i = 0; i < player_manager.players.size(); i++) {
+        serialized_players[i].angle = player_manager.players[i]->get_rotation();
+        serialized_players[i].id = player_manager.players[i]->get_id();
+
+        serialized_players[i].pos = player_manager.players[i]->get_interpos();
+        serialized_players[i].stats = player_manager.players[i]->get_stats();
+
+        const char* pname = player_manager.players[i]->get_name().c_str();
+
+        size_t name_length = strlen(pname) + 1;
+
+        if (name_length >= MAX_NAME_LENGTH) {
+            memcpy(serialized_players[i].name, pname, MAX_NAME_LENGTH -1);
+            serialized_players[i].name[MAX_NAME_LENGTH -1] = '\0';
+        }
+        else {
+            memcpy(serialized_players[i].name, pname, name_length);
+        }
+
+        memcpy(data_b + inc, &serialized_players[i], sizeof(serialized_player));
+
+        inc = inc + sizeof(serialized_player);
+
+    }
+
+    send_p.size = data_size;
+
+    send_p.data = data_b;
+
+    char* buffer = net_utills::convert_to_buffer(&send_p);
+
+    net_utills::send_msg_safe(buffer, net_utills::get_packet_size(&send_p), event->peer, 0);
+
+    delete[] buffer;
+    delete[] data_b;
 }
