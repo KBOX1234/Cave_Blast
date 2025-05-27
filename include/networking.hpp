@@ -82,6 +82,10 @@ class client_utls {
 
 };
 
+class server_utls {
+
+};
+
 struct block_change {
     std::string blk_name;
 

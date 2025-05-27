@@ -20,7 +20,7 @@ void network::handle_request(ENetEvent* event) {
 
     packet* p = net_utills::convert_from_buffer(buffer, buffer_size);
     if (!p) {
-        std::cerr << "[network] Failed to deserialize packet" << std::endl;
+        std::cerr << "Failed to deserialize packet" << std::endl;
         return;
     }
 
@@ -35,16 +35,16 @@ void network::handle_request(ENetEvent* event) {
 
         serialized_player splr = plr->serialize();
 
-        packet* send_p = new packet;
-        send_p->type = CREATE_PLAYER;
-        send_p->size = sizeof(serialized_player);
-        send_p->data = (char*)&splr;
+        packet send_p;
+        send_p.type = CREATE_PLAYER;
+        send_p.size = sizeof(serialized_player);
+        send_p.data = (char*)&splr;
 
-        char* buffer = net_utills::convert_to_buffer(send_p);
-        send_msg_safe(buffer, net_utills::get_packet_size(send_p), event->peer, 0);
+        char* buffer = net_utills::convert_to_buffer(&send_p);
+        send_msg_safe(buffer, net_utills::get_packet_size(&send_p), event->peer, 0);
 
-        //delete[] send_p->data;
-        delete send_p;
+        delete[] buffer;
+
     }
 
     else if (p->type == MOVE) {
@@ -84,6 +84,8 @@ void network::handle_request(ENetEvent* event) {
 
             net_utills::send_msg_safe(buffer, net_utills::get_packet_size(&back_p), event->peer, 0);
 
+            delete[] buffer;
+
 
             //std::cout << "player \"" << id << "\" moved to " << std::to_string(pos.x) << ", " << std::to_string(pos.y) << "." << std::endl;
         } else {
@@ -92,9 +94,9 @@ void network::handle_request(ENetEvent* event) {
     }
 
     else if (p->type == GET_PLAYER_LIST) {
-        packet* send_p = new packet;
+        packet send_p;
 
-        send_p->type = GET_PLAYER_LIST;
+        send_p.type = GET_PLAYER_LIST;
 
         std::vector<int> ids;
 
@@ -106,19 +108,23 @@ void network::handle_request(ENetEvent* event) {
 
         serialized_vector_int datad = serializeIntVector(ids);
 
-        send_p->size = datad.size;
-        send_p->data = datad.buffer;
+        send_p.size = datad.size;
+        send_p.data = datad.buffer;
 
-        char* buffer = net_utills::convert_to_buffer(send_p);
+        char* buffer = net_utills::convert_to_buffer(&send_p);
 
-        send_msg_safe(buffer, net_utills::get_packet_size(send_p), event->peer, 0);
+        send_msg_safe(buffer, net_utills::get_packet_size(&send_p), event->peer, 0);
+
+        delete[] datad.buffer;
+
+        delete[] buffer;
 
     }
 
     else if (p->type == GET_PLAYER) {
-        packet* send_p = new packet;
+        packet send_p;
 
-        send_p->type = GET_PLAYER;
+        send_p.type = GET_PLAYER;
 
         int* id = (int*)p->data;
 
@@ -129,13 +135,15 @@ void network::handle_request(ENetEvent* event) {
         else {
             serialized_player srp = player_manager.fetch_player_data(*id)->serialize();
 
-            send_p->size = sizeof(serialized_player);
+            send_p.size = sizeof(serialized_player);
 
-            send_p->data = (char*)&srp;
+            send_p.data = (char*)&srp;
 
-            char* buffer = net_utills::convert_to_buffer(send_p);
+            char* buffer = net_utills::convert_to_buffer(&send_p);
 
-            send_msg_fast(buffer, net_utills::get_packet_size(send_p), event->peer, 0);
+            send_msg_fast(buffer, net_utills::get_packet_size(&send_p), event->peer, 0);
+
+            delete[] buffer;
         }
 
     }
