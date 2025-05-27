@@ -176,13 +176,26 @@ player_master::~player_master() {
 void player_master::draw_player(player *pl) {
     Texture2D* txt = texture_manager.grab_texture_pointer(default_texture_id);
 
-    float catchup_speed = Vector2Distance(pl->pos, pl->interpolation) / ((delta_time_master.get_ticks_per_second() / 2) / (Vector2Distance(pl->pos, pl->interpolation) / 4));
+    float dx = pl->pos.x - pl->interpolation.x;
+    float dy = pl->pos.y - pl->interpolation.y;
 
-    if (pl->interpolation.x < pl->pos.x) pl->interpolation.x = pl->interpolation.x + catchup_speed;
-    if (pl->interpolation.x > pl->pos.x) pl->interpolation.x = pl->interpolation.x - catchup_speed;
+    int frames_to_reach = delta_time_master.get_ticks_per_second() / 2; // Interpolate over half a second
 
-    if (pl->interpolation.y < pl->pos.y) pl->interpolation.y = pl->interpolation.y + catchup_speed;
-    if (pl->interpolation.y > pl->pos.y) pl->interpolation.y = pl->interpolation.y - catchup_speed;
+    float step_x = dx / frames_to_reach;
+    float step_y = dy / frames_to_reach;
+
+    // X
+    if (std::abs(dx) > std::abs(step_x))
+        pl->interpolation.x += step_x;
+    else
+        pl->interpolation.x = pl->pos.x;
+
+    // Y
+    if (std::abs(dy) > std::abs(step_y))
+        pl->interpolation.y += step_y;
+    else
+        pl->interpolation.y = pl->pos.y;
+
 
 
     float scale = (float)txt->width/32;

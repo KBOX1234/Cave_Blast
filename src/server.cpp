@@ -285,7 +285,7 @@ void server_utls::handle_all_player_fetch(ENetEvent *event) {
         serialized_players[i].angle = player_manager.players[i]->get_rotation();
         serialized_players[i].id = player_manager.players[i]->get_id();
 
-        serialized_players[i].pos = player_manager.players[i]->get_interpos();
+        serialized_players[i].pos = player_manager.players[i]->get_pos();
         serialized_players[i].stats = player_manager.players[i]->get_stats();
 
         const char* pname = player_manager.players[i]->get_name().c_str();

@@ -7,7 +7,8 @@
 void network::update_client() {
 
     if (player_manager.get_host() != nullptr) client_utls::move_myself(player_manager.get_host()->get_rotation(), player_manager.get_host()->get_pos());
-    client_utls::fetch_all_players();
+    //client_utls::fetch_all_players();
+    client_utls::send_player_list_request();
 
     ENetEvent event;
     /* Wait up to 0 milliseconds for an event. */
@@ -216,7 +217,7 @@ void client_utls::move_myself(float angle, Vector2 pos) {
         return;
     }
 
-    net_utills::send_msg_fast(buff, net_utills::get_packet_size(p), networking.remote_instance, 0);
+    net_utills::send_msg_safe(buff, net_utills::get_packet_size(p), networking.remote_instance, 0);
     //delete[] static_cast<char*>(p->data);
 
     //delete p;
