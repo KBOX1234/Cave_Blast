@@ -56,6 +56,8 @@ keybind_master keybind_manager;
 input input_manager;
 #include "networking.hpp"
 network networking;
+#include "delta_time.hpp"
+delta_time delta_time_master;
 
 
 #include "rng.hpp"
@@ -72,16 +74,23 @@ int main() {
 
     player_manager.init();
 
-    SetTargetFPS(60);
+    //SetTargetFPS(60);
 
 
     while (!WindowShouldClose()) {
-        networking.update();
-        texture_manager.update();
 
-        if (player_manager.get_host() != nullptr) {
-            input_manager.update();
-            player_manager.update_predicted_player();
+        delta_time_master.update();
+        networking.update();
+
+        //everything that needs delta time:
+
+        if (delta_time_master.can_game_continue() == true) {
+            texture_manager.update();
+
+            if (player_manager.get_host() != nullptr) {
+                input_manager.update();
+                player_manager.update_predicted_player();
+            }
         }
 
 
