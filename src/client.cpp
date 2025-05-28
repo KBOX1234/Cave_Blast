@@ -183,7 +183,7 @@ void client_utls::fetch_player(int id) {
 
     char* buffer = net_utills::convert_to_buffer(send_p);
 
-    net_utills::send_msg_safe(buffer, net_utills::get_packet_size(send_p), networking.remote_instance, 0);
+    net_utills::send_msg_safe(buffer, net_utills::get_packet_size(send_p), networking->remote_instance, 0);
 }
 
 void client_utls::send_player_list_request() {
@@ -195,7 +195,7 @@ void client_utls::send_player_list_request() {
 
     char* buffer = net_utills::convert_to_buffer(p);
 
-    net_utills::send_msg_safe(buffer, net_utills::get_packet_size(p), networking.remote_instance, 0);
+    net_utills::send_msg_safe(buffer, net_utills::get_packet_size(p), networking->remote_instance, 0);
 }
 
 
@@ -217,7 +217,7 @@ void client_utls::move_myself(float angle, Vector2 pos) {
         return;
     }
 
-    net_utills::send_msg_safe(buff, net_utills::get_packet_size(p), networking.remote_instance, 0);
+    net_utills::send_msg_safe(buff, net_utills::get_packet_size(p), networking->remote_instance, 0);
     //delete[] static_cast<char*>(p->data);
 
     //delete p;
@@ -244,14 +244,14 @@ void client_utls::player_creation_request(std::string name) {
         return;
     }
 
-    net_utills::send_msg_safe(buff, net_utills::get_packet_size(p), networking.remote_instance, 0);
+    net_utills::send_msg_safe(buff, net_utills::get_packet_size(p), networking->remote_instance, 0);
 
     //delete[] static_cast<char*>(p->data);
     //delete p;
 }
 
 void client_utls::place_block(std::string name, Vector2 pos) {
-    if (networking.is_server == false) {
+    if (networking->is_server == false) {
         size_t data_size = strlen(name.c_str()) + 1;
 
         data_size = data_size + sizeof(Vector2);
@@ -274,7 +274,7 @@ void client_utls::place_block(std::string name, Vector2 pos) {
 
         char* buffer = net_utills::convert_to_buffer(send_p);
 
-        net_utills::send_msg_safe(buffer, net_utills::get_packet_size(send_p), networking.remote_instance, 0);
+        net_utills::send_msg_safe(buffer, net_utills::get_packet_size(send_p), networking->remote_instance, 0);
     }
 }
 
@@ -287,7 +287,7 @@ void client_utls::fetch_all_players() {
 
     char* buffer = net_utills::convert_to_buffer(&p);
 
-    net_utills::send_msg_fast(buffer, net_utills::get_packet_size(&p), networking.remote_instance, 0);
+    net_utills::send_msg_fast(buffer, net_utills::get_packet_size(&p), networking->remote_instance, 0);
 
     delete[] buffer;
 }

@@ -20,9 +20,6 @@
 
 #include <enet/enet.h>
 
-#define PORT 8089
-#define API_PORT 8080
-
 #define NOTHING 0
 #define MOVE 1
 #define GET_CHUNK 2
@@ -111,6 +108,8 @@ class network : public net_utills {
     friend class server_utls;
     friend class world_class;
 private:
+    int port;
+    std::string ip_addr;
 
     bool async_chunk_fetch_on = false;
 
@@ -139,7 +138,8 @@ private:
     void start_api();
 
 public:
-    network();
+    network(bool server, const std::string ip, int port);
+
     ~network();
 
     bool is_host();
@@ -149,4 +149,4 @@ public:
 
 };
 
-extern network networking;
+extern std::unique_ptr<network> networking;

@@ -55,7 +55,6 @@ imgui_win imgui_master;
 keybind_master keybind_manager;
 input input_manager;
 #include "networking.hpp"
-network networking;
 #include "delta_time.hpp"
 delta_time delta_time_master;
 
@@ -64,6 +63,8 @@ delta_time delta_time_master;
 #include "world.hpp"
 
 int main() {
+
+    networking = std::make_unique<network>(true, "localhost", 8090);
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGTH, "Cave Blast");
@@ -80,7 +81,7 @@ int main() {
     while (!WindowShouldClose()) {
 
         delta_time_master.update();
-        networking.update();
+        networking->update();
 
         //everything that needs delta time:
 

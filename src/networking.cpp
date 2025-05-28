@@ -4,22 +4,14 @@
 
 #include "../include/player.hpp"
 
-#define IP_ADRESS "localhost"
+std::unique_ptr<network> networking = nullptr;
 
 void network::start_api() {
-    svr.listen(IP_ADRESS, API_PORT);
+    svr.listen(ip_addr, port);
 }
 
+network::network(bool server, const std::string ip, int port) : is_server(server), ip_addr(ip), port(port){
 
-network::network() {
-    std::string input;
-    std::cout << "Server or Client (1, 2): ";
-    std::cin >> input;
-
-    if (input == "1") {
-        is_server = true;
-    }
-    else is_server = false;
 
     if (enet_initialize() != 0) {
         std::cerr << "Failed to initialize ENet." << std::endl;
@@ -41,7 +33,7 @@ network::network() {
         player_manager.myself->set_id(pla->get_id());
 
         address.host = ENET_HOST_ANY;
-        address.port = PORT;
+        address.port = port;
 
         local_instance = enet_host_create(&address /* the address to bind the server host to */,
         32			/* allow up to 32 clients and/or outgoing connections */,
@@ -89,7 +81,7 @@ network::network() {
 
         });
 
-        std::cout << "API server at http://localhost:" << std::to_string(API_PORT) << std::endl;
+        std::cout << "API server at http://localhost:" << std::to_string(port) << std::endl;
         std::thread server_thread(&network::start_api, this);
         server_thread.detach();
 
@@ -97,11 +89,11 @@ network::network() {
     }
     else {
         //httplib::Client cli("http://localhost:" + std::to_string(API_PORT));
-        std::string url = "http://localhost:" + std::to_string(API_PORT);
+        std::string url = "http://localhost:" + std::to_string(port);
 
 
         try {
-            cli = std::make_unique<httplib::Client>(IP_ADRESS, API_PORT);
+            cli = std::make_unique<httplib::Client>(ip_addr, port);
 
         } catch (const std::exception& e) {
             std::cerr << "Failed to initialize httplib::Client: " << e.what() << std::endl;
@@ -122,8 +114,8 @@ network::network() {
 
         ENetAddress address = {};
         //enet_address_set_host(&address, "127.0.0.1");
-        enet_address_set_host(&address, IP_ADRESS);
-        address.port = PORT;
+        enet_address_set_host(&address, ip_addr.c_str());
+        address.port = port;
 
         remote_instance = enet_host_connect(local_instance, &address, 2, 0);
 
@@ -171,13 +163,13 @@ bool network::is_host() {
 }
 
 void network::fetch_chunk(Vector2 pos) {
-    networking.async_chunk_fetch_on = true;
+    networking->async_chunk_fetch_on = true;
     json sendJ;
 
     sendJ["x"] = pos.x;
     sendJ["y"] = pos.y;
 
-    auto res = networking.cli->Post("/chunk", sendJ.dump(), "application/json");
+    auto res = networking->cli->Post("/chunk", sendJ.dump(), "application/json");
 
     if (res && res->status == 200) {
 
@@ -186,5 +178,5 @@ void network::fetch_chunk(Vector2 pos) {
         world.new_chunk_from_json(new_c);
 
     }
-    networking.async_chunk_fetch_on = false;
+    networking->async_chunk_fetch_on = false;
 }
