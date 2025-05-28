@@ -62,9 +62,40 @@ delta_time delta_time_master;
 #include "rng.hpp"
 #include "world.hpp"
 
-int main() {
+int main(int argc, char* argv[]) {
 
-    networking = std::make_unique<network>(true, "localhost", 8090);
+    int port = 0;
+    bool server = false;
+    std::string ip = "";
+    std::string name = "";
+
+    for (int i = 1; i < argc; ++i) {
+        if (strcmp(argv[i], "-p") == 0 && i + 1 < argc) {
+            port = std::stoi(argv[++i]);
+        }
+        else if (strcmp(argv[i], "-s") == 0 && i + 1 < argc) {
+            int val = std::stoi(argv[++i]);
+            server = (val != 0);
+        }
+        else if (strcmp(argv[i], "-ip") == 0 && i + 1 < argc) {
+            ip = argv[++i];
+        }
+        else if (strcmp(argv[i], "-n") == 0 && i + 1 < argc) {
+            name = argv[++i];
+        }
+        else {
+            std::cerr << "Unknown or incomplete argument: " << argv[i] << std::endl;
+            return 1;
+        }
+    }
+
+    std::cout << "Port: " << port << "\nServer: " << server << "\nIP: " << ip << std::endl;
+
+
+
+    networking = std::make_unique<network>(server, ip, port);
+
+    if (server == false) client_utls::player_creation_request(name);
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGTH, "Cave Blast");
