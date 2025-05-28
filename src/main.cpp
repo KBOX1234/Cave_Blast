@@ -112,12 +112,12 @@ int main(int argc, char* argv[]) {
     while (!WindowShouldClose()) {
 
         delta_time_master.update();
-        networking->update();
 
         //everything that needs delta time:
 
         if (delta_time_master.can_game_continue() == true) {
             texture_manager.update();
+                networking->update();
 
             if (player_manager.get_host() != nullptr) {
                 player_manager.update_predicted_player();
