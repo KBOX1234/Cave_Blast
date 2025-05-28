@@ -13,6 +13,8 @@ int item_master::add_item(std::unique_ptr<item> i) {
     i->item_id = static_cast<short>(items.size());
 
     //quick fix 
+
+    if(i->block_type_ptr == nullptr) i->block_type_ptr = new block_type;
     i->block_type_ptr->item_id = i->item_id;
 
     item_map[i->name] = i->item_id;

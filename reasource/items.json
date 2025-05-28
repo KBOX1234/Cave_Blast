@@ -4,7 +4,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
-        "texture_path": "reasource/gfx/item/dirt.png",
+        "texture_path": "reasource/gfx/block_items/dirt.png",
         "description": "A basic building block.",
         "block_texture_path": "reasource/gfx/block/dirt.png"
     },
@@ -13,8 +13,9 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
-        "texture_path": "reasource/gfx/item/stone.png",
-        "description": "A basic building block.",
+        "is_usable": true,
+        "texture_path": "reasource/gfx/block_items/stone.png",
+        "description": "Literaly just stone.",
         "block_texture_path": "reasource/gfx/block/stone.png"
     },
     {
@@ -22,9 +23,355 @@
         "is_solid": false,
         "is_block": true,
         "is_liquid": true,
-        "texture_path": "reasource/gfx/item/air.png",
-        "description": "just air",
+        "texture_path": "reasource/gfx/block_items/air.png",
+        "description": "Literaly just air.",
         "block_texture_path": "reasource/gfx/block/air.png"
+    },
+    {
+        "name": "hoe",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "is_usable": true,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "water_well",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "water_bucket",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "seed",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "wheat",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "sickle",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "is_usable": true,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "bread",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "is_consumable": true,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "chest",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "coal_ore",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "iron_ore",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "coal",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "furnice",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "iron_bar",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "iron_pickaxe",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "is_usable": true,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "torch",
+        "is_solid": false,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "water_basin",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "mud",
+        "is_solid": false,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "mud_brick",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "water_bottle",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "uranium_ore",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "gold_ore",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "lead_ore",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "boran_ore",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "copper_ore",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "uranium_bar",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "gold_bar",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "lead",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "boran",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "copper",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "uranium_pickaxe",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "is_usable": true,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "lava",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": true,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "water",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": true,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "stone_brick",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "copper_block",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "copper_pannel",
+        "is_solid": false,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "copper_pannel_oxi",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land."
+    },
+    {
+        "name": "gold_block",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "gold_pannel",
+        "is_solid": false,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "lead_block",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
+    },
+    {
+        "name": "lead_bricks",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/item/hoe.png",
+        "description": "A tool for ploughing land.",
+        "block_texture_path": "reasource/gfx/block/dirt.png"
     }
 ]
 
