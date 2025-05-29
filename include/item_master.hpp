@@ -27,6 +27,11 @@ struct item {
     bool is_usable;
     bool is_solid;
     bool is_liquid;
+    bool is_ore;
+
+    //if ore is true
+    float chance_to_spawn;
+    int ore_radius;
 
     block_type* block_type_ptr;
 };
@@ -52,6 +57,8 @@ public:
     std::vector<std::string> get_existing_items();
 
     std::string get_item_name_by_id(int id);
+
+    std::vector<item> get_all_ores();
 
 };
 

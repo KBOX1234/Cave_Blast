@@ -64,10 +64,10 @@ delta_time delta_time_master;
 
 int main(int argc, char* argv[]) {
 
-    int port = 0;
-    bool server = false;
-    std::string ip = "";
-    std::string name = "";
+    int port = 8080;
+    bool server = true;
+    std::string ip = "localhost";
+    std::string name = "master";
 
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "-p") == 0 && i + 1 < argc) {

@@ -6,10 +6,6 @@ chunk::chunk(){
     blocks.resize(CHUNK_SIZE*CHUNK_SIZE);
 }
 
-chunk::~chunk(){
-
-}
-
 void chunk::set_global_pos(Vector2 pos){
 
     global_pos.x = round(pos.x);

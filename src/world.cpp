@@ -179,7 +179,6 @@ int world_class::new_chunk_from_json(json j) {
 }
 
 world_class::world_class() {
-    noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
     for (int i = 0; i < MAX_TABLE_SIZE; i++) {
         for (int j = 0; j < MAX_TABLE_SIZE; j++) {
             pos_x_pos_y[i][j] = -1;
@@ -191,24 +190,7 @@ world_class::world_class() {
 }
 
 chunk *world_class::generate_chunk(Vector2 pos) {
-    chunk* chnk = new chunk;
-
-    /*for (int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
-        chnk->set_block_index(item_manager.fetch_item("stone")->block_type_ptr, i);
-    }*/
-
-    for (int x  = 0; x < CHUNK_SIZE; x++) {
-        for (int y = 0; y < CHUNK_SIZE; y++) {
-            float n = noise.GetNoise(((float)x + (pos.x*CHUNK_SIZE))*NOISE_SCALE, ((float)y + (pos.y*CHUNK_SIZE))*NOISE_SCALE);
-
-            if (n <= 0.5) {
-                chnk->set_block(item_manager.fetch_item("stone")->block_type_ptr, {(float)x, (float)y});
-            }
-            else chnk->set_block(item_manager.fetch_item("air")->block_type_ptr, {(float)x, (float)y});
-        }
-    }
-
-    chnk->set_global_pos(pos);
+    chunk* chnk = generator.generate_chunk(pos);
 
     add_chunk(chnk);
 
@@ -260,4 +242,18 @@ int world_class::load_chunk(json j) {
     }
 
     return -1;
+}
+
+void world_class::set_block_radius(block blk, int height, Vector2 pos) {
+    int vertical_radius = height / 2;
+    int horizontal_radius = vertical_radius; // You can customize this if you want ellipses
+
+    for (int y = -vertical_radius; y <= vertical_radius; y++) {
+        for (int x = -horizontal_radius; x <= horizontal_radius; x++) {
+            float dist = sqrtf((x * x) + (y * y));
+            if (dist <= vertical_radius) { // Fills the circle instead of drawing an edge
+                world.place_block({pos.x + x, pos.y + y}, blk);
+            }
+        }
+    }
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_set>
 #include <random>
+
 class rng_device{
     private:
         std::random_device rd;
@@ -13,6 +14,9 @@ class rng_device{
     public:
 
         int get_random_int();
+
+        int get_random_int_range(int a, int b);
+        float get_random_float_range(float a, float b);
 };
 #pragma once
 

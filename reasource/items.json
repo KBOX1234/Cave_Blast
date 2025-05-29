@@ -103,7 +103,10 @@
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/coal_ore.png",
         "description": "A tool for ploughing land.",
-        "block_texture_path": "reasource/gfx/block/coal_ore.png"
+        "block_texture_path": "reasource/gfx/block/coal_ore.png",
+        "is_ore": true,
+        "chance_to_spawn": 20,
+        "ore_radius": 4
     },
     {
         "name": "iron_ore",
@@ -112,7 +115,10 @@
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/iron_ore.png",
         "description": "A tool for ploughing land.",
-        "block_texture_path": "reasource/gfx/block/iron_ore.png"
+        "block_texture_path": "reasource/gfx/block/iron_ore.png",
+        "is_ore": true,
+        "chance_to_spawn": 15,
+        "ore_radius": 5
     },
     {
         "name": "coal",
@@ -199,7 +205,10 @@
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/uranium_ore.png",
         "description": "A tool for ploughing land.",
-        "block_texture_path": "reasource/gfx/block/uranium_ore.png"
+        "block_texture_path": "reasource/gfx/block/uranium_ore.png",
+        "is_ore": true,
+        "chance_to_spawn": 5,
+        "ore_radius": 5
     },
     {
         "name": "gold_ore",
@@ -208,7 +217,10 @@
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/gold_ore.png",
         "description": "A tool for ploughing land.",
-        "block_texture_path": "reasource/gfx/block/gold_ore.png"
+        "block_texture_path": "reasource/gfx/block/gold_ore.png",
+        "is_ore": true,
+        "chance_to_spawn": 4,
+        "ore_radius": 2
     },
     {
         "name": "lead_ore",
@@ -217,7 +229,10 @@
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/lead_ore.png",
         "description": "A tool for ploughing land.",
-        "block_texture_path": "reasource/gfx/block/lead_ore.png"
+        "block_texture_path": "reasource/gfx/block/lead_ore.png",
+        "is_ore": true,
+        "chance_to_spawn" : 10,
+        "ore_radius": 3
     },
     {
         "name": "boran_ore",
@@ -226,7 +241,10 @@
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/boran_ore.png",
         "description": "A tool for ploughing land.",
-        "block_texture_path": "reasource/gfx/block/boran_ore.png"
+        "block_texture_path": "reasource/gfx/block/boran_ore.png",
+        "is_ore": true,
+        "chance_to_spawn" : 7,
+        "ore_radius": 2
     },
     {
         "name": "copper_ore",
@@ -235,7 +253,11 @@
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/copper_ore.png",
         "description": "A tool for ploughing land.",
-        "block_texture_path": "reasource/gfx/block/copper_ore.png"
+        "block_texture_path": "reasource/gfx/block/copper_ore.png",
+        "is_ore": true
+        ,
+        "chance_to_spawn": 20,
+        "ore_radius": 6
     },
     {
         "name": "uranium_bar",

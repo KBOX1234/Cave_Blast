@@ -37,7 +37,6 @@ class chunk{
     public:
 
     chunk();
-    ~chunk();
 
     //set its position
     void set_global_pos(Vector2 pos);
@@ -66,14 +65,47 @@ class chunk{
 
     const block* blocks_buffer() const;
 };
+
+
+
+class world_gen{
+    private:
+
+        std::vector<item> ores;
+
+        int seed;
+        rng_device rng_ore;
+        FastNoiseLite caves;
+        FastNoiseLite warmth;
+        FastNoiseLite compression;
+
+        void generate_mass(chunk* chnk, Vector2 pos);
+
+        void sprinkle_ores(chunk* chnk, Vector2 pos);
+
+        void generate_caves(chunk* chnk, Vector2 pos);
+
+        //void generate_liquids(chunk* chnk, Vector2 pos);
+
+    public:
+
+        world_gen();
+
+        chunk* generate_chunk(Vector2 pos);
+
+
+};
+
+
 class world_class {
     friend class network;
     private:
     
-        FastNoiseLite noise;
         std::vector<chunk> chunks;
 
-        #define MAX_TABLE_SIZE 128
+        world_gen generator;
+
+        #define MAX_TABLE_SIZE 512
 
         int pos_x_neg_y[MAX_TABLE_SIZE][MAX_TABLE_SIZE];
         int neg_x_neg_y[MAX_TABLE_SIZE][MAX_TABLE_SIZE];
@@ -121,6 +153,8 @@ class world_class {
         json serialize_chunk(Vector2 pos);
 
         int load_chunk(json j);
+
+        void set_block_radius(block blk, int height, Vector2 pos);
 };
 
 extern world_class world;

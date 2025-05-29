@@ -48,6 +48,9 @@ int item_master::load_items_from_json(json j) {
         new_item->is_wearable = json_item.value("is_wearable", false);
         new_item->is_block = json_item.value("is_block", false);
         new_item->is_weapon = json_item.value("is_weapon", false);
+        new_item->is_ore = json_item.value("is_ore", false);
+        new_item->chance_to_spawn = json_item.value("chance_to_spawn", 1);
+        new_item->ore_radius = json_item.value("ore_radius", 1);
 
         new_item->texture_path = json_item.value("texture_path", "");
         if (!new_item->texture_path.empty()) {
@@ -138,4 +141,18 @@ std::vector<std::string> item_master::get_existing_items() {
     }
 
     return item_names;
+}
+
+std::vector<item> item_master::get_all_ores(){
+    std::vector<item> rtv;
+
+    for(int i = 0; i < items.size(); i++){
+        if(items[i].get()->is_ore == true){
+            rtv.push_back(*items[i].get());
+
+            //std::cout << "(get_all_ores): chance to spawn is: " << std::to_string(items[i].get()->chance_to_spawn) << std::endl;
+        }
+    }
+
+    return rtv;
 }

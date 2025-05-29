@@ -15,3 +15,21 @@ int rng_device::get_random_int(){
 
     return random_num;
 }
+
+int rng_device::get_random_int_range(int a, int b){
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(a, b);
+
+    int random_number = dist(gen);
+
+    return random_number;
+}
+float rng_device::get_random_float_range(float a, float b) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> dist(a, b); // Range: [a, b)
+
+    float random_number = dist(gen);
+    return random_number;
+}
