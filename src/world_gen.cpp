@@ -24,7 +24,7 @@ void world_gen::sprinkle_ores(chunk* chnk, Vector2 pos){
 
     int chance_to_spawn_vein = random_num.get_random_int_range(1, 2);
 
-    if(chance_to_spawn_vein == 1){
+    if(chance_to_spawn_vein == 1 && compression.GetNoise(real_pos.x*CHUNK_SIZE, real_pos.y*CHUNK_SIZE) < 0.2){
         bool ore_spawned = false;
         int max_retry = ores.size();
         int inc = 0;
@@ -108,7 +108,7 @@ void world_gen::generate_mass(chunk* chnk, Vector2 pos){
         for (int y = 0; y < CHUNK_SIZE; y++) {
             float n = compression.GetNoise(((float)x + (pos.x*CHUNK_SIZE)), ((float)y + (pos.y*CHUNK_SIZE)));
 
-            if (n >= 0.5) {
+            if (n >= 0.2) {
                 chnk->set_block(item_manager.fetch_item("dirt")->block_type_ptr, {(float)x, (float)y});
             }
         }
