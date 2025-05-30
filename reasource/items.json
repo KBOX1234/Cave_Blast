@@ -42,7 +42,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block/well.png",
-        "description": "A tool for ploughing land.",
+        "description": "A place to get your water",
         "block_texture_path": "reasource/gfx/block/well.png"
     },
     {
@@ -51,7 +51,7 @@
         "is_block": false,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/bucketE.png",
-        "description": "A tool for ploughing land."
+        "description": "A bucket for water and other things"
     },
     {
         "name": "seed",
@@ -59,7 +59,7 @@
         "is_block": false,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/seeds.png",
-        "description": "A tool for ploughing land."
+        "description": "Literaly just seed"
     },
     {
         "name": "wheat",
@@ -67,7 +67,7 @@
         "is_block": false,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/wheat.png",
-        "description": "A tool for ploughing land."
+        "description": "Literaily just wheat"
     },
     {
         "name": "sickle",
@@ -76,7 +76,7 @@
         "is_liquid": false,
         "is_usable": true,
         "texture_path": "reasource/gfx/item/sickle.png",
-        "description": "A tool for ploughing land."
+        "description": "A tool for harvesting crops"
     },
     {
         "name": "bread",
@@ -85,7 +85,7 @@
         "is_liquid": false,
         "is_consumable": true,
         "texture_path": "reasource/gfx/item/bread.png",
-        "description": "A tool for ploughing land."
+        "description": "A source of nutriants"
     },
     {
         "name": "chest",
@@ -93,7 +93,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block/chest.png",
-        "description": "A tool for ploughing land.",
+        "description": "A place to store your items",
         "block_texture_path": "reasource/gfx/block/chest.png"
     },
     {
@@ -114,7 +114,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/iron_ore.png",
-        "description": "A tool for ploughing land.",
+        "description": "The ore version of iron",
         "block_texture_path": "reasource/gfx/block/iron_ore.png",
         "is_ore": true,
         "chance_to_spawn": 15,
@@ -126,7 +126,7 @@
         "is_block": false,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/coal.png",
-        "description": "A tool for ploughing land."
+        "description": "Your first fuel source"
     },
     {
         "name": "furnace",
@@ -134,7 +134,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/furnace.png",
-        "description": "A tool for ploughing land.",
+        "description": "A furnace for smelting ores (and enriching uranium to 30% for some reason)",
         "block_texture_path": "reasource/gfx/block/furnace.png"
     },
     {
@@ -143,7 +143,7 @@
         "is_block": false,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/iron_bar.png",
-        "description": "A tool for ploughing land."
+        "description": "A bar of iron."
     },
     {
         "name": "iron_pickaxe",
@@ -152,7 +152,7 @@
         "is_liquid": false,
         "is_usable": true,
         "texture_path": "reasource/gfx/item/iron_pickaxe.png",
-        "description": "A tool for ploughing land."
+        "description": "A pickaxe made of iron"
     },
     {
         "name": "torch",
@@ -160,7 +160,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/torch.png",
-        "description": "A tool for ploughing land.",
+        "description": "A lamp to your feet and a light for your path",
         "block_texture_path": "reasource/gfx/item/torch.png"
     },
     {
@@ -169,7 +169,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/water_basin.png",
-        "description": "A tool for ploughing land.",
+        "description": "A posh little basin of water",
         "block_texture_path": "reasource/gfx/block/water_basin.png"
     },
     {
@@ -178,7 +178,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/mud.png",
-        "description": "A tool for ploughing land.",
+        "description": "Literaly just mud",
         "block_texture_path": "reasource/gfx/block/mud.png"
     },
     {
@@ -187,7 +187,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/mud_bricks.png",
-        "description": "A tool for ploughing land.",
+        "description": "A brick of mud",
         "block_texture_path": "reasource/gfx/block/mud_brick.png"
     },
     {
@@ -196,7 +196,7 @@
         "is_block": false,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/water_bottle.png",
-        "description": "A tool for ploughing land."
+        "description": "Just a water bottle. Stay hydrated!"
     },
     {
         "name": "uranium_ore",
@@ -204,7 +204,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/uranium_ore.png",
-        "description": "A tool for ploughing land.",
+        "description": "The unprocessed form of uranium",
         "block_texture_path": "reasource/gfx/block/uranium_ore.png",
         "is_ore": true,
         "chance_to_spawn": 5,
@@ -216,7 +216,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/gold_ore.png",
-        "description": "A tool for ploughing land.",
+        "description": "The unprocessed form of GOLD!",
         "block_texture_path": "reasource/gfx/block/gold_ore.png",
         "is_ore": true,
         "chance_to_spawn": 4,
@@ -228,7 +228,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/lead_ore.png",
-        "description": "A tool for ploughing land.",
+        "description": "The unprocessed form of lead",
         "block_texture_path": "reasource/gfx/block/lead_ore.png",
         "is_ore": true,
         "chance_to_spawn" : 10,
@@ -240,7 +240,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/boran_ore.png",
-        "description": "A tool for ploughing land.",
+        "description": "The unprocessed form of boran",
         "block_texture_path": "reasource/gfx/block/boran_ore.png",
         "is_ore": true,
         "chance_to_spawn" : 7,
@@ -252,7 +252,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/copper_ore.png",
-        "description": "A tool for ploughing land.",
+        "description": "The unprocessed form of copper",
         "block_texture_path": "reasource/gfx/block/copper_ore.png",
         "is_ore": true
         ,
@@ -265,7 +265,7 @@
         "is_block": false,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/uranium.png",
-        "description": "A tool for ploughing land."
+        "description": "A peice of 30% enriched uranium"
     },
     {
         "name": "gold_bar",
@@ -273,7 +273,7 @@
         "is_block": false,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/gold.png",
-        "description": "A tool for ploughing land."
+        "description": "A solid gold bar"
     },
     {
         "name": "lead",
@@ -281,7 +281,7 @@
         "is_block": false,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/lead.png",
-        "description": "A tool for ploughing land."
+        "description": "Literaly just lead (please don't injest)"
     },
     {
         "name": "boran",
@@ -289,7 +289,7 @@
         "is_block": false,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/boran.png",
-        "description": "A tool for ploughing land."
+        "description": "Eats nutrons for dinner."
     },
     {
         "name": "copper",
@@ -297,7 +297,7 @@
         "is_block": false,
         "is_liquid": false,
         "texture_path": "reasource/gfx/item/copper.png",
-        "description": "A tool for ploughing land."
+        "description": "Literaly just copper"
     },
     {
         "name": "uranium_pickaxe",
@@ -306,7 +306,7 @@
         "is_liquid": false,
         "is_usable": true,
         "texture_path": "reasource/gfx/item/uranium_pickaxe.png",
-        "description": "A tool for ploughing land."
+        "description": "Uranium pickaxe (not very radioactive and also very strong)"
     },
     {
         "name": "lava",
@@ -314,7 +314,7 @@
         "is_block": false,
         "is_liquid": true,
         "texture_path": "reasource/gfx/block/lava.png",
-        "description": "A tool for ploughing land."
+        "description": "RIP Anikin & Gollum"
     },
     {
         "name": "water",
@@ -322,7 +322,7 @@
         "is_block": false,
         "is_liquid": true,
         "texture_path": "reasource/gfx/item/hoe.png",
-        "description": "A tool for ploughing land."
+        "description": "Literaly just water"
     },
     {
         "name": "stone_brick",
@@ -330,7 +330,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/stone_bricks.png",
-        "description": "A tool for ploughing land.",
+        "description": "A nice block made of inexpensive materials",
         "block_texture_path": "reasource/gfx/block/stone_brick.png"
     },
     {
@@ -339,7 +339,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/copper_block.png",
-        "description": "A tool for ploughing land.",
+        "description": "A 1M CUBED BLOCK OF SOLID COPPER",
         "block_texture_path": "reasource/gfx/block/copper_block.png"
     },
     {
@@ -348,7 +348,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/copper_pannel.png",
-        "description": "A tool for ploughing land.",
+        "description": "A cheap good looking metal pannel",
         "block_texture_path": "reasource/gfx/block/copper_pannel.png"
     },
     {
@@ -357,7 +357,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/copper_pannel_oxide.png",
-        "description": "A tool for ploughing land.",
+        "description": "You didnt maintain your copper panneling :(",
         "block_texture_path": "reasource/gfx/block/copper_pannel_oxide.png"
     },
     {
@@ -366,7 +366,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/gold_pannel.png",
-        "description": "A tool for ploughing land.",
+        "description": "A pannel made of gold (very posh)",
         "block_texture_path": "reasource/gfx/block/gold_pannel.png"
     },
     {
@@ -375,7 +375,7 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/lead_block.png",
-        "description": "A tool for ploughing land.",
+        "description": "A fricking 1m cubed lead block you casialy hold in your inventory",
         "block_texture_path": "reasource/gfx/block/lead_block.png"
     },
     {
@@ -384,8 +384,26 @@
         "is_block": true,
         "is_liquid": false,
         "texture_path": "reasource/gfx/block_items/lead_bricks.png",
-        "description": "A tool for ploughing land.",
+        "description": "Great at blocking most radiation (handle with care)",
         "block_texture_path": "reasource/gfx/block/lead_bricks.png"
+    },
+    {
+        "name": "gravel",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": true,
+        "texture_path": "reasource/gfx/block_items/gravel.png",
+        "description": "uncompressed stone",
+        "block_texture_path": "reasource/gfx/block/gravel.png"
+    },
+    {
+        "name": "blackstone",
+        "is_solid": true,
+        "is_block": true,
+        "is_liquid": false,
+        "texture_path": "reasource/gfx/block_items/blackstone.png",
+        "description": "very compressed stone",
+        "block_texture_path": "reasource/gfx/block/blackstone.png"
     }
 ]
 
