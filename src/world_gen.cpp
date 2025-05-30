@@ -107,6 +107,9 @@ void world_gen::generate_mass(chunk* chnk, Vector2 pos){
     for (int x  = 0; x < CHUNK_SIZE; x++) {
         for (int y = 0; y < CHUNK_SIZE; y++) {
             float n = compression.GetNoise(((float)x + (pos.x*CHUNK_SIZE)), ((float)y + (pos.y*CHUNK_SIZE)));
+            float n2 = warmth.GetNoise(((float)x + (pos.x*CHUNK_SIZE)), ((float)y + (pos.y*CHUNK_SIZE)));
+
+            n2 = abs(n2);
 
             if (n >= 0 && n < 0.2) {
                 chnk->set_block(item_manager.fetch_item("stone")->block_type_ptr, {(float)x, (float)y});
@@ -114,6 +117,14 @@ void world_gen::generate_mass(chunk* chnk, Vector2 pos){
 
             if(n >= 0.2){
                 chnk->set_block(item_manager.fetch_item("gravel")->block_type_ptr, {(float)x, (float)y});
+                std::cout << std::to_string(n2) << std::endl;
+                if(n2 > 0.5 && n2 <= 0.7){
+                    chnk->set_block(item_manager.fetch_item("dirt")->block_type_ptr, {(float)x, (float)y});
+                }
+
+                if(n2 > 0.95){
+                    chnk->set_block(item_manager.fetch_item("lava")->block_type_ptr, {(float)x, (float)y});
+                }
             }
         }
     }

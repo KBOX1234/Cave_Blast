@@ -311,10 +311,11 @@
     {
         "name": "lava",
         "is_solid": false,
-        "is_block": false,
+        "is_block": true,
         "is_liquid": true,
-        "texture_path": "reasource/gfx/block/lava.png",
-        "description": "RIP Anikin & Gollum"
+        "texture_path": "reasource/gfx/block_items/lava.png",
+        "description": "RIP Anikin & Gollum",
+        "block_texture_path": "reasource/gfx/block/lava.png"
     },
     {
         "name": "water",
