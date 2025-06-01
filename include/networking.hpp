@@ -35,6 +35,9 @@
 #include "rng.hpp"
 #include "httplib.h"
 #include <thread>
+#include <iostream>
+
+#include "player.hpp"
 
 struct __attribute__((packed)) packet {
     int type;
