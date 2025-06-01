@@ -133,7 +133,9 @@ int world_class::place_block(Vector2 pos, block b){
 
     bc.pos = pos;
 
-    networking->add_block_change(bc);
+    if(network_manager.is_host() == true){
+        network_manager.server_obj.add_block_change(bc);
+    }
 
     return chunks[chunk_index].set_block(b.attr, get_sub_chunk_pos(pos));
 
@@ -205,12 +207,12 @@ const block* world_class::chunk_buffer(Vector2 pos){
     chunk* tmp_chunk = get_chunk(pos);
 
     if(tmp_chunk == nullptr) {
-        if (networking->is_host() == true) {
+        if (network_manager.is_host() == true) {
             tmp_chunk = generate_chunk(pos);
         }
 
         else {
-            std::thread t(&network::fetch_chunk, networking.get(), pos);
+            std::thread t(&client::fetch_chunk, &network_manager.client_obj, pos);
             t.detach();
             return nullptr;
 

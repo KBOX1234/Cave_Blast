@@ -55,6 +55,7 @@ imgui_win imgui_master;
 keybind_master keybind_manager;
 input input_manager;
 #include "networking.hpp"
+network network_manager;
 #include "delta_time.hpp"
 delta_time delta_time_master;
 
@@ -91,11 +92,12 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Port: " << port << "\nServer: " << server << "\nIP: " << ip << std::endl;
 
+    network_manager.start(ip, port, server);
 
 
-    networking = std::make_unique<network>(server, ip, port);
-
-    if (server == false) client_utls::player_creation_request(name);
+    if (server == false) {
+        client_utls::player_creation_request(name, network_manager.get_server());
+    }
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGTH, "Cave Blast");
@@ -117,7 +119,7 @@ int main(int argc, char* argv[]) {
 
         if (delta_time_master.can_game_continue() == true) {
             texture_manager.update();
-                networking->update();
+                network_manager.update();
 
             if (player_manager.get_host() != nullptr) {
                 player_manager.update_predicted_player();

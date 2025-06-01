@@ -4,15 +4,17 @@
 
 #include "../include/player.hpp"
 
-void network::update_client() {
+std::unique_ptr<client> networking_client = nullptr;
 
-    if (player_manager.get_host() != nullptr) client_utls::move_myself(player_manager.get_host()->get_rotation(), player_manager.get_host()->get_pos());
+void client::update() {
+
+    if (player_manager.get_host() != nullptr) client_utls::move_myself(player_manager.get_host()->get_rotation(), player_manager.get_host()->get_pos(), remote_server);
     //client_utls::fetch_all_players();
-    client_utls::send_player_list_request();
+    client_utls::send_player_list_request(remote_server);
 
     ENetEvent event;
     /* Wait up to 0 milliseconds for an event. */
-    while (enet_host_service(local_instance, &event, 0) > 0)
+    while (enet_host_service(myself, &event, 0) > 0)
     {
 
 
@@ -34,12 +36,12 @@ void network::update_client() {
                     if (p->type == GET_PLAYER_LIST) {
                         std::vector<int> ids;
 
-                        ids = deserializeIntVector(p->data, p->size);
+                        ids = net_utills::deserializeIntVector(p->data, p->size);
 
                         for (int i = 0; i < ids.size(); i++) {
                             //std::cout << "id: " << std::to_string(ids[i]) << std::endl;
 
-                            client_utls::fetch_player(ids[i]);
+                            client_utls::fetch_player(ids[i], remote_server);
                         }
                     }
 
@@ -169,4 +171,70 @@ void network::update_client() {
         }
 
     }
+}
+
+//new stuff
+
+void client::start_client(std::string ip, int port){
+        //std::string url = "http://localhost:" + std::to_string(port);
+
+
+        try {
+            cli = std::make_unique<httplib::Client>(ip_addr, port);
+
+        } catch (const std::exception& e) {
+            std::cerr << "Failed to initialize httplib::Client: " << e.what() << std::endl;
+        }
+
+
+
+        myself = enet_host_create(NULL /* create a client host */,
+            1 /* only allow 1 outgoing connection */,
+            2 /* allow up 2 channels to be used, 0 and 1 */,
+            0 /* assume any amount of incoming bandwidth */,
+            0 /* assume any amount of outgoing bandwidth */);
+
+        if (myself == NULL) {
+            std::cerr << "Error creating client socket" << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+
+        ENetAddress address = {};
+
+        enet_address_set_host(&address, ip_addr.c_str());
+        address.port = port;
+
+        remote_server = enet_host_connect(myself, &address, 2, 0);
+
+        if (remote_server == NULL) {
+            std::cerr << "Error connecting to server" << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        std::cout << "connected to server port: " << std::to_string(address.port) << std::endl;
+
+        ENetEvent event;
+
+        if (enet_host_service(myself, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
+            std::cout << "Connection established" << std::endl;
+            //move_myself({10, 3});
+        }
+}
+
+void client::fetch_chunk(Vector2 pos) {
+    async_chunk_fetch_on = true;
+    json sendJ;
+
+    sendJ["x"] = pos.x;
+    sendJ["y"] = pos.y;
+
+    auto res = cli->Post("/chunk", sendJ.dump(), "application/json");
+
+    if (res && res->status == 200) {
+
+        //std::cout << "Response:\n" << res->body << std::endl;
+        json new_c = json::parse(res->body);
+        world.new_chunk_from_json(new_c);
+
+    }
+    async_chunk_fetch_on = false;
 }

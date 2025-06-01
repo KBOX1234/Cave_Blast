@@ -1,6 +1,6 @@
 #include "../include/networking.hpp"
 
-void network::handle_connect(ENetEvent *event) {
+void server::handle_connect(ENetEvent *event) {
     printf("A new client connected from %x:%u.\n",
     event->peer->address.host,
     event->peer->address.port);
@@ -8,7 +8,7 @@ void network::handle_connect(ENetEvent *event) {
     clients.push_back(event->peer);
 }
 
-void network::handle_request(ENetEvent* event) {
+void server::handle_request(ENetEvent* event) {
     ENetPacket* epacket = event->packet;
     char* buffer = reinterpret_cast<char*>(epacket->data);
     size_t buffer_size = epacket->dataLength;
@@ -48,7 +48,7 @@ void network::handle_request(ENetEvent* event) {
 }
 
 
-void network::handle_disconnect(ENetEvent *event) {
+void server::handle_disconnect(ENetEvent *event) {
     int id;
 
     memcpy(&id, event->peer->data, sizeof(int));
@@ -56,13 +56,13 @@ void network::handle_disconnect(ENetEvent *event) {
     std::cout <<  "client disconnected: "<< std::to_string(id) << std::endl;
 
     player_manager.remove_player(id);
-    send_p_connection_loss(event);
+    broadcast_disconnect(event);
 }
 
-void network::update_server() {
+void server::update() {
     ENetEvent event = {};
 
-    while (enet_host_service(local_instance, &event, 0) > 0)
+    while (enet_host_service(host_server, &event, 0) > 0)
     {
         switch (event.type)
         {
@@ -88,12 +88,122 @@ void network::update_server() {
 
     }
 
+    broadcast_block_changes();
+}
 
-    for (size_t i = 0; i < local_instance->peerCount; ++i) {
-        ENetPeer* peer = &local_instance->peers[i];
+void server::start_server(const std::string ip, int port2){
+
+    ip_addr = ip;
+    port = port2;
+
+
+    if (enet_initialize() != 0) {
+        std::cerr << "Failed to initialize ENet." << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+
+        //prepare server owner so things can happen
+        player* pla = new player;
+
+        pla->set_id(random_num.get_random_int());
+        pla->set_name("server");
+        pla->set_pos({0, 0});
+        player_manager.players.push_back(pla);
+
+        player_manager.host_id = pla->get_id();
+
+        player_manager.myself->set_id(pla->get_id());
+
+
+        //do stuff so we can connect
+        address.host = ENET_HOST_ANY;
+        address.port = port;
+
+        host_server = enet_host_create(&address /* the address to bind the server host to */,
+        32			/* allow up to 32 clients and/or outgoing connections */,
+        2	/* allow up to 2 channels to be used, 0 and 1 */,
+        0			/* assume any amount of incoming bandwidth */,
+        0			/* assume any amount of outgoing bandwidth */);
+
+        if (host_server == NULL) {
+            std::cerr << "Error creating server socket" << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+
+        std::cout << "Server listening on port: " << std::to_string(address.port) << std::endl;
+
+        svr.Post("/chunk", [](const httplib::Request& req, httplib::Response& res) {
+
+            //std::cout << "got request:\n" + req.body;
+
+            json body = json::parse(req.body);
+
+            Vector2 pos;
+
+
+
+            pos.x = body["x"];
+
+            pos.y = body["y"];
+
+
+
+            chunk* chnk = world.get_chunk(pos);
+
+            if (chnk == nullptr) {
+                chnk = world.generate_chunk(pos);
+            }
+
+            json response = chnk->serialize_chunk();
+
+            //std::cout << response.dump(4);
+            //std::cout << "got request for chunk: " << std::to_string(pos.x) + ", " + std::to_string(pos.y) << std::endl;
+
+
+            res.set_content(response.dump(), "application/json");
+
+
+        });
+
+        std::cout << "API server at http://localhost:" << std::to_string(port) << std::endl;
+        std::thread server_thread(&server::start_api, this);
+        server_thread.detach();
+}
+
+void server::start_api() {
+    svr.listen(ip_addr, port);
+}
+
+server::~server() {
+    enet_host_destroy(host_server);
+    enet_deinitialize();
+    svr.stop();
+
+}
+
+void server::broadcast_block_changes(){
+    for (size_t i = 0; i < host_server->peerCount; ++i) {
+        ENetPeer* peer = &host_server->peers[i];
 
         if (peer->state == ENET_PEER_STATE_CONNECTED) {
             send_block_changes(peer);
         }
+    }
+}
+
+void server::broadcast_disconnect(ENetEvent* event){
+    packet pp;
+
+    pp.type = DISCONNECT_PLAYER;
+
+    pp.size = sizeof(int);
+
+    pp.data = (char*)event->peer->data;
+
+    char* buffer = net_utills::convert_to_buffer(&pp);
+
+    for (int i = 0; i < clients.size(); i++) {
+        net_utills::send_msg_safe(buffer, net_utills::get_packet_size(&pp), clients[i], 0);
     }
 }

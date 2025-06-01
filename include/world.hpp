@@ -99,6 +99,8 @@ class world_gen{
 
 class world_class {
     friend class network;
+    friend class client;
+    friend class server;
     private:
     
         std::vector<chunk> chunks;

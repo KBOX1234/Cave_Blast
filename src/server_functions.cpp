@@ -1,10 +1,10 @@
 #include "networking.hpp"
 
-void network::add_block_change(block_change blk_chng) {
+void server::add_block_change(block_change blk_chng) {
     blk_change.push_back(blk_chng);
 }
 
-void network::send_block_changes(ENetPeer *to) {
+void server::send_block_changes(ENetPeer *to) {
     for (int i = 0; i < blk_change.size(); i++) {
         packet p;
 
@@ -22,27 +22,10 @@ void network::send_block_changes(ENetPeer *to) {
 
         char* buffer = net_utills::convert_to_buffer(&p);
 
-        send_msg_safe(buffer,  net_utills::get_packet_size(&p), to, 0);
+        net_utills::send_msg_safe(buffer,  net_utills::get_packet_size(&p), to, 0);
 
     }
     blk_change.clear();
-
-}
-
-void network::send_p_connection_loss(ENetEvent *event) {
-    packet pp;
-
-    pp.type = DISCONNECT_PLAYER;
-
-    pp.size = sizeof(int);
-
-    pp.data = (char*)event->peer->data;
-
-    char* buffer = net_utills::convert_to_buffer(&pp);
-
-    for (int i = 0; i < clients.size(); i++) {
-        send_msg_safe(buffer, net_utills::get_packet_size(&pp), clients[i], 0);
-    }
 
 }
 
