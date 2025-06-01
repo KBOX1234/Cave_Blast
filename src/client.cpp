@@ -176,6 +176,8 @@ void client::update() {
 //new stuff
 
 void client::start_client(std::string ip, int port){
+        ip_addr = ip;
+
         std::string url = "http://localhost:" + std::to_string(port);
 
 
