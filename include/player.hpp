@@ -13,6 +13,7 @@
 #include "networking.hpp"
 #include "raymath.h"
 #include "delta_time.hpp"
+#include "inventory.hpp"
 
 struct stat_s {
     int health;
@@ -60,6 +61,8 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         Vector2 interpolation;
 
+        inventory inv;
+
 
     public:
 
@@ -105,7 +108,7 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         void zero_rotation(bool no_delta = false);
 
-    float get_rotation();
+        float get_rotation();
 
         Vector2 get_interpos();
 
@@ -127,9 +130,13 @@ class player_master {
 
     public:
 
+        inventory_ui inv_ui;
+
         int default_texture_id;
 
         player* myself;
+
+        
 
         int host_id;
 

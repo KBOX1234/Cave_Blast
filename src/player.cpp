@@ -114,6 +114,7 @@ int player_master::add_player(std::string name) {
 player_master::player_master() {
     host_id = random_num.get_random_int();
     myself = new player;
+    inv_ui.set_inventory_pointer(&myself->inv);
 }
 
 player *player_master::get_host() {
@@ -129,8 +130,9 @@ player *player_master::get_host() {
 
 void player_master::init() {
 
-
     default_texture_id = texture_manager.add_texture("reasource/gfx/other/player.png", true);
+
+    inv_ui.init();
 }
 
 std::vector<std::string> player_master::get_player_names() {

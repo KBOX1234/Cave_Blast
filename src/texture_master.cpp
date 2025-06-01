@@ -38,7 +38,6 @@ Texture2D* texture_master::grab_texture_pointer(int id) {
             return &tex->texture;
         }
     }
-    std::cout << "failed to get texture\n";
     return &default_texture_T;
 
 }

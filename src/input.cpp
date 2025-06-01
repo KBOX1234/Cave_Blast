@@ -103,4 +103,5 @@ void input::mine_controles() {
 void input::update() {
     update_movement();
     mine_controles();
+    player_manager.inv_ui.update_inv_ui_input();
 }

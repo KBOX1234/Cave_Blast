@@ -138,6 +138,8 @@ int main(int argc, char* argv[]) {
 
         }
 
+        player_manager.inv_ui.draw_inventory();
+
 
         rlImGuiBegin();
         if (player_manager.get_host() != nullptr) {
