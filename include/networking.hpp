@@ -106,6 +106,69 @@ struct block_change {
     Vector2 pos;
 };
 
+class network;
+
+class server{
+    
+    friend class client_utls;
+    friend class server_utls;
+    friend class world_class;
+    friend class network;
+
+    private:
+
+        //enet host object
+        ENetHost host_server = nullptr;
+
+
+        //chunk sync server
+        httplib::Server svr;
+
+        //clients vector
+        std::vector<ENetPeer*> clients;
+
+        //block changes vector
+        std::vector<block_change> blk_change;
+
+        void handle_connect(ENetEvent *event);
+
+        void handle_disconnect(ENetEvent *event);
+
+        void handle_request(ENetEvent *event);
+
+        void start_api();
+
+        void broadcast_block_changes();
+
+    public:
+
+        network(bool server, const std::string ip, int port);
+
+        ~network();
+
+        void add_block_change(block_change blk_chng);
+
+        void update_server();
+
+
+};
+
+class client{
+    friend class client_utls;
+    friend class server_utls;
+    friend class world_class;
+    friend class network;
+
+    private:
+
+        ENetPeer remote_server = nullptr;
+
+        std::unique_ptr<httplib::Client> cli;
+
+        void update();
+
+}
+
 class network : public net_utills {
     friend class client_utls;
     friend class server_utls;
