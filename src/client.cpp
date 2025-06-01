@@ -176,7 +176,7 @@ void client::update() {
 //new stuff
 
 void client::start_client(std::string ip, int port){
-        //std::string url = "http://localhost:" + std::to_string(port);
+        std::string url = "http://localhost:" + std::to_string(port);
 
 
         try {
@@ -210,13 +210,18 @@ void client::start_client(std::string ip, int port){
             std::cerr << "Error connecting to server" << std::endl;
             std::exit(EXIT_FAILURE);
         }
-        std::cout << "connected to server port: " << std::to_string(address.port) << std::endl;
+        std::cout << "connecting to server port: " << std::to_string(address.port) << std::endl;
 
         ENetEvent event;
 
         if (enet_host_service(myself, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
             std::cout << "Connection established" << std::endl;
             //move_myself({10, 3});
+        }
+
+        else{
+            std::cout << "could not connect\n";
+            std::exit(EXIT_FAILURE);
         }
 }
 
