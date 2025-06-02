@@ -214,6 +214,11 @@ void server::broadcast_disconnect(ENetEvent* event){
 
     for (int i = 0; i < clients.size(); i++) {
         net_utills::send_msg_safe(buffer, net_utills::get_packet_size(&pp), clients[i], 0);
+
+        int in;
+        memcpy(&in, clients[i]->data, sizeof(int));
+
+        std::cout << "player ids to send: " << std::to_string(in) << std::endl;
     }
 }
 
@@ -221,12 +226,17 @@ ENetPeer* server::get_peer_by_player_id(int id){
     for (int i = 0; i < clients.size(); i++) {
         int id2;
 
-        memcpy(&id, clients[i]->data, sizeof(int));
+        memcpy(&id2, clients[i]->data, sizeof(int));
 
         if(id2 == id){
             return clients[i];
         }
     }
+
+    //this threat motivated this function to finaly work properly
+    std::cout << "kill yourself\n";
+    int* pp = NULL;
+    pp[99] = 0;
 
     return nullptr;
 }

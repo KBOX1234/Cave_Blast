@@ -131,8 +131,6 @@ class player_master {
 
         player* myself;
 
-        
-
         int host_id;
 
         void init();

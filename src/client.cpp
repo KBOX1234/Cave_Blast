@@ -165,6 +165,7 @@ void client::handle_player_creation_response(ENetEvent* event, packet* p){
     player_manager.host_id = splr.id;
 
     player_manager.myself->set_id(splr.id);
+    std::cout << "my id is: " << std::to_string(splr.id) << std::endl;
 
     if (player_manager.re_sync_timer < 2 * GetFPS()) {
         player_manager.re_sync_timer ++;
