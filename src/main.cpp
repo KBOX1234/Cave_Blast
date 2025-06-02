@@ -9,7 +9,7 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #define NOGDI          // Avoid GDI definitions like Rectangle()
-#define NOMINMAX       // Avoid min/max macros
+//#define NOMINMAX       // Avoid min/max macros
 #define NOSERVICE
 #define NOHELP
 #define NOATOM

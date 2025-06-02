@@ -70,6 +70,7 @@ bool inventory::give_item(item* itm, char count){
 
     if(add_item_slot == nullptr) return false;
 
+
     if(add_item_slot->count + count < 256){
         add_item_slot->count = add_item_slot->count + count;
     }
@@ -86,14 +87,15 @@ bool inventory::give_item(item* itm, char count){
         add_item_slot->count = remainder;
     }
 
-    if(network_manager.is_host() == true){
+    if(network_manager.is_host() == true && player_id != player_manager.host_id){
         std::cout << "player id is: " << std::to_string(player_id) << std::endl;
 
-        if(player_id == player_manager.host_id){
-            return true;
-        }
-        else server_utls::give_player_item(network_manager.server_obj.get_peer_by_player_id(player_id), item_manager.get_item_name_by_id(itm->item_id), count);
 
+        server_utls::give_player_item(network_manager.server_obj.get_peer_by_player_id(player_id), item_manager.get_item_name_by_id(itm->item_id), count);
+
+    }
+    else{
+        add_item_slot->item_i = *itm;
     }
 
     

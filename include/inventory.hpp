@@ -5,7 +5,7 @@
 
 struct inventory_slot{
     item item_i;
-    char count;
+    long count;
 };
 
 #define MAX_INVENTORY_SIZE 30
