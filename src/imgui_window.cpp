@@ -1,8 +1,5 @@
 #include "imgui_window.hpp"
 
-#include "../external/imgui/imgui.h"
-#include "../include/player.hpp"
-
 void imgui_win::items_menu() {
     ImGui::Begin("Items/Blocks list", &items_menu_active, ImGuiWindowFlags_MenuBar);
     if (ImGui::BeginMenuBar())

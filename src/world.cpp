@@ -1,6 +1,9 @@
 #include "world.hpp"
-
+#include "defines.hpp"
 #include "rng.hpp"
+#include "item_master.hpp"
+#include "block_master.hpp"
+#include "networking.hpp"
 
 int world_class::look_up_chunk_index(Vector2 coord){
 
@@ -137,9 +140,18 @@ int world_class::place_block(Vector2 pos, block b){
         network_manager.server_obj.add_block_change(bc);
     }
 
+    if(network_manager.is_host() == true){
+
+        block_change blkch;
+
+        blkch.blk_name = item_manager.get_item_name_by_id(b.attr->item_id);
+
+        blkch.pos = pos;
+
+        network_manager.server_obj.add_block_change(blkch);
+    }
+
     return chunks[chunk_index].set_block(b.attr, get_sub_chunk_pos(pos));
-
-
 }
 
 block* world_class::get_block(Vector2 pos){

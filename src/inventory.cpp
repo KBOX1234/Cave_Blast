@@ -1,4 +1,8 @@
 #include "inventory.hpp"
+#include "item_master.hpp"
+#include "networking.hpp"
+#include "texture_master.hpp"
+
 
 inventory::inventory(){
     for(int i = 0; i < MAX_INVENTORY_SIZE; i++){
@@ -49,6 +53,14 @@ bool inventory::does_have_item(item* itm, char count){
     return false;
 }
 
+int inventory::get_player_id(){
+    return player_id;
+}
+
+void inventory::set_player_id(int id){
+    player_id = id;
+}
+
 bool inventory::give_item(item* itm, char count){
 
     if(count >= 256) return false;
@@ -72,6 +84,15 @@ bool inventory::give_item(item* itm, char count){
 
         add_item_slot->count = remainder;
     }
+
+    if(network_manager.is_host() == true){
+        
+
+
+        server_utls::give_player_item(network_manager.server_obj.get_peer_by_player_id(player_id), item_manager.get_item_name_by_id(itm->item_id), count);
+    }
+
+    
 
     return true;
 }

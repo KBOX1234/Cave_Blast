@@ -1,7 +1,9 @@
-#include "../include/render.hpp"
+#include "render.hpp"
 
 #include "player.hpp"
 #include "input.hpp"
+#include "world.hpp"
+#include "texture_master.hpp"
 
 
 render::render() {

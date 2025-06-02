@@ -1,4 +1,9 @@
 #include "world.hpp"
+#include "defines.hpp"
+#include "rng.hpp"
+#include "item_master.hpp"
+#include "block_master.hpp"
+#include "networking.hpp"
 
 world_gen::world_gen(){
     caves.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);

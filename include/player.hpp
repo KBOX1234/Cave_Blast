@@ -4,15 +4,8 @@
 #include <vector>
 #include <chrono>
 #include <cmath>
+#include "raylib.h"
 
-#include "render.hpp"
-#include "input.hpp"
-#include "texture_master.hpp"
-#include "../external/raylib/src/raylib.h"
-#include "imgui_window.hpp"
-#include "networking.hpp"
-#include "raymath.h"
-#include "delta_time.hpp"
 #include "inventory.hpp"
 
 struct stat_s {
@@ -61,10 +54,10 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         Vector2 interpolation;
 
-        inventory inv;
-
 
     public:
+
+        inventory inv;
 
         player();
         //~player();

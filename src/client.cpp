@@ -1,8 +1,11 @@
-#include "../include/networking.hpp"
+#include "networking.hpp"
+#include "world.hpp"
+#include "rng.hpp"
+#include "httplib.h"
+#include "player.hpp"
 
 #include <iostream>
 
-#include "../include/player.hpp"
 
 std::unique_ptr<client> networking_client = nullptr;
 
@@ -45,6 +48,8 @@ void client::update() {
                 if (p->type == RE_CALIBRATE) handle_recalibrate_request_from_server(&event, p);
 
                 if (p->type == GET_ALL_PLAYERS) handle_big_ahh_player_packet_with_all_players_from_the_server_for_which_data_is_comming_from(&event, p);
+
+                if(p->type == GIVE_BLOCK) handel_get_item_from_server(&event, p);
 
 
                 enet_packet_destroy(event.packet);
@@ -228,4 +233,18 @@ void client::handle_big_ahh_player_packet_with_all_players_from_the_server_for_w
             player_p->increase_angle(spl.angle, true);
         }
     }
+}
+
+void client::handel_get_item_from_server(ENetEvent* client, packet* p){
+    char count;
+
+    memcpy(&count, p->data, sizeof(char));
+
+    char tmp_str[p->size - sizeof(char)];
+
+    memcpy(tmp_str, p->data + sizeof(char), p->size - sizeof(char));
+
+    item* itm = item_manager.fetch_item(tmp_str);
+
+    player_manager.myself->inv.give_item(itm, count);
 }

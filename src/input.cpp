@@ -1,4 +1,8 @@
-#include "../include/input.hpp"
+#include "input.hpp"
+#include "world.hpp"
+#include "player.hpp"
+#include "imgui_window.hpp"
+#include "networking.hpp"
 
 
 int kb(key_bind kbind) {

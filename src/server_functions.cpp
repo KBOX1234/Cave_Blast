@@ -1,4 +1,10 @@
 #include "networking.hpp"
+#include "world.hpp"
+#include "rng.hpp"
+#include "httplib.h"
+#include "inventory.hpp"
+#include "player.hpp"
+#include "item_master.hpp"
 
 void server::add_block_change(block_change blk_chng) {
     blk_change.push_back(blk_chng);
@@ -216,4 +222,56 @@ void server_utls::handle_all_player_fetch(ENetEvent *event) {
 
     delete[] buffer;
     delete[] data_b;
+}
+
+void server_utls::handle_player_break_block(ENetEvent* event, packet* p){
+    Vector2 block_pos;
+
+    memcpy(&block_pos, p->data, sizeof(Vector2));
+
+    char tmp_str[p->size - sizeof(Vector2)];
+
+    memcpy(tmp_str, p->data + sizeof(Vector2), p->size - sizeof(Vector2));
+
+    std::string tool_name(tmp_str);
+
+    item* itm = item_manager.fetch_item(tool_name);
+
+    if(itm == nullptr) return; 
+
+    if(itm->is_weapon != true){
+        //return;
+    }
+
+    player* pl = player_manager.fetch_player_data(*(int*)event->peer->data);
+
+    if(pl == nullptr) return;
+
+    pl->inv.give_item(item_manager.fetch_item_by_id(world.get_block(block_pos)->attr->item_id), 1);
+
+    block blk;
+
+    blk.state = 0;
+    blk.attr = item_manager.fetch_item("air")->block_type_ptr;
+
+    world.place_block(block_pos, blk);
+}
+
+void server_utls::give_player_item(ENetPeer* peer, std::string item, char count){
+    packet p;
+
+    p.type = GIVE_BLOCK;
+    p.size = sizeof(char) + strlen(item.c_str()) + 1;
+
+    p.data = (char*)malloc(p.size);
+
+    memcpy(p.data, &count, sizeof(char));
+
+    memcpy(p.data + sizeof(char), item.c_str(), strlen(item.c_str()) + 1);
+
+    char* buffer = net_utills::convert_to_buffer(&p);
+
+    net_utills::send_msg_safe(buffer, net_utills::get_packet_size(&p), peer, 0);
+
+    free(p.data);
 }

@@ -19,6 +19,11 @@
 #endif
 
 #include <enet/enet.h>
+#include <thread>
+#include <iostream>
+#include "httplib.h"
+#include "raylib.h"
+#include "inventory.hpp"
 
 #define NOTHING 0
 #define MOVE 1
@@ -30,14 +35,8 @@
 #define DISCONNECT_PLAYER 7
 #define RE_CALIBRATE 8
 #define GET_ALL_PLAYERS 9
-
-#include "world.hpp"
-#include "rng.hpp"
-#include "httplib.h"
-#include <thread>
-#include <iostream>
-
-#include "player.hpp"
+#define BREAK_BLOCK 10
+#define GIVE_BLOCK 11
 
 struct __attribute__((packed)) packet {
     int type;
@@ -84,6 +83,8 @@ class client_utls {
 
         static void fetch_all_players(ENetPeer* srv_r);
 
+        static void break_block(ENetPeer* srv_r, Vector2 pos, const std::string& item);
+
 
 
 };
@@ -103,6 +104,11 @@ class server_utls {
         static void handle_all_player_fetch(ENetEvent* event);
 
         static void send_p_connection_loss(ENetEvent *event);
+
+        static void handle_player_break_block(ENetEvent* event, packet* p);
+
+        static void give_player_item(ENetPeer* peer, std::string item, char count);
+
 };
 
 struct block_change {
@@ -166,6 +172,8 @@ class server : public server_utls{
 
         void update();
 
+        ENetPeer* get_peer_by_player_id(int id);
+
 
 };
 
@@ -195,12 +203,9 @@ class client : public client_utls{
 
         void fetch_chunk(Vector2 pos);
 
-
         void start_client(std::string ip, int port);
 
         void update();
-
-        //response handling
 
         void handle_player_list_response(ENetEvent* event, packet* p);
 
@@ -216,6 +221,7 @@ class client : public client_utls{
 
         void handle_big_ahh_player_packet_with_all_players_from_the_server_for_which_data_is_comming_from(ENetEvent* event, packet* p);
 
+        void handel_get_item_from_server(ENetEvent* event, packet* p);
 };
 
 class network : public net_utills {
@@ -228,12 +234,12 @@ class network : public net_utills {
 
         bool is_server;
 
+
+    public:
+
         server server_obj;
 
         client client_obj;
-
-
-    public:
 
         void start(std::string ip, int port, bool is_server);
 

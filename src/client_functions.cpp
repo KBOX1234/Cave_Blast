@@ -1,4 +1,8 @@
 #include "networking.hpp"
+#include "world.hpp"
+#include "rng.hpp"
+#include "httplib.h"
+#include "player.hpp"
 
 void client_utls::fetch_player(int id, ENetPeer* srv_r) {
     packet* send_p = new packet;
@@ -138,4 +142,25 @@ void client::fetch_chunk(Vector2 pos) {
 
     }
     async_chunk_fetch_on = false;
+}
+
+void client_utls::break_block(ENetPeer* srv_r, Vector2 pos, const std::string& item) {
+    packet p;
+
+    p.type = BREAK_BLOCK;
+
+    size_t total_size = sizeof(Vector2) + item.length() + 1;
+    p.size = total_size;
+
+    p.data = new char[total_size];
+
+    memcpy(p.data, &pos, sizeof(Vector2));
+    memcpy(p.data + sizeof(Vector2), item.c_str(), item.length() + 1);
+
+    char* buffer = net_utills::convert_to_buffer(&p);
+
+    net_utills::send_msg_safe(buffer, net_utills::get_packet_size(&p), srv_r, 0);
+
+    delete[] buffer;
+    delete[] p.data;
 }

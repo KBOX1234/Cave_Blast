@@ -9,12 +9,12 @@
 #include <math.h>
 #include <climits>
 #include "json.hpp"
-#include "defines.hpp"
 #include "rng.hpp"
 #include "FastNoiseLite.h"
-#include "item_master.hpp"
-#include "block_master.hpp"
-#include "networking.hpp"
+
+class block;
+struct block_type;
+struct item;
 
 
 

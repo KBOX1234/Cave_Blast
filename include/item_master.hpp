@@ -4,13 +4,10 @@
 #include <unordered_map>
 #include <fstream>
 #include "json.hpp"
-
 #include "block_master.hpp"
-
 
 using json = nlohmann::json;
 
-#include "texture_master.hpp"
 
 struct item {
     std::string name;

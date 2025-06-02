@@ -1,6 +1,12 @@
-#include "../include/player.hpp"
-#include "../include/texture_master.hpp"
-#include "../include/world.hpp"
+#include "player.hpp"
+#include "render.hpp"
+#include "input.hpp"
+#include "texture_master.hpp"
+#include "imgui_window.hpp"
+#include "networking.hpp"
+#include "raymath.h"
+#include "delta_time.hpp"
+#include "inventory.hpp"
 
 player::player() {
     pos = {0, 0};
@@ -13,6 +19,8 @@ player::player() {
 
 void player::set_id(int id2) {
     id = id2;
+
+    inv.set_player_id(id2);
 }
 
 void player::set_name(std::string name2) {

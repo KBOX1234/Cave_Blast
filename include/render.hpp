@@ -1,7 +1,5 @@
 #pragma once
 #include "raylib.h"
-#include "world.hpp"
-#include "texture_master.hpp"
 #include <cmath>
 
 #define SCREEN_WIDTH 1280

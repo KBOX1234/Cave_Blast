@@ -1,5 +1,10 @@
 #include "world.hpp"
-
+#include "defines.hpp"
+#include "rng.hpp"
+#include "FastNoiseLite.h"
+#include "item_master.hpp"
+#include "block_master.hpp"
+#include "networking.hpp"
 
 chunk::chunk(){
     chunk_id = random_num.get_random_int();
