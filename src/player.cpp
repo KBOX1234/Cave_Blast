@@ -186,13 +186,16 @@ player_master::~player_master() {
 void player_master::draw_player(player *pl) {
     Texture2D* txt = texture_manager.grab_texture_pointer(default_texture_id);
 
+    // Calculate difference
     float dx = pl->pos.x - pl->interpolation.x;
     float dy = pl->pos.y - pl->interpolation.y;
 
-    int frames_to_reach = delta_time_master.get_ticks_per_second() / 2; // Interpolate over half a second
+    // Interpolation duration in seconds
+    const float duration = 0.1f;
 
-    float step_x = dx / frames_to_reach;
-    float step_y = dy / frames_to_reach;
+    // How much to move this frame (in units per second, scaled by frame time)
+    float step_x = dx / duration * GetFrameTime();
+    float step_y = dy / duration * GetFrameTime();
 
     // X
     if (std::abs(dx) > std::abs(step_x))
@@ -205,6 +208,7 @@ void player_master::draw_player(player *pl) {
         pl->interpolation.y += step_y;
     else
         pl->interpolation.y = pl->pos.y;
+
 
 
 

@@ -196,9 +196,9 @@ void server::broadcast_block_changes(){
         ENetPeer* peer = clients[i];
 
         send_block_changes(peer);
-        std::cout << "block changes size: " << std::to_string(blk_change.size() * sizeof(block_change)) << std::endl;
-        std::cout << "number of changes: " << std::to_string(blk_change.size()) << std::endl;
-        std::cout << "size of block_change: " << std::to_string(sizeof(block_change)) << std::endl;
+        //std::cout << "block changes size: " << std::to_string(blk_change.size() * sizeof(block_change)) << std::endl;
+        //std::cout << "number of changes: " << std::to_string(blk_change.size()) << std::endl;
+        //std::cout << "size of block_change: " << std::to_string(sizeof(block_change)) << std::endl;
     }
     blk_change.clear();
     

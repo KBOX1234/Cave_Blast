@@ -25,18 +25,21 @@
 #include "raylib.h"
 #include "inventory.hpp"
 
-#define NOTHING 0
-#define MOVE 1
-#define GET_CHUNK 2
-#define SET_BLOCK 3
-#define CREATE_PLAYER 4
-#define GET_PLAYER_LIST 5
-#define GET_PLAYER 6
-#define DISCONNECT_PLAYER 7
-#define RE_CALIBRATE 8
-#define GET_ALL_PLAYERS 9
-#define BREAK_BLOCK 10
-#define GIVE_BLOCK 11
+typedef enum PacketType {
+    NOTHING = 0,
+    MOVE,
+    GET_CHUNK,
+    SET_BLOCK,
+    CREATE_PLAYER,
+    GET_PLAYER_LIST,
+    GET_PLAYER,
+    DISCONNECT_PLAYER,
+    RE_CALIBRATE,
+    GET_ALL_PLAYERS,
+    BREAK_BLOCK,
+    GIVE_BLOCK
+} PacketType;
+
 
 struct __attribute__((packed)) packet {
     int type;
