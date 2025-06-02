@@ -160,6 +160,7 @@ inventory* inventory_ui::get_inventory_pointer(){
 }
 
 inventory_slot* inventory_ui::get_current_item(){
+    if(current_item->count < 1) current_item->item_i.item_id = 0;
     return current_item;
 }
 

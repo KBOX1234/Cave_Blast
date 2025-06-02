@@ -84,6 +84,26 @@ void input::mine_controles() {
 
     }
 
+    if (IsKeyPressed(KEY_P)) {
+
+        block new_block;
+        new_block.state = 0;
+
+        if(player_manager.inv_ui.get_current_item()->count < 1) return;
+
+
+
+        new_block.attr = player_manager.inv_ui.get_current_item()->item_i.block_type_ptr;
+        player_manager.inv_ui.get_current_item()->count--;
+
+        //the coord should just be able to be directly passed but some logic error makes the block be placed 1 to the side
+        //PLS FIX
+
+        world.place_block({cursor.x - 1, cursor.y}, new_block);
+
+
+    }
+
     if (IsKeyPressed(KEY_LEFT)) {
         cursor_offset.x--;
     }
