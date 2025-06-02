@@ -282,14 +282,13 @@ void world_class::break_block(Vector2 pos, const std::string& current_tool){
     if(get_block(pos)->attr->item_id == item_manager.fetch_item("air")->item_id) return;
 
     if(network_manager.is_host() == true){
-
-        place_block(pos, blk);
-
         
 
         item* itm = item_manager.fetch_item_by_id(world.get_block(pos)->attr->item_id);
 
         player_manager.myself->inv.give_item(itm, 1);
+
+        place_block(pos, blk);
     }
 
     else{
