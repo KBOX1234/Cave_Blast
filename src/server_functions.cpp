@@ -7,7 +7,17 @@
 #include "item_master.hpp"
 
 void server::add_block_change(block_change blk_chng) {
-    blk_change.push_back(blk_chng);
+
+    if(blk_change.size() == 0 || blk_change.size() == 1){
+        blk_change.push_back(blk_chng);
+
+        return;
+    }
+
+    if(blk_change[blk_change.size() - 2].blk_name != blk_chng.blk_name && blk_change[blk_change.size() - 2].pos.x != blk_chng.pos.x && blk_change[blk_change.size() - 2].pos.y != blk_chng.pos.y){
+        blk_change.push_back(blk_chng);
+    }
+
 }
 
 void server::send_block_changes(ENetPeer *to) {
@@ -31,7 +41,6 @@ void server::send_block_changes(ENetPeer *to) {
         net_utills::send_msg_safe(buffer,  net_utills::get_packet_size(&p), to, 0);
 
     }
-    blk_change.clear();
 
 }
 

@@ -138,10 +138,8 @@ int world_class::place_block(Vector2 pos, block b){
     bc.pos = pos;
 
     if(network_manager.is_host() == true){
-        network_manager.server_obj.add_block_change(bc);
-    }
 
-    if(network_manager.is_host() == true){
+        network_manager.server_obj.add_block_change(bc);
 
         block_change blkch;
 
@@ -150,6 +148,9 @@ int world_class::place_block(Vector2 pos, block b){
         blkch.pos = pos;
 
         network_manager.server_obj.add_block_change(blkch);
+    }
+    else{
+        client_utls::place_block(bc.blk_name, pos, network_manager.get_server());
     }
 
     return chunks[chunk_index].set_block(b.attr, get_sub_chunk_pos(pos));

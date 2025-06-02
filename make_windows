@@ -15,7 +15,7 @@ TARGET = main.exe
 all: debug
 
 # Debug build: includes symbols, no optimization
-debug: CFLAGS = -g -O0 $(INCLUDE)
+debug: CFLAGS = -g -O0 -pg $(INCLUDE)
 debug: $(TARGET)
 
 # Release build: optimized, no symbols, stripped

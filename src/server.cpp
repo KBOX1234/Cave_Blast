@@ -192,13 +192,16 @@ server::~server() {
 }
 
 void server::broadcast_block_changes(){
-    for (size_t i = 0; i < host_server->peerCount; ++i) {
-        ENetPeer* peer = &host_server->peers[i];
+    for (size_t i = 0; i < clients.size(); ++i) {
+        ENetPeer* peer = clients[i];
 
-        if (peer->state == ENET_PEER_STATE_CONNECTED) {
-            send_block_changes(peer);
-        }
+        send_block_changes(peer);
+        std::cout << "block changes size: " << std::to_string(blk_change.size() * sizeof(block_change)) << std::endl;
+        std::cout << "number of changes: " << std::to_string(blk_change.size()) << std::endl;
+        std::cout << "size of block_change: " << std::to_string(sizeof(block_change)) << std::endl;
     }
+    blk_change.clear();
+    
 }
 
 void server::broadcast_disconnect(ENetEvent* event){
