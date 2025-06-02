@@ -76,10 +76,10 @@ void input::mine_controles() {
         //PLS FIX
 
         if (network_manager.is_host() == false) {
-            client_utls::place_block("dirt", {cursor.x - 1, cursor.y}, network_manager.get_server());
+            //client_utls::place_block("dirt", {cursor.x - 1, cursor.y}, network_manager.get_server());
         }
 
-        world.place_block({cursor.x - 1, cursor.y}, new_block);
+        world.break_block({cursor.x - 1, cursor.y}, "stone");
 
 
     }

@@ -271,6 +271,11 @@ void server_utls::give_player_item(ENetPeer* peer, std::string item, char count)
 
     char* buffer = net_utills::convert_to_buffer(&p);
 
+    if(peer == nullptr){
+        std::cout << "[cannot give player item\nerror: peer is NULL]";
+        return;
+    }
+
     net_utills::send_msg_safe(buffer, net_utills::get_packet_size(&p), peer, 0);
 
     free(p.data);

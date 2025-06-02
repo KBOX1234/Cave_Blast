@@ -271,3 +271,19 @@ void world_class::set_block_radius(block blk, int height, Vector2 pos) {
         }
     }
 }
+
+void world_class::break_block(Vector2 pos, const std::string& current_tool){
+    block blk;
+
+    blk.attr = item_manager.fetch_item("air")->block_type_ptr;
+    blk.state = 0;
+
+    if(network_manager.is_host() == true) place_block(pos, blk);
+
+    else{
+        //std::cout << "sending break block request\n";
+        client_utls::break_block(network_manager.get_server(), pos, current_tool);
+    }
+
+    
+}

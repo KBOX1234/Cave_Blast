@@ -157,6 +157,8 @@ class world_class {
         int load_chunk(json j);
 
         void set_block_radius(block blk, int height, Vector2 pos);
+
+        void break_block(Vector2 pos, const std::string& current_tool);
 };
 
 extern world_class world;

@@ -86,6 +86,7 @@ bool inventory::give_item(item* itm, char count){
     }
 
     if(network_manager.is_host() == true){
+        std::cout << "player id is: " << std::to_string(player_id) << std::endl;
         
 
 

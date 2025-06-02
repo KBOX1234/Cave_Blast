@@ -42,6 +42,11 @@ void server::handle_request(ENetEvent* event) {
         case GET_ALL_PLAYERS:
             server_utls::handle_all_player_fetch(event);
             break;
+        case BREAK_BLOCK:
+
+            server_utls::handle_player_break_block(event, p);
+
+            break;
         default:
             std::cerr << "Unknown packet type: " << static_cast<int>(p->type) << std::endl;
             break;
