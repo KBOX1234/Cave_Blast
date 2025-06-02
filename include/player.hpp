@@ -118,6 +118,8 @@ class player_master {
     friend class imgui_win;
     friend class input;
     friend class network;
+    friend class server;
+    friend class client;
     friend class render;
     friend class server_utls;
     private:

@@ -71,17 +71,20 @@ public:
 class client_utls {
     public:
 
-        static void player_creation_request(std::string name);
+        //requests
+        static void player_creation_request(std::string name, ENetPeer* srv_r);
 
-        static void move_myself(float angle, Vector2 pos);
+        static void move_myself(float angle, Vector2 pos, ENetPeer* srv_r);
 
-        static void send_player_list_request();
+        static void send_player_list_request(ENetPeer* srv_r);
 
-        static void fetch_player(int id);
+        static void fetch_player(int id, ENetPeer* srv_r);
 
-        static void place_block(std::string name, Vector2 pos);
+        static void place_block(std::string name, Vector2 pos, ENetPeer* srv_r);
 
-        static void fetch_all_players();
+        static void fetch_all_players(ENetPeer* srv_r);
+
+
 
 };
 
@@ -98,6 +101,8 @@ class server_utls {
         static void handle_player_block_placement(ENetEvent* event, packet* p);
 
         static void handle_all_player_fetch(ENetEvent* event);
+
+        static void send_p_connection_loss(ENetEvent *event);
 };
 
 struct block_change {
@@ -106,50 +111,138 @@ struct block_change {
     Vector2 pos;
 };
 
+class network;
+
+class server : public server_utls{
+    
+    friend class client_utls;
+    friend class server_utls;
+    friend class world_class;
+    friend class network;
+
+    private:
+
+        std::string ip_addr;
+        int port;
+
+        //enet host object
+        ENetHost* host_server = nullptr;
+
+
+        //chunk sync server
+        httplib::Server svr;
+
+        //clients vector
+        std::vector<ENetPeer*> clients;
+
+        //block changes vector
+        std::vector<block_change> blk_change;
+
+        ENetAddress address = {};
+
+        void handle_connect(ENetEvent *event);
+
+        void handle_disconnect(ENetEvent *event);
+
+        void handle_request(ENetEvent *event);
+
+        void send_block_changes(ENetPeer *to);
+
+        void broadcast_block_changes();
+
+        void broadcast_disconnect(ENetEvent *event);
+
+        bool async_chunk_fetch_on = false;
+
+    public:
+
+        void start_api();
+
+        void start_server(const std::string ip, int port);
+
+        ~server();
+
+        void add_block_change(block_change blk_chng);
+
+        void update();
+
+
+};
+
+class client : public client_utls{
+    friend class client_utls;
+    friend class server_utls;
+    friend class world_class;
+    friend class network;
+
+    private:
+
+        bool async_chunk_fetch_on = false;
+
+        int port;
+
+        std::string ip_addr;
+
+        ENetAddress address = {};
+
+        ENetPeer* remote_server = nullptr;
+
+        ENetHost* myself = nullptr;
+
+        std::unique_ptr<httplib::Client> cli;
+
+    public:
+
+        void fetch_chunk(Vector2 pos);
+
+
+        void start_client(std::string ip, int port);
+
+        void update();
+
+        //response handling
+
+        void handle_player_list_response(ENetEvent* event, packet* p);
+
+        void handle_player_get_response(ENetEvent* event, packet* p);
+
+        void handle_player_creation_response(ENetEvent* event, packet* p);
+
+        void handle_block_updates(ENetEvent* event, packet* p);
+
+        void handle_other_player_disconnect(ENetEvent* event, packet* p);
+
+        void handle_recalibrate_request_from_server(ENetEvent* event, packet* p);
+
+        void handle_big_ahh_player_packet_with_all_players_from_the_server_for_which_data_is_comming_from(ENetEvent* event, packet* p);
+
+};
+
 class network : public net_utills {
     friend class client_utls;
     friend class server_utls;
     friend class world_class;
-private:
-    int port;
-    std::string ip_addr;
+    private:
+        int port;
+        std::string ip_addr;
 
-    bool async_chunk_fetch_on = false;
+        bool is_server;
 
-    void fetch_chunk(Vector2 pos);
+        server server_obj;
 
-    bool is_server;
-    ENetAddress address = {};
-    ENetHost *local_instance = nullptr;
-    ENetPeer *remote_instance = nullptr;
-    std::unique_ptr<httplib::Client> cli;
-    httplib::Server svr;
-    std::vector<ENetPeer*> clients;
+        client client_obj;
 
-    std::vector<block_change> blk_change;
 
-    void send_block_changes(ENetPeer* to);
+    public:
 
-    void handle_connect(ENetEvent *event);
-    void handle_disconnect(ENetEvent *event);
-    void handle_request(ENetEvent *event);
-    void send_p_connection_loss(ENetEvent* event);
+        void start(std::string ip, int port, bool is_server);
 
-    void update_server();
-    void update_client();
+        bool is_host();
 
-    void start_api();
+        ENetPeer* get_server();
 
-public:
-    network(bool server, const std::string ip, int port);
-
-    ~network();
-
-    bool is_host();
-    void add_block_change(block_change blk_chng);
-
-    void update();
+        void update();
 
 };
 
-extern std::unique_ptr<network> networking;
+extern network network_manager;

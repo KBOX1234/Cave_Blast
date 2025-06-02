@@ -4,6 +4,7 @@
 #include "world.hpp"
 #include "player.hpp"
 #include "imgui_window.hpp"
+#include "networking.hpp"
 
 struct key_bind {
     int org_key;
