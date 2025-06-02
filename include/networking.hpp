@@ -10,7 +10,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define NOGDI             // Prevent inclusion of GDI (Graphics Device Interface), including Rectangle()
 #define NOSYSMETRICS
-#define NOMINMAX
+#define NOMINMAX 1
 #define NOUSER
 #define NOCOMM
 #define NOIME

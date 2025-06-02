@@ -4,6 +4,7 @@
 #include "item_master.hpp"
 #include "block_master.hpp"
 #include "networking.hpp"
+#include "player.hpp"
 
 int world_class::look_up_chunk_index(Vector2 coord){
 
@@ -278,7 +279,13 @@ void world_class::break_block(Vector2 pos, const std::string& current_tool){
     blk.attr = item_manager.fetch_item("air")->block_type_ptr;
     blk.state = 0;
 
-    if(network_manager.is_host() == true) place_block(pos, blk);
+    if(network_manager.is_host() == true){
+        place_block(pos, blk);
+
+        item* itm = item_manager.fetch_item_by_id(world.get_block(pos)->attr->item_id);
+
+        player_manager.myself->inv.give_item(itm, 1);
+    }
 
     else{
         //std::cout << "sending break block request\n";

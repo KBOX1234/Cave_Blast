@@ -2,6 +2,7 @@
 #include "item_master.hpp"
 #include "networking.hpp"
 #include "texture_master.hpp"
+#include "player.hpp"
 
 
 inventory::inventory(){
@@ -87,10 +88,12 @@ bool inventory::give_item(item* itm, char count){
 
     if(network_manager.is_host() == true){
         std::cout << "player id is: " << std::to_string(player_id) << std::endl;
-        
 
+        if(player_id == player_manager.host_id){
+            return true;
+        }
+        else server_utls::give_player_item(network_manager.server_obj.get_peer_by_player_id(player_id), item_manager.get_item_name_by_id(itm->item_id), count);
 
-        server_utls::give_player_item(network_manager.server_obj.get_peer_by_player_id(player_id), item_manager.get_item_name_by_id(itm->item_id), count);
     }
 
     
@@ -141,6 +144,9 @@ void inventory_ui::draw_inventory(){
 
         Color tint = (mouse_pos.x > a.x && mouse_pos.y > a.y && mouse_pos.x < b.x && mouse_pos.y < b.y) ? GRAY : WHITE;
         DrawTextureEx(*it, a, 0, draw_scale, tint);
+        std::string count_str = std::to_string(inventory_i->slots[i].count);
+
+        DrawText(count_str.c_str(), a.x, a.y, 10, BLACK);
 
         if(current_item == &inventory_i->slots[i]){
             DrawRectangleLines(a.x, a.y, (b.x - a.x), (b.y - a.y), BLACK);

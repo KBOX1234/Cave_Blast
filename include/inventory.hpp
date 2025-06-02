@@ -51,7 +51,7 @@ class inventory_ui{
     private:
         inventory* inventory_i;
 
-        Vector2 ui_pos = {0, 0};
+        Vector2 ui_pos = {20, 20};
         float ui_scale = 2;
 
         int ui_texture_id;
