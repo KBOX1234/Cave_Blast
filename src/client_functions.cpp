@@ -120,3 +120,22 @@ void client_utls::fetch_all_players(ENetPeer* srv_r) {
 
     delete[] buffer;
 }
+
+void client::fetch_chunk(Vector2 pos) {
+    async_chunk_fetch_on = true;
+    json sendJ;
+
+    sendJ["x"] = pos.x;
+    sendJ["y"] = pos.y;
+
+    auto res = cli->Post("/chunk", sendJ.dump(), "application/json");
+
+    if (res && res->status == 200) {
+
+        //std::cout << "Response:\n" << res->body << std::endl;
+        json new_c = json::parse(res->body);
+        world.new_chunk_from_json(new_c);
+
+    }
+    async_chunk_fetch_on = false;
+}

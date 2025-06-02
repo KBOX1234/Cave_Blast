@@ -30,135 +30,22 @@ void client::update() {
 
 
                 if (player_manager.get_host() != nullptr) {
-                    //std::cout << "my id is: " + std::to_string(player_manager.host_id) + "\n";
-                    //std::cout << "my official id is: " + std::to_string(player_manager.get_host()->get_id()) << std::endl;
-                    //std::cout << "my pos is: " + std::to_string(player_manager.get_host()->get_pos().x) + ", " + std::to_string(player_manager.get_host()->get_pos().x) << std::endl;
-                    if (p->type == GET_PLAYER_LIST) {
-                        std::vector<int> ids;
 
-                        ids = net_utills::deserializeIntVector(p->data, p->size);
+                    if (p->type == GET_PLAYER_LIST) handle_player_list_response(&event, p);
 
-                        for (int i = 0; i < ids.size(); i++) {
-                            //std::cout << "id: " << std::to_string(ids[i]) << std::endl;
-
-                            client_utls::fetch_player(ids[i], remote_server);
-                        }
-                    }
-
-                    if (p->type == GET_PLAYER) {
-                        serialized_player spl;
-
-                        memcpy(&spl, p->data, sizeof(serialized_player));
-
-                        if (player_manager.does_player_exist(spl.id) == false) {
-                            player_manager.add_player_from_serialised_player(&spl);
-                        }
-
-                        else {
-                            player* pl = player_manager.fetch_player_data(spl.id);
-                            if (pl != nullptr) {
-                                pl->set_pos(spl.pos);
-                                pl->set_stats(spl.stats);
-
-                            }
-                            else {
-                                std::cout << "player id: " + std::to_string(spl.id) + " does not exist\n";
-                            }
-                        }
-                    }
+                    if (p->type == GET_PLAYER) handle_player_get_response(&event, p);
                 }
 
-                if (p->type == CREATE_PLAYER) {
+                if (p->type == CREATE_PLAYER) handle_player_creation_response(&event, p);
 
-                    serialized_player splr;
+                if (p->type == SET_BLOCK) handle_block_updates(&event, p);
 
-                    std::cout << "got player creation response from server.\nplayer id: " << std::to_string(splr.id) << std::endl;
+                if (p->type == DISCONNECT_PLAYER) handle_other_player_disconnect(&event, p);
 
-                    memcpy(&splr, p->data, sizeof(serialized_player));
+                if (p->type == RE_CALIBRATE) handle_recalibrate_request_from_server(&event, p);
 
-                    player_manager.add_player_from_serialised_player(&splr);
+                if (p->type == GET_ALL_PLAYERS) handle_big_ahh_player_packet_with_all_players_from_the_server_for_which_data_is_comming_from(&event, p);
 
-                    player_manager.host_id = splr.id;
-
-                    player_manager.myself->set_id(splr.id);
-
-                    if (player_manager.re_sync_timer < 2 * GetFPS()) {
-                        player_manager.re_sync_timer ++;
-                    }
-                    else {
-                        player_manager.myself->set_pos(player_manager.get_host()->get_pos());
-                        player_manager.myself->zero_rotation();
-                        player_manager.myself->increase_angle(player_manager.get_host()->get_rotation());
-                    }
-
-                }
-
-                if (p->type == SET_BLOCK) {
-                    char* name = new char[p->size - sizeof(Vector2)];
-
-                    Vector2 pos;
-
-                    memcpy(&pos, p->data, sizeof(Vector2));
-
-                    memcpy(name, p->data + sizeof(Vector2), p->size - sizeof(Vector2));
-
-                    block blk;
-
-                    blk.state = 0;
-
-                    blk.attr = item_manager.fetch_item(name)->block_type_ptr;
-
-                    world.place_block(pos, blk);
-
-                    //std::cout << "set block\n";
-                }
-
-                if (p->type == DISCONNECT_PLAYER) {
-                    int id;
-
-                    memcpy(&id, p->data, sizeof(int));
-
-                    player_manager.remove_player(id);
-                }
-
-                if (p->type == RE_CALIBRATE) {
-                    Vector2 n_pos;
-
-                    memcpy(&n_pos, p->data, sizeof(Vector2));
-
-                    player_manager.get_host()->set_pos(n_pos);
-                }
-
-                if (p->type == GET_ALL_PLAYERS) {
-                    size_t size = (size_t)round(p->size / sizeof(serialized_player));
-                    size_t inc = 0;
-
-
-
-                    while (inc < p->size) {
-                        serialized_player spl;
-
-                        memcpy(&spl, p->data + inc, sizeof(serialized_player));
-
-                        inc = inc + sizeof(serialized_player);
-
-                        player* player_p = player_manager.fetch_player_data(spl.id);
-
-                        if (player_p == nullptr) {
-                            player_p = player_manager.fetch_player_data(player_manager.add_player_from_serialised_player(&spl));
-                        }
-                        else {
-                            player_p->set_name(spl.name);
-                            player_p->set_pos(spl.pos);
-                            player_p->set_stats(spl.stats);
-
-                            player_p->zero_rotation(true);
-                            player_p->increase_angle(spl.angle, true);
-                        }
-                    }
-
-
-                }
 
                 enet_packet_destroy(event.packet);
                 break;
@@ -227,21 +114,118 @@ void client::start_client(std::string ip, int port){
         }
 }
 
-void client::fetch_chunk(Vector2 pos) {
-    async_chunk_fetch_on = true;
-    json sendJ;
+void client::handle_player_list_response(ENetEvent* event, packet* p){
+    std::vector<int> ids;
 
-    sendJ["x"] = pos.x;
-    sendJ["y"] = pos.y;
+    ids = net_utills::deserializeIntVector(p->data, p->size);
 
-    auto res = cli->Post("/chunk", sendJ.dump(), "application/json");
+    for (int i = 0; i < ids.size(); i++) {
+        //std::cout << "id: " << std::to_string(ids[i]) << std::endl;
 
-    if (res && res->status == 200) {
-
-        //std::cout << "Response:\n" << res->body << std::endl;
-        json new_c = json::parse(res->body);
-        world.new_chunk_from_json(new_c);
-
+        client_utls::fetch_player(ids[i], remote_server);
     }
-    async_chunk_fetch_on = false;
+}
+
+void client::handle_player_get_response(ENetEvent* event, packet* p){
+    serialized_player spl;
+
+    memcpy(&spl, p->data, sizeof(serialized_player));
+
+    if (player_manager.does_player_exist(spl.id) == false) {
+        player_manager.add_player_from_serialised_player(&spl);
+    }
+
+    else {
+        player* pl = player_manager.fetch_player_data(spl.id);
+        if (pl != nullptr) {
+            pl->set_pos(spl.pos);
+            pl->set_stats(spl.stats);
+
+        }
+        else {
+            std::cout << "player id: " + std::to_string(spl.id) + " does not exist\n";
+        }
+    }
+}
+
+void client::handle_player_creation_response(ENetEvent* event, packet* p){
+    serialized_player splr;
+
+    std::cout << "got player creation response from server.\nplayer id: " << std::to_string(splr.id) << std::endl;
+
+    memcpy(&splr, p->data, sizeof(serialized_player));
+
+    player_manager.add_player_from_serialised_player(&splr);
+
+    player_manager.host_id = splr.id;
+
+    player_manager.myself->set_id(splr.id);
+
+    if (player_manager.re_sync_timer < 2 * GetFPS()) {
+        player_manager.re_sync_timer ++;
+    }
+    else {
+        player_manager.myself->set_pos(player_manager.get_host()->get_pos());
+        player_manager.myself->zero_rotation();
+        player_manager.myself->increase_angle(player_manager.get_host()->get_rotation());
+    }
+}
+
+void client::handle_block_updates(ENetEvent* event, packet* p){
+    char* name = new char[p->size - sizeof(Vector2)];
+
+    Vector2 pos;
+
+    memcpy(&pos, p->data, sizeof(Vector2));
+
+    memcpy(name, p->data + sizeof(Vector2), p->size - sizeof(Vector2));
+
+    block blk;
+
+    blk.state = 0;
+
+    blk.attr = item_manager.fetch_item(name)->block_type_ptr;
+
+    world.place_block(pos, blk);
+}
+
+void client::handle_other_player_disconnect(ENetEvent* event, packet* p){
+    int id;
+
+    memcpy(&id, p->data, sizeof(int));
+
+    player_manager.remove_player(id);
+}
+
+void client::handle_recalibrate_request_from_server(ENetEvent* event, packet* p){
+    Vector2 n_pos;
+
+    memcpy(&n_pos, p->data, sizeof(Vector2));
+
+    player_manager.get_host()->set_pos(n_pos);
+}
+
+void client::handle_big_ahh_player_packet_with_all_players_from_the_server_for_which_data_is_comming_from(ENetEvent* event, packet* p) {
+    size_t size = (size_t)round(p->size / sizeof(serialized_player));
+    size_t inc = 0;
+
+    while (inc < p->size) {
+        serialized_player spl;
+
+        memcpy(&spl, p->data + inc, sizeof(serialized_player));
+        inc += sizeof(serialized_player);
+
+        player* player_p = player_manager.fetch_player_data(spl.id);
+
+        if (player_p == nullptr) {
+            player_p = player_manager.fetch_player_data(player_manager.add_player_from_serialised_player(&spl));
+        } 
+        else {
+            player_p->set_name(spl.name);
+            player_p->set_pos(spl.pos);
+            player_p->set_stats(spl.stats);
+            player_p->zero_rotation(true);
+            player_p->increase_angle(spl.angle, true);
+        }
+    }
 }

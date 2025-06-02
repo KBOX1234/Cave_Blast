@@ -71,6 +71,7 @@ public:
 class client_utls {
     public:
 
+        //requests
         static void player_creation_request(std::string name, ENetPeer* srv_r);
 
         static void move_myself(float angle, Vector2 pos, ENetPeer* srv_r);
@@ -82,6 +83,8 @@ class client_utls {
         static void place_block(std::string name, Vector2 pos, ENetPeer* srv_r);
 
         static void fetch_all_players(ENetPeer* srv_r);
+
+
 
 };
 
@@ -110,7 +113,7 @@ struct block_change {
 
 class network;
 
-class server{
+class server : public server_utls{
     
     friend class client_utls;
     friend class server_utls;
@@ -166,7 +169,7 @@ class server{
 
 };
 
-class client{
+class client : public client_utls{
     friend class client_utls;
     friend class server_utls;
     friend class world_class;
@@ -196,6 +199,22 @@ class client{
         void start_client(std::string ip, int port);
 
         void update();
+
+        //response handling
+
+        void handle_player_list_response(ENetEvent* event, packet* p);
+
+        void handle_player_get_response(ENetEvent* event, packet* p);
+
+        void handle_player_creation_response(ENetEvent* event, packet* p);
+
+        void handle_block_updates(ENetEvent* event, packet* p);
+
+        void handle_other_player_disconnect(ENetEvent* event, packet* p);
+
+        void handle_recalibrate_request_from_server(ENetEvent* event, packet* p);
+
+        void handle_big_ahh_player_packet_with_all_players_from_the_server_for_which_data_is_comming_from(ENetEvent* event, packet* p);
 
 };
 
