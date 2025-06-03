@@ -4,15 +4,9 @@
 [submodule "external/raylib"]
 	path = external/raylib
 	url = https://github.com/raysan5/raylib.git
-[submodule "external/rl_imgui"]
-	path = external/rl_imgui
-	url = https://github.com/raylib-extras/rlImGui.git
 [submodule "external/imgui"]
 	path = external/imgui
 	url = https://github.com/ocornut/imgui.git
-[submodule "external/sphysics"]
-	path = external/sphysics
-	url = https://github.com/KBOX1234/sphysics.git
 [submodule "external/netem"]
 	path = external/netem
 	url = https://github.com/tum-lkn/tcgui.git
