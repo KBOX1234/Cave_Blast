@@ -29,9 +29,9 @@ void render::move_camera_y(float amount) {
 
 void render::update_drawing_coords() {
 
-    camera.target.x = player_manager.myself->get_pos().x - ((((float)SCREEN_WIDTH / camera.zoom) / 2.0f) - (BLOCK_SIZE / 2));
+    camera.target.x = player_manager.myself->get_pos().x - ((((float)GetScreenWidth() / camera.zoom) / 2.0f) - (BLOCK_SIZE / 2));
     camera.target.x = round(camera.target.x);
-    camera.target.y = player_manager.myself->get_pos().y - ((((float)SCREEN_HEIGTH / camera.zoom) / 2.0f) - BLOCK_SIZE);
+    camera.target.y = player_manager.myself->get_pos().y - ((((float)GetScreenHeight() / camera.zoom) / 2.0f) - BLOCK_SIZE);
     camera.target.y = round(camera.target.y);
 
     //std::cout << "player pos: " << std::to_string(player_manager.get_host()->get_pos().x) << ", " << std::to_string(player_manager.get_host()->get_pos().y) << std::endl;

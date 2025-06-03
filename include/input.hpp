@@ -12,19 +12,18 @@ int kb(key_bind kbind);
 
 class keybind_master {
 
-    std::vector<key_bind> key_binds;
-
     public:
-
-    int load_key_bind(const std::string& path);
-
-    int save_key_bind(const std::string& path);
-
-    void new_keybind(int org_key, int custom_key);
-
-    bool is_key_pressed(key_bind kbind);
-
-    bool is_key_down(key_bind kbind);
+        int inventory_key = KEY_I;
+        int move_cursor_lefty_key = KEY_LEFT;
+        int move_cursor_righty_key = KEY_RIGHT;
+        int move_cursor_upy_key = KEY_UP;
+        int move_cursor_downy_key = KEY_DOWN;
+        int move_lefty_key = KEY_A;
+        int move_righty_key = KEY_D;
+        int move_upy_key = KEY_W;
+        int move_downy_key = KEY_S;
+        int break_blocky_key = KEY_ENTER;
+        int place_blocky_key = KEY_P;
 
 
 };

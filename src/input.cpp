@@ -13,7 +13,7 @@ int kb(key_bind kbind) {
 }
 
 void input::update_movement() {
-    if (IsKeyDown(KEY_W)) {
+    if (IsKeyDown(keybind_manager.move_upy_key)) {
 
         player_manager.myself->zero_rotation();
         player_manager.myself->increase_angle(270);
@@ -22,7 +22,7 @@ void input::update_movement() {
 
         is_inp_update = true;
     }
-    if (IsKeyDown(KEY_S)) {
+    if (IsKeyDown(keybind_manager.move_downy_key)) {
         player_manager.myself->zero_rotation();
         player_manager.myself->increase_angle(90);
 
@@ -31,7 +31,7 @@ void input::update_movement() {
         is_inp_update = true;
 
     }
-    if (IsKeyDown(KEY_D)) {
+    if (IsKeyDown(keybind_manager.move_righty_key)) {
         player_manager.myself->zero_rotation();
         player_manager.myself->increase_angle(0);
 
@@ -39,7 +39,7 @@ void input::update_movement() {
 
         is_inp_update = true;
     }
-    if (IsKeyDown(KEY_A)) {
+    if (IsKeyDown(keybind_manager.move_lefty_key)) {
         player_manager.myself->zero_rotation();
         player_manager.myself->increase_angle(180);
 
@@ -65,12 +65,7 @@ void input::mine_controles() {
     cursor.x = round(player_manager.get_host()->get_pos().x / BLOCK_SIZE) + cursor_offset.x;
     cursor.y = round(player_manager.get_host()->get_pos().y / BLOCK_SIZE) + cursor_offset.y;
 
-    if (IsKeyPressed(KEY_ENTER)) {
-
-        block new_block;
-        new_block.state = 0;
-
-        new_block.attr = item_manager.fetch_item("dirt")->block_type_ptr;
+    if (IsKeyPressed(keybind_manager.break_blocky_key)) {
 
         //the coord should just be able to be directly passed but some logic error makes the block be placed 1 to the side
         //PLS FIX
@@ -84,7 +79,7 @@ void input::mine_controles() {
 
     }
 
-    if (IsKeyPressed(KEY_P)) {
+    if (IsKeyPressed(keybind_manager.place_blocky_key)) {
 
         block new_block;
         new_block.state = 0;
@@ -104,19 +99,19 @@ void input::mine_controles() {
 
     }
 
-    if (IsKeyPressed(KEY_LEFT)) {
+    if (IsKeyPressed(keybind_manager.move_cursor_lefty_key)) {
         cursor_offset.x--;
     }
 
-    if (IsKeyPressed(KEY_RIGHT)) {
+    if (IsKeyPressed(keybind_manager.move_cursor_righty_key)) {
         cursor_offset.x++;
     }
 
-    if (IsKeyPressed(KEY_UP)) {
+    if (IsKeyPressed(keybind_manager.move_cursor_upy_key)) {
         cursor_offset.y--;
     }
 
-    if (IsKeyPressed(KEY_DOWN)) {
+    if (IsKeyPressed(keybind_manager.move_cursor_downy_key)) {
         cursor_offset.y++;
     }
 

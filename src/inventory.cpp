@@ -3,6 +3,7 @@
 #include "networking.hpp"
 #include "texture_master.hpp"
 #include "player.hpp"
+#include "input.hpp"
 
 
 inventory::inventory(){
@@ -167,8 +168,8 @@ inventory_slot* inventory_ui::get_current_item(){
 void inventory_ui::update_inv_ui_input(){
 
 
-    if(IsKeyPressed(KEY_I) && is_inventory_opened == false) is_inventory_opened = true;
-    else if(IsKeyPressed(KEY_I) && is_inventory_opened == true) is_inventory_opened = false;
+    if(IsKeyPressed(keybind_manager.inventory_key) && is_inventory_opened == false) is_inventory_opened = true;
+    else if(IsKeyPressed(keybind_manager.inventory_key) && is_inventory_opened == true) is_inventory_opened = false;
 
     
 

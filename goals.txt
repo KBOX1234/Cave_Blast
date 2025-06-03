@@ -1,0 +1,7 @@
+! 1. Good Camera Controlls 
+
+2. Actual mining
+
+3. Colision
+
+4. Lighting
