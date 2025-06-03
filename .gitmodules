@@ -10,3 +10,9 @@
 [submodule "external/netem"]
 	path = external/netem
 	url = https://github.com/tum-lkn/tcgui.git
+[submodule "external/sphysics"]
+	path = external/sphysics
+	url = https://github.com/KBOX1234/sphysics.git
+[submodule "external/rl_imgui"]
+	path = external/rl_imgui
+	url = https://github.com/raylib-extras/rlImGui.git
