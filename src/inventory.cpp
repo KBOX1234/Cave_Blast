@@ -201,6 +201,8 @@ void inventory_ui::update_inv_ui_input(){
         if(mouse_pos.x > a.x && mouse_pos.y > a.y && mouse_pos.x < b.x && mouse_pos.y < b.y){
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
                 current_item = &inventory_i->slots[i];
+
+                current_item_index = i;
             }
         }
 
@@ -214,5 +216,61 @@ void inventory_ui::update_inv_ui_input(){
             pos_pointer.x = 0;
             pos_pointer.y++;
         }
+    }
+
+    if(IsKeyPressed(keybind_manager.move_inventory_slot_down)){
+        current_item_index = current_item_index + 10;
+
+        if(current_item_index > MAX_INVENTORY_SIZE){
+            current_item_index = current_item_index - MAX_INVENTORY_SIZE;
+        }
+
+        else if(current_item_index < 0){
+            current_item_index = current_item_index + MAX_INVENTORY_SIZE;
+        }
+
+        current_item = &inventory_i->slots[current_item_index];
+    }
+
+    if(IsKeyPressed(keybind_manager.move_inventory_slot_up)){
+        current_item_index = current_item_index - 10;
+
+        if(current_item_index > MAX_INVENTORY_SIZE){
+            current_item_index = current_item_index - MAX_INVENTORY_SIZE;
+        }
+
+        else if(current_item_index < 0){
+            current_item_index = current_item_index + MAX_INVENTORY_SIZE;
+        }
+
+        current_item = &inventory_i->slots[current_item_index];
+    }
+
+    if(IsKeyPressed(keybind_manager.move_inventory_slot_left)){
+        current_item_index = current_item_index - 1;
+
+        if(current_item_index > MAX_INVENTORY_SIZE){
+            current_item_index = current_item_index - MAX_INVENTORY_SIZE;
+        }
+
+        else if(current_item_index < 0){
+            current_item_index = current_item_index + MAX_INVENTORY_SIZE;
+        }
+
+        current_item = &inventory_i->slots[current_item_index];
+    }
+
+    if(IsKeyPressed(keybind_manager.move_inventory_slot_right)){
+        current_item_index = current_item_index + 1;
+
+        if(current_item_index > MAX_INVENTORY_SIZE){
+            current_item_index = current_item_index - MAX_INVENTORY_SIZE;
+        }
+
+        else if(current_item_index < 0){
+            current_item_index = current_item_index + MAX_INVENTORY_SIZE;
+        }
+
+        current_item = &inventory_i->slots[current_item_index];
     }
 }

@@ -65,39 +65,9 @@ void input::mine_controles() {
     cursor.x = round(player_manager.get_host()->get_pos().x / BLOCK_SIZE) + cursor_offset.x;
     cursor.y = round(player_manager.get_host()->get_pos().y / BLOCK_SIZE) + cursor_offset.y;
 
-    if (IsKeyPressed(keybind_manager.break_blocky_key)) {
+    if (IsKeyPressed(keybind_manager.break_block_key)) player_manager.myself->break_block({cursor.x - 1, cursor.y});
 
-        //the coord should just be able to be directly passed but some logic error makes the block be placed 1 to the side
-        //PLS FIX
-
-        if (network_manager.is_host() == false) {
-            //client_utls::place_block("dirt", {cursor.x - 1, cursor.y}, network_manager.get_server());
-        }
-
-        world.break_block({cursor.x - 1, cursor.y}, "stone");
-
-
-    }
-
-    if (IsKeyPressed(keybind_manager.place_blocky_key)) {
-
-        block new_block;
-        new_block.state = 0;
-
-        if(player_manager.inv_ui.get_current_item()->count < 1) return;
-
-
-
-        new_block.attr = player_manager.inv_ui.get_current_item()->item_i.block_type_ptr;
-        player_manager.inv_ui.get_current_item()->count--;
-
-        //the coord should just be able to be directly passed but some logic error makes the block be placed 1 to the side
-        //PLS FIX
-
-        world.place_block({cursor.x - 1, cursor.y}, new_block);
-
-
-    }
+    if (IsKeyPressed(keybind_manager.place_block_key)) player_manager.myself->place_block({cursor.x - 1, cursor.y});
 
     if (IsKeyPressed(keybind_manager.move_cursor_lefty_key)) {
         cursor_offset.x--;

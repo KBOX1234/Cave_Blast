@@ -328,3 +328,69 @@ bool player::is_valid_move(Vector2 pos2) {
 Vector2 player::get_interpos() {
     return interpolation;
 }
+
+bool player::place_block(Vector2 pos){
+
+    std::cout << "placing block\n";
+
+    block new_block;
+    new_block.state = 0;
+
+    if(player_manager.inv_ui.get_current_item()->count < 1) return false;
+
+    new_block.attr = player_manager.inv_ui.get_current_item()->item_i.block_type_ptr;
+    player_manager.inv_ui.get_current_item()->count--;
+
+
+    if(network_manager.is_host() == true){
+        world.place_block(pos, new_block);
+    }
+    else{
+        client_utls::place_block(player_manager.inv_ui.get_current_item()->item_i.name, pos, network_manager.get_server());
+    }
+
+    return true;
+}
+
+bool player::break_block(Vector2 pos){
+    if(world.get_block(pos)->attr->item_id == item_manager.fetch_item("air")->item_id) return false;
+
+
+    block blk;
+
+    blk.attr = item_manager.fetch_item("air")->block_type_ptr;
+    blk.state = 0;
+
+    if(network_manager.is_host() == true){
+
+        if(
+            player_manager.inv_ui.current_item->item_i.strength < item_manager.fetch_item_by_id(world.get_block(pos)->attr->item_id)->strength
+            && item_manager.fetch_item_by_id(world.get_block(pos)->attr->item_id)->strength > 0
+    
+        ) return false;
+
+        if(player_manager.inv_ui.current_item->item_i.is_weapon == false && player_manager.inv_ui.current_item->item_i.item_id != 0) return false;
+        
+
+        item* itm = item_manager.fetch_item_by_id(world.get_block(pos)->attr->item_id);
+
+        player_manager.myself->inv.give_item(itm, 1);
+
+        world.place_block(pos, blk);
+    }
+
+    else{
+        //std::cout << "sending break block request\n";
+
+        std::string tool_name;
+
+        if(player_manager.inv_ui.current_item->item_i.item_id == 0) tool_name = "air";
+
+        else tool_name = player_manager.inv_ui.current_item->item_i.name;
+
+        client_utls::break_block(network_manager.get_server(), pos, tool_name);
+        //std::cout << player_manager.inv_ui.current_item->item_i.name << std::endl;
+    }
+
+    return true;
+}

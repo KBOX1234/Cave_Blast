@@ -25,6 +25,7 @@ struct item {
     bool is_solid;
     bool is_liquid;
     bool is_ore;
+    int strength;
 
     //if ore is true
     float chance_to_spawn;

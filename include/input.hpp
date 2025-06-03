@@ -13,7 +13,7 @@ int kb(key_bind kbind);
 class keybind_master {
 
     public:
-        int inventory_key = KEY_I;
+        int inventory_key = KEY_E;
         int move_cursor_lefty_key = KEY_LEFT;
         int move_cursor_righty_key = KEY_RIGHT;
         int move_cursor_upy_key = KEY_UP;
@@ -22,8 +22,12 @@ class keybind_master {
         int move_righty_key = KEY_D;
         int move_upy_key = KEY_W;
         int move_downy_key = KEY_S;
-        int break_blocky_key = KEY_ENTER;
-        int place_blocky_key = KEY_P;
+        int break_block_key = KEY_Q;
+        int place_block_key = KEY_SPACE;
+        int move_inventory_slot_left = KEY_J;
+        int move_inventory_slot_right = KEY_L;
+        int move_inventory_slot_up = KEY_I;
+        int move_inventory_slot_down = KEY_K;
 
 
 };

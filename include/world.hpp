@@ -158,7 +158,7 @@ class world_class {
 
         void set_block_radius(block blk, int height, Vector2 pos);
 
-        void break_block(Vector2 pos, const std::string& current_tool);
+        void break_block(Vector2 pos);
 };
 
 extern world_class world;

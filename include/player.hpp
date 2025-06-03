@@ -105,6 +105,10 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         Vector2 get_interpos();
 
+        bool break_block(Vector2 pos);
+
+        bool place_block(Vector2 pos);
+
 };
 
 class player_master {

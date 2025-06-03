@@ -4,6 +4,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 0,
         "texture_path": "reasource/gfx/block_items/dirt.png",
         "description": "A basic building block.",
         "block_texture_path": "reasource/gfx/block/dirt.png"
@@ -14,6 +15,7 @@
         "is_block": true,
         "is_liquid": false,
         "is_usable": true,
+        "strength": 0,
         "texture_path": "reasource/gfx/block_items/stone.png",
         "description": "Literaly just stone.",
         "block_texture_path": "reasource/gfx/block/stone.png"
@@ -23,6 +25,8 @@
         "is_solid": false,
         "is_block": true,
         "is_liquid": true,
+        "is_weapon": true,
+        "strength": 0,
         "texture_path": "reasource/gfx/block_items/air.png",
         "description": "Literaly just air.",
         "block_texture_path": "reasource/gfx/block/air.png"
@@ -41,6 +45,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 3,
         "texture_path": "reasource/gfx/block/well.png",
         "description": "A place to get your water",
         "block_texture_path": "reasource/gfx/block/well.png"
@@ -92,6 +97,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 0,
         "texture_path": "reasource/gfx/block/chest.png",
         "description": "A place to store your items",
         "block_texture_path": "reasource/gfx/block/chest.png"
@@ -101,6 +107,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 4,
         "texture_path": "reasource/gfx/block_items/coal_ore.png",
         "description": "A tool for ploughing land.",
         "block_texture_path": "reasource/gfx/block/coal_ore.png",
@@ -113,6 +120,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 4,
         "texture_path": "reasource/gfx/block_items/iron_ore.png",
         "description": "The ore version of iron",
         "block_texture_path": "reasource/gfx/block/iron_ore.png",
@@ -133,6 +141,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 5,
         "texture_path": "reasource/gfx/block_items/furnace.png",
         "description": "A furnace for smelting ores (and enriching uranium to 30% for some reason)",
         "block_texture_path": "reasource/gfx/block/furnace.png"
@@ -151,6 +160,8 @@
         "is_block": false,
         "is_liquid": false,
         "is_usable": true,
+        "is_weapon": true,
+        "strength": 10,
         "texture_path": "reasource/gfx/item/iron_pickaxe.png",
         "description": "A pickaxe made of iron"
     },
@@ -159,6 +170,7 @@
         "is_solid": false,
         "is_block": true,
         "is_liquid": false,
+        "strength": 0,
         "texture_path": "reasource/gfx/item/torch.png",
         "description": "A lamp to your feet and a light for your path",
         "block_texture_path": "reasource/gfx/item/torch.png"
@@ -168,6 +180,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 1,
         "texture_path": "reasource/gfx/block_items/water_basin.png",
         "description": "A posh little basin of water",
         "block_texture_path": "reasource/gfx/block/water_basin.png"
@@ -177,6 +190,7 @@
         "is_solid": false,
         "is_block": true,
         "is_liquid": false,
+        "strength": 0,
         "texture_path": "reasource/gfx/block_items/mud.png",
         "description": "Literaly just mud",
         "block_texture_path": "reasource/gfx/block/mud.png"
@@ -186,6 +200,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 5,
         "texture_path": "reasource/gfx/block_items/mud_bricks.png",
         "description": "A brick of mud",
         "block_texture_path": "reasource/gfx/block/mud_brick.png"
@@ -203,6 +218,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 9,
         "texture_path": "reasource/gfx/block_items/uranium_ore.png",
         "description": "The unprocessed form of uranium",
         "block_texture_path": "reasource/gfx/block/uranium_ore.png",
@@ -215,6 +231,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 14,
         "texture_path": "reasource/gfx/block_items/gold_ore.png",
         "description": "The unprocessed form of GOLD!",
         "block_texture_path": "reasource/gfx/block/gold_ore.png",
@@ -227,6 +244,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 16,
         "texture_path": "reasource/gfx/block_items/lead_ore.png",
         "description": "The unprocessed form of lead",
         "block_texture_path": "reasource/gfx/block/lead_ore.png",
@@ -239,6 +257,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 9,
         "texture_path": "reasource/gfx/block_items/boran_ore.png",
         "description": "The unprocessed form of boran",
         "block_texture_path": "reasource/gfx/block/boran_ore.png",
@@ -251,6 +270,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 8,
         "texture_path": "reasource/gfx/block_items/copper_ore.png",
         "description": "The unprocessed form of copper",
         "block_texture_path": "reasource/gfx/block/copper_ore.png",
@@ -305,6 +325,8 @@
         "is_block": false,
         "is_liquid": false,
         "is_usable": true,
+        "is_weapon": true,
+        "strength": 20,
         "texture_path": "reasource/gfx/item/uranium_pickaxe.png",
         "description": "Uranium pickaxe (not very radioactive and also very strong)"
     },
@@ -330,6 +352,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 9,
         "texture_path": "reasource/gfx/block_items/stone_bricks.png",
         "description": "A nice block made of inexpensive materials",
         "block_texture_path": "reasource/gfx/block/stone_brick.png"
@@ -339,6 +362,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 15,
         "texture_path": "reasource/gfx/block_items/copper_block.png",
         "description": "A 1M CUBED BLOCK OF SOLID COPPER",
         "block_texture_path": "reasource/gfx/block/copper_block.png"
@@ -348,6 +372,7 @@
         "is_solid": false,
         "is_block": true,
         "is_liquid": false,
+        "strength": 5,
         "texture_path": "reasource/gfx/block_items/copper_pannel.png",
         "description": "A cheap good looking metal pannel",
         "block_texture_path": "reasource/gfx/block/copper_pannel.png"
@@ -357,6 +382,7 @@
         "is_solid": false,
         "is_block": true,
         "is_liquid": false,
+        "strength": 4,
         "texture_path": "reasource/gfx/block_items/copper_pannel_oxide.png",
         "description": "You didnt maintain your copper panneling :(",
         "block_texture_path": "reasource/gfx/block/copper_pannel_oxide.png"
@@ -366,6 +392,7 @@
         "is_solid": false,
         "is_block": true,
         "is_liquid": false,
+        "strength": 10,
         "texture_path": "reasource/gfx/block_items/gold_pannel.png",
         "description": "A pannel made of gold (very posh)",
         "block_texture_path": "reasource/gfx/block/gold_pannel.png"
@@ -375,6 +402,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 20,
         "texture_path": "reasource/gfx/block_items/lead_block.png",
         "description": "A fricking 1m cubed lead block you casialy hold in your inventory",
         "block_texture_path": "reasource/gfx/block/lead_block.png"
@@ -384,6 +412,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 18,
         "texture_path": "reasource/gfx/block_items/lead_bricks.png",
         "description": "Great at blocking most radiation (handle with care)",
         "block_texture_path": "reasource/gfx/block/lead_bricks.png"
@@ -393,6 +422,7 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": true,
+        "strength": 1,
         "texture_path": "reasource/gfx/block_items/gravel.png",
         "description": "uncompressed stone",
         "block_texture_path": "reasource/gfx/block/gravel.png"
@@ -402,9 +432,21 @@
         "is_solid": true,
         "is_block": true,
         "is_liquid": false,
+        "strength": 8,
         "texture_path": "reasource/gfx/block_items/blackstone.png",
         "description": "very compressed stone",
         "block_texture_path": "reasource/gfx/block/blackstone.png"
+    },
+    {
+        "name": "stone_pickaxe",
+        "is_solid": false,
+        "is_block": false,
+        "is_liquid": false,
+        "is_usable": true,
+        "strength": 5,
+        "is_weapon": true,
+        "texture_path": "reasource/gfx/item/stone_pickaxe.png",
+        "description": "A pickaxe made of stone"
     }
 ]
 

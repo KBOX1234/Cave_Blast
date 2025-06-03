@@ -137,8 +137,6 @@ int world_class::place_block(Vector2 pos, block b){
 
     bc.pos = pos;
 
-    if(network_manager.is_host() == true){
-
         network_manager.server_obj.add_block_change(bc);
 
         block_change blkch;
@@ -148,10 +146,7 @@ int world_class::place_block(Vector2 pos, block b){
         blkch.pos = pos;
 
         network_manager.server_obj.add_block_change(blkch);
-    }
-    else{
-        client_utls::place_block(bc.blk_name, pos, network_manager.get_server());
-    }
+
 
     return chunks[chunk_index].set_block(b.attr, get_sub_chunk_pos(pos));
 }
@@ -274,28 +269,11 @@ void world_class::set_block_radius(block blk, int height, Vector2 pos) {
     }
 }
 
-void world_class::break_block(Vector2 pos, const std::string& current_tool){
+void world_class::break_block(Vector2 pos){
     block blk;
 
     blk.attr = item_manager.fetch_item("air")->block_type_ptr;
     blk.state = 0;
 
-    if(get_block(pos)->attr->item_id == item_manager.fetch_item("air")->item_id) return;
-
-    if(network_manager.is_host() == true){
-        
-
-        item* itm = item_manager.fetch_item_by_id(world.get_block(pos)->attr->item_id);
-
-        player_manager.myself->inv.give_item(itm, 1);
-
-        place_block(pos, blk);
-    }
-
-    else{
-        //std::cout << "sending break block request\n";
-        client_utls::break_block(network_manager.get_server(), pos, current_tool);
-    }
-
-    
+    place_block(pos, blk);
 }

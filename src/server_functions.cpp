@@ -166,6 +166,9 @@ void server_utls::send_player_data(ENetEvent *event, packet *p) {
 }
 
 void server_utls::handle_player_block_placement(ENetEvent *event, packet *p) {
+
+    player* pl = player_manager.fetch_player_data(*(int*)event->peer->data);
+
     Vector2 b_p_pos;
 
     memcpy(&b_p_pos, p->data, sizeof(Vector2));
@@ -178,6 +181,8 @@ void server_utls::handle_player_block_placement(ENetEvent *event, packet *p) {
 
     blk.state = 0;
     blk.attr = item_manager.fetch_item(name_b)->block_type_ptr;
+
+    if(pl->inv.does_have_item(item_manager.fetch_item(name_b), 1) == false) return;
 
     world.place_block(b_p_pos, blk);
 }
@@ -249,8 +254,13 @@ void server_utls::handle_player_break_block(ENetEvent* event, packet* p){
     if(itm == nullptr) return; 
 
     if(itm->is_weapon != true){
-        //return;
+        return;
     }
+
+    if(
+        itm->strength < item_manager.fetch_item_by_id(world.get_block(block_pos)->attr->item_id)->strength
+        && item_manager.fetch_item_by_id(world.get_block(block_pos)->attr->item_id)->strength > 0
+    ) return;
 
     player* pl = player_manager.fetch_player_data(*(int*)event->peer->data);
 

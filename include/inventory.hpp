@@ -56,13 +56,17 @@ class inventory_ui{
 
         int ui_texture_id;
 
-        inventory_slot* current_item;
+
+        int current_item_index = 0;
 
         bool is_inventory_opened = false;
 
         int overlay_id;
 
     public:
+
+        inventory_slot* current_item;
+    
 
         void init();
 

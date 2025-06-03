@@ -50,6 +50,7 @@ int item_master::load_items_from_json(json j) {
         new_item->is_ore = json_item.value("is_ore", false);
         new_item->chance_to_spawn = json_item.value("chance_to_spawn", 1);
         new_item->ore_radius = json_item.value("ore_radius", 1);
+        new_item->strength = json_item.value("strength", 0);
 
         new_item->texture_path = json_item.value("texture_path", "");
         if (!new_item->texture_path.empty()) {
