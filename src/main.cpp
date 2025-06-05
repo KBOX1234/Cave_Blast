@@ -110,6 +110,10 @@ int main(int argc, char* argv[]) {
     texture_manager.set_default_texture("reasource/gfx/default.png");
     item_manager.load_item_declaration_file("reasource/items.json");
 
+    block bl;
+    bl.state = 0;
+    bl.attr = item_manager.fetch_item("air")->block_type_ptr;
+
     player_manager.init();
 
     //SetTargetFPS(60);

@@ -28,10 +28,7 @@ int world_class::look_up_chunk_index(Vector2 coord){
 
     //std::cout << "befor size check\n";
     if (abs_x >= MAX_TABLE_SIZE || abs_y >= MAX_TABLE_SIZE) {
-        std::cout << "\nTOO BIG!\n";
 
-        Sound s = LoadSound("reasource/mfx/extra/tuco-get-out.mp3");
-        PlaySound(s);
         return -1;
     }
     //std::cout << "after size check\n";
@@ -202,6 +199,12 @@ world_class::world_class() {
 
 chunk *world_class::generate_chunk(Vector2 pos) {
     chunk* chnk = generator.generate_chunk(pos);
+
+    if(pos.x == 0 && pos.y == 0){
+        for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++){
+            chnk->set_block_index(item_manager.fetch_item("air")->block_type_ptr, i);
+        }
+    }
 
     add_chunk(chnk);
 

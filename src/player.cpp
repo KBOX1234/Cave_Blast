@@ -10,7 +10,8 @@
 #include "colide.hpp"
 
 player::player() {
-    pos = {0, 0};
+    //place in the middle of spawn chunk
+    pos = {2 * BLOCK_SIZE, 2 * BLOCK_SIZE};
     last_move = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::high_resolution_clock::now().time_since_epoch()
     ).count();
@@ -63,22 +64,94 @@ float player::get_rotation() {
 
 
 void player::move_player() {
-    if (delta_time_master.can_game_continue() == true){
-        Vector2 d;
+    if (!delta_time_master.can_game_continue()) return;
 
+    Vector2 next = get_move_target();
 
-        float rad = rotation * (M_PI / 180.0f);
+    if (is_valid_move_2(next)) {
+        last_pos = pos;
+        pos = next;
+        update_colide_box();
+        update_time_stamp();
+    } else {
 
-        d.x = std::cos(rad) * speed;
-        d.y = std::sin(rad) * speed;
-
-        pos.x += d.x;
-        pos.y += d.y;
     }
 }
+
+#define BOX_WIDTH  32
+#define BOX_HEIGHT 64
+
+bool player::is_valid_move_2(Vector2 pos2) {
+
+    const float box_width = BOX_WIDTH;
+    const float box_height = BOX_HEIGHT;
+
+    colideBox test_box;
+    test_box.a = colide::v2p(pos2);
+    test_box.a.x = test_box.a.x - box_width;
+
+
+    Vector2 bottom_right = { pos2.x, pos2.y + box_height };
+    test_box.b = colide::v2p(bottom_right);
+
+
+    int start_block_x = (int)(pos2.x / BLOCK_SIZE) - 1;
+    int start_block_y = (int)(pos2.y / BLOCK_SIZE) - 1;
+    int end_block_x = (int)((pos2.x + box_width) / BLOCK_SIZE) + 1;
+    int end_block_y = (int)((pos2.y + box_height) / BLOCK_SIZE) + 1;
+
+
+    for (int by = start_block_y; by <= end_block_y; ++by) {
+        for (int bx = start_block_x; bx <= end_block_x; ++bx) {
+            Vector2 block_vec = { (float)bx, (float)by };
+            block* blk = world.get_block(block_vec);
+
+            if (blk != nullptr) {
+                auto item = item_manager.fetch_item_by_id(blk->attr->item_id);
+                if (item->name == "air") continue;
+
+
+                Vector2 block_top_left = { (float)(bx * BLOCK_SIZE), (float)(by * BLOCK_SIZE) };
+
+                Vector2 block_bottom_right = {
+                    block_top_left.x + BLOCK_SIZE,
+                    block_top_left.y + BLOCK_SIZE
+                };
+
+                colideBox block_box;
+                block_box.a = colide::v2p(block_top_left);
+                block_box.b = colide::v2p(block_bottom_right);
+
+                // 4. Check for collision
+                if (doesBoxAndBoxColide(&test_box, &block_box)) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true; // No collisions
+}
+
+
+
+Vector2 player::get_move_target() {
+    Vector2 d;
+    float rad = rotation * (M_PI / 180.0f);
+    d.x = std::cos(rad) * speed;
+    d.y = std::sin(rad) * speed;
+
+    return { pos.x + d.x, pos.y + d.y };
+}
+
+
 void player::move_player_back() {
     if (delta_time_master.can_game_continue() == true){
 
+        block* blk1 = world.get_block(get_block_pos());
+        block* blk2 = world.get_block({get_block_pos().x, get_block_pos().y + 1});
+
+        if(blk1 == nullptr || blk2 == nullptr) return;
 
         Vector2 d;
 
@@ -86,6 +159,10 @@ void player::move_player_back() {
 
         d.x = std::cos(rad) * speed;
         d.y = std::sin(rad) * speed;
+
+        Vector2 predicted_pos = {round(pos.x - d.x), round(pos.y - d.y)};
+
+        Vector2 block_pos = {round(predicted_pos.x / BLOCK_SIZE)};
 
         pos.x -= d.x;
         pos.y -= d.y;
@@ -402,4 +479,13 @@ bool player::break_block(Vector2 pos){
     }
 
     return true;
+}
+
+Vector2 player::get_block_pos(){
+    Vector2 rtv;
+
+    rtv.x = round(pos.x / BLOCK_SIZE);
+    rtv.y = round(pos.y / BLOCK_SIZE);
+
+    return rtv;
 }

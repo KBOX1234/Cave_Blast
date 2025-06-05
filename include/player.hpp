@@ -61,8 +61,13 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         colideBox box;
 
+        bool is_valid_move_2(Vector2 pos2);
+
+        Vector2 get_move_target();
+
 
     public:
+
 
         void update_colide_box();
 
@@ -91,6 +96,8 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
         void move_player_back();
 
         Vector2 get_pos();
+
+        Vector2 get_block_pos();
 
         Texture2D* get_texture();
 
