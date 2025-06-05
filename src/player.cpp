@@ -87,12 +87,12 @@ bool player::is_valid_move_2(Vector2 pos2) {
     const float box_height = BOX_HEIGHT;
 
     colideBox test_box;
-    test_box.a = colide::v2p(pos2);
-    test_box.a.x = test_box.a.x - box_width;
+        test_box.a = colide::v2p(pos2);
+        //test_box.a.x = test_box.a.x - box_width;
 
 
-    Vector2 bottom_right = { pos2.x, pos2.y + box_height };
-    test_box.b = colide::v2p(bottom_right);
+        Vector2 bottom_right = { pos2.x + box_width, pos2.y + box_height};
+        test_box.b = colide::v2p(bottom_right);
 
 
     int start_block_x = (int)(pos2.x / BLOCK_SIZE) - 1;
@@ -103,7 +103,7 @@ bool player::is_valid_move_2(Vector2 pos2) {
 
     for (int by = start_block_y; by <= end_block_y; ++by) {
         for (int bx = start_block_x; bx <= end_block_x; ++bx) {
-            Vector2 block_vec = { (float)bx, (float)by };
+            Vector2 block_vec = { (float)bx - 1, (float)by};
             block* blk = world.get_block(block_vec);
 
             if (blk != nullptr) {
