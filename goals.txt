@@ -1,7 +1,11 @@
 ! 1. Good Camera Controlls 
 
-2. Actual mining
+! 2. Actual mining
 
-3. Colision
+! 3. Colision
 
 4. Lighting
+
+5. Smelting
+
+6. Craafting
