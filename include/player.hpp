@@ -7,6 +7,9 @@
 #include "raylib.h"
 
 #include "inventory.hpp"
+#include "sphysics.h"
+#define PLAYER_WIDTH 32
+#define PLAYER_HEIGHT 64
 
 struct stat_s {
     int health;
@@ -29,10 +32,12 @@ struct serialized_player {
 };
 
 class player_master;
+class colide;
 
 class player {
     friend class player_master;
     friend class render;
+    friend class colide;
     private:
         Vector2 pos;
 
@@ -54,8 +59,12 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         Vector2 interpolation;
 
+        colideBox box;
+
 
     public:
+
+        void update_colide_box();
 
         inventory inv;
 
@@ -111,6 +120,8 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
 };
 
+class colide;
+
 class player_master {
     friend class imgui_win;
     friend class input;
@@ -119,6 +130,8 @@ class player_master {
     friend class client;
     friend class render;
     friend class server_utls;
+
+    friend class colide;
     private:
         std::vector<player*> players;
 

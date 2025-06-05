@@ -7,6 +7,7 @@
 #include "raymath.h"
 #include "delta_time.hpp"
 #include "inventory.hpp"
+#include "colide.hpp"
 
 player::player() {
     pos = {0, 0};
@@ -14,6 +15,14 @@ player::player() {
         std::chrono::high_resolution_clock::now().time_since_epoch()
     ).count();
 
+}
+
+void player::update_colide_box(){
+    box.a = colide::v2p(pos);
+
+    box.b.x = pos.x + PLAYER_WIDTH;
+
+    box.b.y = pos.y + PLAYER_HEIGHT;
 }
 
 

@@ -33,6 +33,8 @@
 #include "imgui.h"
 #include "rlImGui.h"
 #include "json.hpp"
+#define SPHYSICS_IMPL
+#include "sphysics.h"
 
 using json = nlohmann::json;
 #include "rng.hpp"
@@ -58,6 +60,8 @@ input input_manager;
 network network_manager;
 #include "delta_time.hpp"
 delta_time delta_time_master;
+#include "colide.hpp"
+colide colide_master;
 
 
 #include "rng.hpp"
