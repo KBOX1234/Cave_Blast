@@ -20,6 +20,8 @@ private:
 
     void render_players(bool debug = false);
 
+    void render_lights();
+
 
 
 public:

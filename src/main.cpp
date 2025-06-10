@@ -62,6 +62,8 @@ network network_manager;
 delta_time delta_time_master;
 #include "colide.hpp"
 colide colide_master;
+#include "lighting.hpp"
+light_master light_manager;
 
 
 #include "rng.hpp"
@@ -115,6 +117,8 @@ int main(int argc, char* argv[]) {
     bl.attr = item_manager.fetch_item("air")->block_type_ptr;
 
     player_manager.init();
+
+    
 
     //SetTargetFPS(60);
 

@@ -65,6 +65,8 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         Vector2 get_move_target();
 
+        int light_index;
+
 
     public:
 

@@ -8,6 +8,7 @@
 #include "delta_time.hpp"
 #include "inventory.hpp"
 #include "colide.hpp"
+#include "lighting.hpp"
 
 player::player() {
     //place in the middle of spawn chunk
@@ -15,6 +16,15 @@ player::player() {
     last_move = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::high_resolution_clock::now().time_since_epoch()
     ).count();
+
+    Color c;
+
+    c.a = 255;
+    c.b = 0;
+    c.g = 255;
+    c.r = 255;
+
+    light_index = light_manager.add_light(c, 150, {0, 0}, 1, 0);
 
 }
 
@@ -76,6 +86,8 @@ void player::move_player() {
     } else {
 
     }
+
+    light_manager.update_light_pos(light_index, pos);
 }
 
 #define BOX_WIDTH  32

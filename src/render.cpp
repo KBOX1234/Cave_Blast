@@ -4,6 +4,7 @@
 #include "input.hpp"
 #include "world.hpp"
 #include "texture_master.hpp"
+#include "lighting.hpp"
 
 
 render::render() {
@@ -148,6 +149,8 @@ void render::update() {
 
     player_manager.draw_player(player_manager.myself);
 
+    render_lights();
+
     draw_cursor(input_manager.cursor);
 
     EndMode2D();
@@ -162,4 +165,17 @@ Vector2 render::get_camera_pos() {
 
 float render::get_camera_zoom() {
     return camera.zoom;
+}
+
+void render::render_lights(){
+
+    Vector2 offset = {camera.target.x - (GetScreenWidth() / 2), camera.target.y - (GetScreenHeight() / 2)};
+
+    Texture2D light_map = light_manager.generate_lights(offset, {GetScreenWidth(), GetScreenHeight()});
+    BeginBlendMode(BLEND_MULTIPLIED); 
+
+    
+
+    DrawTexture(light_map, offset.x, offset.y, WHITE);
+    EndBlendMode();
 }
