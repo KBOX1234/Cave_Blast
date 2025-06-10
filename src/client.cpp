@@ -3,6 +3,7 @@
 #include "rng.hpp"
 #include "httplib.h"
 #include "player.hpp"
+#include "lighting.hpp"
 
 #include <iostream>
 
@@ -145,6 +146,8 @@ void client::handle_player_get_response(ENetEvent* event, packet* p){
         if (pl != nullptr) {
             pl->set_pos(spl.pos);
             pl->set_stats(spl.stats);
+
+            light_manager.update_light_pos(pl->get_light_index(), spl.pos);
 
         }
         else {
