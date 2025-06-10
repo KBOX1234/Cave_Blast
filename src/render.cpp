@@ -177,5 +177,8 @@ void render::render_lights(){
     
 
     DrawTexture(light_map, offset.x, offset.y, WHITE);
+
     EndBlendMode();
+
+    UnloadTexture(light_map);
 }
