@@ -501,3 +501,7 @@ Vector2 player::get_block_pos(){
 
     return rtv;
 }
+
+int player::get_light_index(){
+    return light_index;
+}

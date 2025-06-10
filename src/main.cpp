@@ -118,6 +118,8 @@ int main(int argc, char* argv[]) {
 
     player_manager.init();
 
+    SetTraceLogLevel(LOG_ERROR); 
+
     
 
     //SetTargetFPS(60);

@@ -5,6 +5,7 @@
 #include "inventory.hpp"
 #include "player.hpp"
 #include "item_master.hpp"
+#include "lighting.hpp"
 
 void server::add_block_change(block_change blk_chng) {
 
@@ -87,6 +88,7 @@ void server_utls::handle_move_packet(ENetEvent *event, packet *p) {
         //if (player_manager.players[id]->is_valid_move(pos) == true) {
         if (true) {
             player_manager.players[id]->set_pos(pos);
+            light_manager.update_light_pos(player_manager.players[id]->light_index, pos);
             player_manager.players[id]->update_time_stamp();
             back_p.data = (char*)&pos;
 

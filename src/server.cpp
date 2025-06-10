@@ -3,6 +3,7 @@
 #include "rng.hpp"
 #include "httplib.h"
 #include "player.hpp"
+#include "lighting.hpp"
 
 void server::handle_connect(ENetEvent *event) {
     printf("A new client connected from %x:%u.\n",
@@ -63,6 +64,8 @@ void server::handle_disconnect(ENetEvent *event) {
     memcpy(&id, event->peer->data, sizeof(int));
 
     std::cout <<  "client disconnected: "<< std::to_string(id) << std::endl;
+
+    light_manager.remove_light(player_manager.fetch_player_data(id)->get_light_index());
 
     player_manager.remove_player(id);
     broadcast_disconnect(event);

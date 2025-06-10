@@ -33,11 +33,13 @@ struct serialized_player {
 
 class player_master;
 class colide;
+class server_utls;
 
 class player {
     friend class player_master;
     friend class render;
     friend class colide;
+    friend class server_utls;
     private:
         Vector2 pos;
 
@@ -69,6 +71,8 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
 
     public:
+
+        int get_light_index();
 
 
         void update_colide_box();
