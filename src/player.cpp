@@ -20,11 +20,11 @@ player::player() {
     Color c;
 
     c.a = 255;
-    c.b = 0;
+    c.b = 255;
     c.g = 255;
     c.r = 255;
 
-    light_index = light_manager.add_light(c, 150, {0, 0}, 1, 0);
+    light_index = light_manager.add_light(c, 150, {0, 0}, 0.5, 0);
 
 }
 
@@ -504,4 +504,22 @@ Vector2 player::get_block_pos(){
 
 int player::get_light_index(){
     return light_index;
+}
+
+void player_master::give_player_item(item *i, int count, int player_id) {
+    if (player_id == myself->id) {
+        if (network_manager.is_host() == true) {
+            myself->inv.give_item(i, count);
+
+            //else it ant my responsibility
+        }
+    }
+
+    else {
+        if (network_manager.is_host() == true) {
+            fetch_player_data(player_id)->inv.give_item(i, count);
+        }
+
+        //else it ant my responsibility
+    }
 }

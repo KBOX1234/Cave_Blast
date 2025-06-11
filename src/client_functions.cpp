@@ -164,3 +164,20 @@ void client_utls::break_block(ENetPeer* srv_r, Vector2 pos, const std::string& i
     delete[] buffer;
     delete[] p.data;
 }
+
+void client_utls::craft_item(int craft_index) {
+    packet p;
+
+    p.type = CRAFT_ITEM;
+
+    p.size = sizeof(int);
+
+    p.data = (char*)&craft_index;
+
+    char* buffer = net_utills::convert_to_buffer(&p);
+
+    net_utills::send_msg_safe(buffer, net_utills::get_packet_size(&p), network_manager.get_server(), 0);
+
+    delete[] buffer;
+
+}

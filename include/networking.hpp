@@ -21,6 +21,8 @@
 #include <enet/enet.h>
 #include <thread>
 #include <iostream>
+
+#include "crafting.hpp"
 #include "httplib.h"
 #include "raylib.h"
 #include "inventory.hpp"
@@ -37,7 +39,8 @@ typedef enum PacketType {
     RE_CALIBRATE,
     GET_ALL_PLAYERS,
     BREAK_BLOCK,
-    GIVE_BLOCK
+    GIVE_BLOCK,
+    CRAFT_ITEM
 } PacketType;
 
 
@@ -88,7 +91,7 @@ class client_utls {
 
         static void break_block(ENetPeer* srv_r, Vector2 pos, const std::string& item);
 
-
+        static void craft_item(int craft_index);
 
 };
 
@@ -111,6 +114,8 @@ class server_utls {
         static void handle_player_break_block(ENetEvent* event, packet* p);
 
         static void give_player_item(ENetPeer* peer, std::string item, char count);
+
+        static void handle_craft_request(ENetEvent* event, packet* p);
 
 };
 

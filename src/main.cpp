@@ -64,6 +64,8 @@ delta_time delta_time_master;
 colide colide_master;
 #include "lighting.hpp"
 light_master light_manager;
+#include "crafting.hpp"
+crafting_master crafting_manager;
 
 
 #include "rng.hpp"
@@ -117,6 +119,8 @@ int main(int argc, char* argv[]) {
     bl.attr = item_manager.fetch_item("air")->block_type_ptr;
 
     player_manager.init();
+
+    crafting_manager.init();
 
     SetTraceLogLevel(LOG_ERROR); 
 

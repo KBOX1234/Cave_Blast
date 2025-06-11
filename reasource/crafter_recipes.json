@@ -1,0 +1,17 @@
+[
+    {
+        "items" : [
+            {"name" : "stone", "count": 1},
+            {"name" : "stone", "count": 2}
+        ],
+
+        "result" : "stone_pickaxe"
+    },
+    {
+      "items" : [
+        {"name" : "stone", "count": 2}
+      ],
+
+      "result" : "water_bucket"
+    }
+]

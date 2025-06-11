@@ -274,3 +274,17 @@ void inventory_ui::update_inv_ui_input(){
         current_item = &inventory_i->slots[current_item_index];
     }
 }
+bool inventory::take_item(item *itm, char count) {
+    for (int i = 0; i < MAX_INVENTORY_SIZE; i++) {
+        if (slots[i].item_i.item_id == itm->item_id) {
+            slots[i].count = slots[i].count - count;
+
+            if (slots[i].count < 0) slots[i].count = 0;
+
+            return true;
+
+        }
+    }
+
+    return false;
+}

@@ -6,6 +6,7 @@
 #include "player.hpp"
 #include "item_master.hpp"
 #include "lighting.hpp"
+#include "crafting.hpp"
 
 void server::add_block_change(block_change blk_chng) {
 
@@ -300,4 +301,16 @@ void server_utls::give_player_item(ENetPeer* peer, std::string item, char count)
     net_utills::send_msg_safe(buffer, net_utills::get_packet_size(&p), peer, 0);
 
     free(p.data);
+}
+
+void server_utls::handle_craft_request(ENetEvent *event, packet *p) {
+    player* pl = player_manager.fetch_player_data(*(int*)event->peer->data);
+
+    if (pl == nullptr) return;
+
+    int ci;
+
+    memcpy(&ci, p->data, sizeof(int));
+
+    crafting_manager.craft_item(ci, pl);
 }

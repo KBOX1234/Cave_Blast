@@ -69,6 +69,8 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         int light_index;
 
+        char current_table = 0;
+
 
     public:
 
@@ -185,6 +187,8 @@ class player_master {
         bool does_player_exist(int id);
 
         void update_predicted_player();
+
+        void give_player_item(item* i, int count, int player_id);
 
 
 };

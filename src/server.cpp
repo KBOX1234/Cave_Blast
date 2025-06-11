@@ -48,6 +48,10 @@ void server::handle_request(ENetEvent* event) {
             server_utls::handle_player_break_block(event, p);
 
             break;
+
+        case CRAFT_ITEM:
+            server_utls::handle_craft_request(event, p);
+            break;
         default:
             std::cerr << "Unknown packet type: " << static_cast<int>(p->type) << std::endl;
             break;
