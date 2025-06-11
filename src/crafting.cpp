@@ -79,7 +79,8 @@ std::vector<std::string> crafting_master::get_avalible_crafting_recipies(player 
     std::vector<std::string> rtv;
 
     for (int i = 0; i < crafting_recipes.size(); i++) {
-        rtv.push_back(crafting_recipes[i].result.item_i.name);
+        if (does_player_have_requirements(pl, &crafting_recipes[i])) rtv.push_back(crafting_recipes[i].result.item_i.name);
+
     }
 
     return rtv;

@@ -18,6 +18,8 @@ class imgui_win {
         void items_menu();
 
         void player_data_menu();
+
+        void craft_view_menue();
 };
 
 extern imgui_win imgui_master;

@@ -166,6 +166,8 @@ int main(int argc, char* argv[]) {
             imgui_master.items_menu();
 
             imgui_master.player_data_menu();
+
+            imgui_master.craft_view_menue();
         }
         rlImGuiEnd();
 
