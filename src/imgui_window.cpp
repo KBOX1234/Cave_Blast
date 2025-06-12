@@ -107,7 +107,9 @@ void imgui_win::craft_view_menue() {
 
         Texture2D* txt = texture_manager.grab_texture_pointer(itm->texture_id);
 
-        rlImGuiImage(txt);
+        if (rlImGuiImageButtonSize(itm->name.c_str(), txt, {64, 64})) {
+            crafting_manager.craft_item(i, player_manager.myself);
+        }
     }
 
     ImGui::EndChild();
