@@ -124,6 +124,8 @@ Vector2 world_class::get_sub_chunk_pos(Vector2 real_coord) {
 //does not set state yet
 int world_class::place_block(Vector2 pos, block b){
 
+    if (item_manager.fetch_item_by_id(b.attr->item_id)->is_block == false) return -1;
+
     int chunk_index = look_up_chunk_index(get_chunk_coord(pos));
 
     if(chunk_index == -1) return -1;

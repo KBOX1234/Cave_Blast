@@ -120,7 +120,7 @@ bool player::is_valid_move_2(Vector2 pos2) {
 
             if (blk != nullptr) {
                 auto item = item_manager.fetch_item_by_id(blk->attr->item_id);
-                if (item->name == "air") continue;
+                if (item->is_block == false || item->is_solid == false) continue;
 
 
                 Vector2 block_top_left = { (float)(bx * BLOCK_SIZE), (float)(by * BLOCK_SIZE) };

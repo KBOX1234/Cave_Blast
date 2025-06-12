@@ -13,5 +13,12 @@
       ],
 
       "result" : "water_bucket"
-    }
+    },
+  {
+    "items" : [
+      {"name" : "stone", "count": 8}
+    ],
+
+    "result" : "furnace"
+  }
 ]

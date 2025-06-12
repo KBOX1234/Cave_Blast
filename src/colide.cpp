@@ -54,24 +54,22 @@ bool colide::check_player(player* p){
             tmp_box.b.x = (pointer_p.x*BLOCK_SIZE) + BLOCK_SIZE;
             tmp_box.b.y = (pointer_p.y*BLOCK_SIZE) + BLOCK_SIZE;
 
-            if(doesBoxAndBoxColide(&p->box, &tmp_box) && item_manager.fetch_item_by_id(check_block->attr->item_id)->name != "air"){
+            if(doesBoxAndBoxColide(&p->box, &tmp_box)){
+                if (item_manager.fetch_item_by_id(check_block->attr->item_id)->is_block == true && item_manager.fetch_item_by_id(check_block->attr->item_id)->is_solid == true){
+                    float rotation = p->get_rotation() - (360/2);
 
-                float rotation = p->get_rotation() - (360/2);
+                    p->zero_rotation();
 
-                p->zero_rotation();
+                    p->increase_angle(rotation);
 
-                p->increase_angle(rotation);
+                    p->move_player();
 
-                p->move_player();
+                    std::cout << "colide\n";
 
-                std::cout << "colide\n";
-
-                DrawRectangleLines(pointer_p.x, pointer_p.y, BLOCK_SIZE, BLOCK_SIZE, RED);
+                    //DrawRectangleLines(pointer_p.x, pointer_p.y, BLOCK_SIZE, BLOCK_SIZE, RED);
+                }
             }
-            
-            else{
-                DrawRectangleLines(pointer_p.x, pointer_p.y, BLOCK_SIZE, BLOCK_SIZE, GREEN);
-            }
+
         } 
 
 

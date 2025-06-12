@@ -1,0 +1,8 @@
+[
+    {
+        "table" : "furnace",
+        "block" : "iron_ore",
+        "result" : "iron",
+        "table_state_min" : 1
+    }
+]
