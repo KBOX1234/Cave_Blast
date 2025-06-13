@@ -2,7 +2,7 @@
 #include "../include/networking.hpp"
 
 void crafting_master::init() {
-    std::ifstream file(CRAFT_RECIPIE_JSON_PATH);
+    std::ifstream file(CRAFT_RECIPE_JSON_PATH);
     if (!file.is_open()) {
         std::cerr << "Failed to open json\n";
         std::exit(EXIT_FAILURE);
@@ -37,6 +37,8 @@ void crafting_master::init() {
             result_s.count = 1;
 
             cm.result = result_s;
+
+            cm.index = crafting_recipes.size();
 
             crafting_recipes.push_back(cm);
         }
@@ -75,11 +77,13 @@ bool crafting_master::does_player_have_requirements(player *pl, craft_mix *cm) {
     return true;
 }
 
-std::vector<std::string> crafting_master::get_avalible_crafting_recipies(player *pl) {
-    std::vector<std::string> rtv;
+std::vector<craft_mix> crafting_master::get_avalible_crafting_recipies(player *pl) {
+    std::vector<craft_mix> rtv;
 
     for (int i = 0; i < crafting_recipes.size(); i++) {
-        if (does_player_have_requirements(pl, &crafting_recipes[i])) rtv.push_back(crafting_recipes[i].result.item_i.name);
+        if (does_player_have_requirements(pl, &crafting_recipes[i])) {
+            rtv.push_back(crafting_recipes[i]);
+        }
 
     }
 

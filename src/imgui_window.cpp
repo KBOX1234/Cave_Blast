@@ -100,15 +100,18 @@ void imgui_win::craft_view_menue() {
 
     ImGui::BeginChild("Scrolling");
 
-    std::vector<std::string> rcps = crafting_manager.get_avalible_crafting_recipies(player_manager.myself);
+    std::vector<craft_mix> rcps = crafting_manager.get_avalible_crafting_recipies(player_manager.myself);
 
     for (int i = 0; i < rcps.size(); i++) {
-        item* itm = item_manager.fetch_item(rcps[i]);
+        //for safety im doing this also it's very funny
+        item* itm = item_manager.fetch_item(rcps[i].result.item_i.name);
+
+
 
         Texture2D* txt = texture_manager.grab_texture_pointer(itm->texture_id);
 
         if (rlImGuiImageButtonSize(itm->name.c_str(), txt, {64, 64})) {
-            crafting_manager.craft_item(i, player_manager.myself);
+            crafting_manager.craft_item(rcps[i].index, player_manager.myself);
         }
     }
 

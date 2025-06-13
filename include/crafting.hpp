@@ -7,12 +7,13 @@
 #include "item_master.hpp"
 #include "player.hpp"
 
-#define CRAFT_RECIPIE_JSON_PATH "reasource/crafter_recipes.json"
+#define CRAFT_RECIPE_JSON_PATH "reasource/crafter_recipes.json"
 
 struct craft_mix {
     char table_type;
     std::vector<inventory_slot> item_reqs;
     inventory_slot result;
+    int index;
 };
 
 class server_utls;
@@ -33,7 +34,7 @@ class crafting_master {
 
         bool craft_item(int craft_index, player* pl);
 
-        std::vector<std::string> get_avalible_crafting_recipies(player* pl);
+        std::vector<craft_mix> get_avalible_crafting_recipies(player* pl);
 
 };
 

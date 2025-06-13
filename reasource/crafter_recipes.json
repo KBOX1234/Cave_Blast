@@ -14,19 +14,19 @@
 
       "result" : "water_bucket"
     },
-  {
-    "items" : [
-      {"name" : "stone", "count": 8}
-    ],
+    {
+      "items" : [
+        {"name" : "stone", "count": 2},
+        {"name" : "iron_bar", "count": 3}
+      ],
 
-    "result" : "furnace"
-  },
-  {
-    "items" : [
-      {"name" : "stone", "count": 2},
-      {"name" : "iron_bar", "count": 3}
-    ],
+      "result" : "iron_pickaxe"
+    },
+    {
+      "items" : [
+        {"name" : "stone", "count": 8}
+      ],
 
-    "result" : "stone"
-  }
+      "result" : "furnace"
+    }
 ]
