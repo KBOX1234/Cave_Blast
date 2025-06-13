@@ -7,6 +7,7 @@
 #include "item_master.hpp"
 #include "lighting.hpp"
 #include "crafting.hpp"
+#include "item_convert.hpp"
 
 void server::add_block_change(block_change blk_chng) {
 
@@ -313,4 +314,46 @@ void server_utls::handle_craft_request(ENetEvent *event, packet *p) {
     memcpy(&ci, p->data, sizeof(int));
 
     crafting_manager.craft_item(ci, pl);
+}
+
+void server_utls::handle_convert_request(ENetEvent *event, packet *p) {
+    player* pl = player_manager.fetch_player_data(*(int*)event->peer->data);
+
+    if (pl == nullptr) return;
+
+    int item_name_length;
+
+    int table_name_length;
+
+    size_t pointer;
+
+    memcpy(&item_name_length, p->data, sizeof(int));
+
+    pointer = pointer + sizeof(int);
+
+    memcpy(&table_name_length, p->data + pointer, sizeof(int));
+
+    pointer = pointer + sizeof(int);
+
+    char item_name[item_name_length];
+
+    memcpy(item_name, p->data + pointer, item_name_length);
+
+    pointer = pointer + item_name_length;
+
+    char table_name[table_name_length];
+
+    memcpy(table_name, p->data + pointer, table_name_length);
+
+    item* itm = item_manager.fetch_item(item_name);
+
+    item* table_i = item_manager.fetch_item(table_name);
+
+    block blk;
+    blk.attr = table_i->block_type_ptr;
+    blk.state = 0;
+
+    item_convert_manager.convert_item(itm, blk, pl);
+
+
 }

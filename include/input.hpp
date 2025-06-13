@@ -28,6 +28,7 @@ class keybind_master {
         int move_inventory_slot_right = KEY_L;
         int move_inventory_slot_up = KEY_I;
         int move_inventory_slot_down = KEY_K;
+        int convert_item = KEY_R;
 
 
 };
@@ -46,6 +47,8 @@ class input {
         void update_movement();
 
         void mine_controles();
+
+        void craft_convert_controles();
 
     public:
 

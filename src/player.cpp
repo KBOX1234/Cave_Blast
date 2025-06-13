@@ -429,6 +429,8 @@ Vector2 player::get_interpos() {
 
 bool player::place_block(Vector2 pos){
 
+    if (item_manager.fetch_item_by_id(world.get_block(pos)->attr->item_id)->name != "air") return false;
+
     std::cout << "placing block\n";
 
     block new_block;

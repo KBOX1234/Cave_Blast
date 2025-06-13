@@ -181,3 +181,42 @@ void client_utls::craft_item(int craft_index) {
     delete[] buffer;
 
 }
+
+void client_utls::convert_item(item *itm, item *table) {
+    packet p;
+
+    int itm_str_len = itm->name.size() + 1;
+
+    int table_str_len = table->name.size() + 1;
+
+    p.size = (sizeof(int) * 2) + table_str_len + itm_str_len;
+
+    char* buffer = new char[p.size];
+
+    size_t pointer;
+
+    memcpy(buffer, &itm_str_len, sizeof(int));
+
+    pointer = pointer + sizeof(int);
+
+    memcpy(buffer + pointer, &table_str_len, sizeof(int));
+
+    pointer = pointer + sizeof(int);
+
+    memcpy(buffer + pointer, itm->name.c_str(), itm_str_len);
+
+    pointer = pointer + itm_str_len;
+
+    memcpy(buffer + pointer, table->name.c_str(), table_str_len);
+
+    p.data = buffer;
+
+    p.type = CONVERT_ITEM;
+
+    char* other_b = net_utills::convert_to_buffer(&p);
+
+    net_utills::send_msg_safe(other_b, net_utills::get_packet_size(&p), network_manager.get_server(), 0);
+
+    delete[] other_b;
+    delete[] p.data;
+}

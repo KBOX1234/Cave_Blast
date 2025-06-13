@@ -3,6 +3,7 @@
 #include "player.hpp"
 #include "imgui_window.hpp"
 #include "networking.hpp"
+#include "item_convert.hpp"
 
 
 int kb(key_bind kbind) {
@@ -88,9 +89,21 @@ void input::mine_controles() {
     //std::cout << "cursor pos: " << std::to_string(cursor.x) << ", " << std::to_string(cursor.y) << std::endl;
 }
 
+void input::craft_convert_controles() {
+    if (IsKeyPressed(keybind_manager.convert_item)) {
+        block* blk = world.get_block({cursor.x - 1, cursor.y});
+
+        item itm = player_manager.inv_ui.current_item->item_i;
+
+        item_convert_manager.convert_item(&itm, *blk, player_manager.myself);
+
+    }
+}
+
 
 void input::update() {
     update_movement();
     mine_controles();
+    craft_convert_controles();
     player_manager.inv_ui.update_inv_ui_input();
 }

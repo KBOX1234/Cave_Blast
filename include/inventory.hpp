@@ -17,10 +17,12 @@ struct inventory_slot{
 
 
 class inventory_ui;
+class input;
 
 
 class inventory{
     friend class inventory_ui;
+    friend class input;
 
     private:
         inventory_slot slots[MAX_INVENTORY_SIZE];

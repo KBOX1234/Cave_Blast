@@ -1,8 +1,8 @@
 [
     {
         "table" : "furnace",
-        "block" : "iron_ore",
-        "result" : "iron",
+        "item" : "iron_ore",
+        "result" : "iron_bar",
         "table_state_min" : 1
     }
 ]

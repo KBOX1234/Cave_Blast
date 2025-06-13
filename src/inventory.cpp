@@ -65,7 +65,13 @@ void inventory::set_player_id(int id){
 
 bool inventory::give_item(item* itm, char count){
 
-    std::cout << "gave item: " + itm->name << std::endl;
+    //std::cout << "gave item: " + itm->name << std::endl;
+
+    if (itm == nullptr) {
+        std::cout << "null item\n";
+
+        return false;
+    }
 
     if(count >= 256) return false;
 

@@ -40,7 +40,8 @@ typedef enum PacketType {
     GET_ALL_PLAYERS,
     BREAK_BLOCK,
     GIVE_BLOCK,
-    CRAFT_ITEM
+    CRAFT_ITEM,
+    CONVERT_ITEM
 } PacketType;
 
 
@@ -93,6 +94,8 @@ class client_utls {
 
         static void craft_item(int craft_index);
 
+        static void convert_item(item* itm, item* table);
+
 };
 
 class server_utls {
@@ -116,6 +119,8 @@ class server_utls {
         static void give_player_item(ENetPeer* peer, std::string item, char count);
 
         static void handle_craft_request(ENetEvent* event, packet* p);
+
+        static void handle_convert_request(ENetEvent* event, packet* p);
 
 };
 

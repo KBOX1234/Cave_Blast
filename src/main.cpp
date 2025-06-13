@@ -66,10 +66,8 @@ colide colide_master;
 light_master light_manager;
 #include "crafting.hpp"
 crafting_master crafting_manager;
-
-
-#include "rng.hpp"
-#include "world.hpp"
+#include "item_convert.hpp"
+item_convert_master item_convert_manager;
 
 int main(int argc, char* argv[]) {
 
@@ -122,7 +120,11 @@ int main(int argc, char* argv[]) {
 
     crafting_manager.init();
 
-    SetTraceLogLevel(LOG_ERROR); 
+    item_convert_manager.init();
+
+    SetTraceLogLevel(LOG_ERROR);
+
+    player_manager.myself->inv.give_item(item_manager.fetch_item("iron_ore"), 10);
 
     
 
