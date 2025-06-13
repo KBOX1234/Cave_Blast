@@ -1,5 +1,6 @@
-#include "lighting.hpp"
+#include "../include/lighting.hpp"
 #include <math.h>
+
 
 template<typename T>
 inline T Clamp(T value, T min, T max) {
@@ -8,62 +9,15 @@ inline T Clamp(T value, T min, T max) {
     else return value;
 }
 
+RenderTexture2D light_master::generate_lights(Vector2 viewport_pos, Vector2 viewport_size){
 
-void light_master::DrawLightCircleToImage(Image *img, Vector2 center, float radius, Color color, float intensity){
-    int imgWidth = img->width;
-    int imgHeight = img->height;
+    RenderTexture2D rnd = LoadRenderTexture((int)viewport_size.x, (int)viewport_size.y);
 
-    int startX = (int)(center.x - radius);
-    int startY = (int)(center.y - radius);
-    int endX   = (int)(center.x + radius);
-    int endY   = (int)(center.y + radius);
+    BeginTextureMode(rnd);
 
-    for (int y = startY; y <= endY; y++)
-    {
-        if (y < 0 || y >= imgHeight) continue;
+    ClearBackground(BLACK);
 
-        for (int x = startX; x <= endX; x++)
-        {
-            if (x < 0 || x >= imgWidth) continue;
-
-            float dx = x - center.x;
-            float dy = y - center.y;
-            float dist = sqrtf(dx*dx + dy*dy);
-
-            if (dist <= radius)
-            {
-                float alphaFactor = 1.0f - (dist / radius);
-                alphaFactor = powf(alphaFactor, intensity); // smoother falloff
-
-                unsigned char a = (unsigned char)(color.a * alphaFactor);
-                Color result = {
-                    (unsigned char)(color.r * alphaFactor),
-                    (unsigned char)(color.g * alphaFactor),
-                    (unsigned char)(color.b * alphaFactor),
-                    (unsigned char)(color.a * alphaFactor)
-                };
-
-                // Blend with existing pixel (additive)
-                Color existing = GetImageColor(*img, x, y);
-                Color blended = {
-                    (unsigned char)Clamp(existing.r + result.r, 0, 255),
-                    (unsigned char)Clamp(existing.g + result.g, 0, 255),
-                    (unsigned char)Clamp(existing.b + result.b, 0, 255),
-                    (unsigned char)Clamp(existing.a + result.a, 0, 255)
-                };
-
-                ImageDrawPixel(img, x, y, blended);
-            }
-        }
-    }
-}
-
-
-Texture2D light_master::generate_lights(Vector2 viewport_pos, Vector2 viewport_size){
-
-    Image img = GenImageColor(viewport_size.x, viewport_size.y, BLACK);
-
-    
+    BeginBlendMode(BLEND_ADDITIVE);
 
     for(int i = 0; i < lights.size(); i++){
         if(lights[i].pos.x > viewport_pos.x && lights[i].pos.x < viewport_pos.x + viewport_size.x && lights[i].pos.y > viewport_pos.y && lights[i].pos.y < viewport_pos.y + viewport_size.y && lights[i].skip == false){
@@ -72,15 +26,15 @@ Texture2D light_master::generate_lights(Vector2 viewport_pos, Vector2 viewport_s
             img_light_pos.x = lights[i].pos.x - viewport_pos.x;
             img_light_pos.y = lights[i].pos.y - viewport_pos.y;
 
-            DrawLightCircleToImage(&img, img_light_pos, lights[i].radius, lights[i].color, lights[i].strength);
+            DrawCircleGradient(img_light_pos.x, img_light_pos.y, lights[i].radius, WHITE, BLACK);
+
+
         }
     }
+    EndBlendMode();
+    EndTextureMode();
 
-    Texture2D rtv = LoadTextureFromImage(img);
-
-    UnloadImage(img);
-
-    return rtv;
+    return rnd;
 }
 
 int light_master::add_light(Color color, float radius, Vector2 pos, float strength, long frames_till_expire){

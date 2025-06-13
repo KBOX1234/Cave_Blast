@@ -22,9 +22,7 @@ class light_master{
 
         std::vector<light> lights;
 
-        void DrawLightCircleToImage(Image *img, Vector2 center, float radius, Color color, float intensity);
-
-        Texture2D generate_lights(Vector2 viewport_pos, Vector2 viewport_size);
+        RenderTexture2D generate_lights(Vector2 viewport_pos, Vector2 viewport_size);
 
      public:
 

@@ -139,6 +139,10 @@ void render::render_players(bool debug) {
 void render::update() {
     camera.zoom = 3;
 
+    Vector2 offset = {camera.target.x - (GetScreenWidth() / 2), camera.target.y - (GetScreenHeight() / 2)};
+
+    light_map = light_manager.generate_lights(offset, {(float)GetScreenWidth(), (float)GetScreenHeight()});
+
     BeginMode2D(camera);
 
     update_drawing_coords();
@@ -167,18 +171,45 @@ float render::get_camera_zoom() {
     return camera.zoom;
 }
 
-void render::render_lights(){
+void render::render_lights() {
+    BeginBlendMode(BLEND_MULTIPLIED);
 
-    Vector2 offset = {camera.target.x - (GetScreenWidth() / 2), camera.target.y - (GetScreenHeight() / 2)};
+    float zoom = camera.zoom;
+    float screenW = (float)GetScreenWidth();
+    float screenH = (float)GetScreenHeight();
 
-    Texture2D light_map = light_manager.generate_lights(offset, {GetScreenWidth(), GetScreenHeight()});
-    BeginBlendMode(BLEND_MULTIPLIED); 
+    // Get top-left corner of the camera view in world coordinates
+    Vector2 topLeftWorld = {
+        camera.target.x - (screenW / 2),
+        camera.target.y - (screenH / 2)
+    };
 
-    
+    // raylib render textures are vertically flipped, so we draw them "upside-down"
+    // We correct this by shifting the Y coordinate down by the texture height (in world units)
+    Vector2 drawPos = {
+        camera.target.x - (GetScreenWidth()/2),
+        camera.target.y - (GetScreenHeight()/2)
+    };
 
-    DrawTexture(light_map, offset.x, offset.y, WHITE);
+    Vector2 viewport_size = {(float)GetScreenWidth(), (float)GetScreenHeight()};
+
+    Rectangle source = {
+        0, 0,
+        (float)light_map.texture.width,
+        -(float)light_map.texture.height // <-- flips vertically
+    };
+
+    Rectangle dest = {
+        topLeftWorld.x,
+        topLeftWorld.y,
+        viewport_size.x,
+        viewport_size.y
+    };
+
+    DrawTexturePro(light_map.texture, source, dest, { 0, 0 }, 0.0f, WHITE);
 
     EndBlendMode();
 
-    UnloadTexture(light_map);
+    UnloadRenderTexture(light_map);
 }
+

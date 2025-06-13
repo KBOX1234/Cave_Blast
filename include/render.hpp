@@ -12,6 +12,8 @@ private:
 
     Vector2 chunks_pos_to_draw[12];
 
+    RenderTexture2D light_map;
+
     void update_drawing_coords();
 
     void draw_chunk(Vector2 chnk_pos);
