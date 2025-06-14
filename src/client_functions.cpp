@@ -193,7 +193,7 @@ void client_utls::convert_item(item *itm, item *table) {
 
     char* buffer = new char[p.size];
 
-    size_t pointer;
+    size_t pointer = 0;
 
     memcpy(buffer, &itm_str_len, sizeof(int));
 
