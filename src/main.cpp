@@ -124,7 +124,7 @@ int main(int argc, char* argv[]) {
 
     SetTraceLogLevel(LOG_ERROR);
 
-    player_manager.myself->inv.give_item(item_manager.fetch_item("iron_ore"), 10);
+    //player_manager.myself->inv.give_item(item_manager.fetch_item("iron_ore"), 10);
 
     
 
