@@ -4,8 +4,8 @@
 
 ! 3. Colision
 
-4. Lighting
+! 4. Lighting
 
-5. Smelting
+! 5. Smelting
 
-6. Craafting
+! 6. Craafting
