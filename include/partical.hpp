@@ -25,10 +25,12 @@ struct partical_cluster{
 
     //max distance it can spawn from where it has been spawned;
     float spawn_range;
-    
+   
     //particle members
     std::vector<Vector2> members;   
     std::vector<float> member_directions;
+
+    Color tint;
 };
 
 struct partical_preset{
@@ -43,6 +45,8 @@ struct partical_preset{
     float spawn_range;
 
     std::string name;
+
+    Color tint;
 };
 
 class partical_system{
