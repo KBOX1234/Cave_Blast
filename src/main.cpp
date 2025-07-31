@@ -68,6 +68,9 @@ light_master light_manager;
 crafting_master crafting_manager;
 #include "item_convert.hpp"
 item_convert_master item_convert_manager;
+#include "partical.hpp"
+partical_system partical_manager;
+
 
 int main(int argc, char* argv[]) {
 
