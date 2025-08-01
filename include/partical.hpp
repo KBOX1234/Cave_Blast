@@ -21,7 +21,7 @@ struct partical_cluster{
     int existance;
 
     //how fast should these particles explode
-    int velocity;
+    float velocity;
 
     //max distance it can spawn from where it has been spawned;
     float spawn_range;
@@ -40,7 +40,7 @@ struct partical_preset{
 
     int lifetime;
 
-    int velocity;
+    float velocity;
 
     float spawn_range;
 
@@ -61,7 +61,7 @@ class partical_system{
 
 
         void load_partical_presets_from_json_file(std::string path);
-       
+
     public:
         
         void init();

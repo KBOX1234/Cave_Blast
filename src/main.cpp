@@ -127,11 +127,19 @@ int main(int argc, char* argv[]) {
 
     SetTraceLogLevel(LOG_ERROR);
 
-    //player_manager.myself->inv.give_item(item_manager.fetch_item("iron_ore"), 10);
+    //temporary testing:
+    //
 
-    
+    partical_preset pp;
+    pp.texture_id = 282;
+    pp.partical_count = 200;
+    pp.lifetime = 15;
+    pp.velocity = 1;
+    pp.spawn_range = 20;
+    pp.tint = RED;
 
-    //SetTargetFPS(60);
+
+
 
 
     while (!WindowShouldClose()) {
@@ -142,7 +150,7 @@ int main(int argc, char* argv[]) {
 
         if (delta_time_master.can_game_continue() == true) {
             texture_manager.update();
-                network_manager.update();
+            network_manager.update();
 
             if (player_manager.get_host() != nullptr) {
                 player_manager.update_predicted_player();
@@ -153,6 +161,9 @@ int main(int argc, char* argv[]) {
             input_manager.update();
         }
 
+        if(IsKeyPressed(KEY_V)){
+            partical_manager.spawn_partical_custome(pp, {0, 0});
+        }
 
         BeginDrawing();
         ClearBackground(BLACK);
@@ -162,6 +173,9 @@ int main(int argc, char* argv[]) {
             render_master.update();
 
         }
+
+        
+
 
         player_manager.inv_ui.draw_inventory();
 

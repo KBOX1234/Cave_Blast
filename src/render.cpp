@@ -5,7 +5,7 @@
 #include "world.hpp"
 #include "texture_master.hpp"
 #include "lighting.hpp"
-
+#include "partical.hpp"
 
 render::render() {
     camera.target = {1, 1};
@@ -154,6 +154,8 @@ void render::update() {
     player_manager.draw_player(player_manager.myself);
 
     render_lights();
+    
+    partical_manager.update();
 
     draw_cursor(input_manager.cursor);
 
