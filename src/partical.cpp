@@ -36,10 +36,15 @@ void partical_system::simulate_partical_cluster(partical_cluster* pc){
 }
 
 void partical_system::draw_partical(partical_cluster* pc){
+
+    if(delta_time_master.can_game_continue() == true)pc->tint.a = pc->tint.a - (pc->tint.a/(float)pc->lifetime);
+
+
     for(int i = 0; i < pc->members.size(); i++){
         Texture2D* txt = texture_manager.grab_texture_pointer(pc->texture_id);
-
         DrawTextureV(*txt, pc->members[i], pc->tint);
+
+        //pc->tint.a = pc->tint.a - (255/(float)pc->lifetime);
     }
 }
 
@@ -82,6 +87,8 @@ void partical_system::spawn_partical_custome(partical_preset pp, Vector2 pos){
     pc.spawn_range = pp.spawn_range;
 
     pc.tint = pp.tint;
+
+   
 
     float spawn_radius = pp.spawn_range / 2;
 

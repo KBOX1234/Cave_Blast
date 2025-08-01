@@ -31,6 +31,8 @@ struct partical_cluster{
     std::vector<float> member_directions;
 
     Color tint;
+
+    
 };
 
 struct partical_preset{
