@@ -26,7 +26,7 @@ RenderTexture2D light_master::generate_lights(Vector2 viewport_pos, Vector2 view
             img_light_pos.x = lights[i].pos.x - viewport_pos.x;
             img_light_pos.y = lights[i].pos.y - viewport_pos.y;
 
-            DrawCircleGradient(img_light_pos.x, img_light_pos.y, lights[i].radius, WHITE, BLACK);
+            DrawCircleGradient(img_light_pos.x, img_light_pos.y, lights[i].radius, lights[i].color, BLACK);
 
 
         }

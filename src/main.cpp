@@ -137,7 +137,7 @@ int main(int argc, char* argv[]) {
     pp.velocity = 1;
     pp.spawn_range = 20;
     pp.tint = RED;
-
+    pp.has_light = true;
 
 
 

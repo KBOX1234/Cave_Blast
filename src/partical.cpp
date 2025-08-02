@@ -1,6 +1,7 @@
 #include "./../include/partical.hpp"
 #include "../include/delta_time.hpp"
 #include "../include/texture_master.hpp"
+#include "../include/lighting.hpp"
 
 #include <cmath>
 #include <random>
@@ -37,7 +38,10 @@ void partical_system::simulate_partical_cluster(partical_cluster* pc){
 
 void partical_system::draw_partical(partical_cluster* pc){
 
-    if(delta_time_master.can_game_continue() == true)pc->tint.a = pc->tint.a - (pc->tint.a/(float)pc->lifetime);
+    if(delta_time_master.can_game_continue() == true){
+        pc->tint.a = pc->tint.a - (pc->tint.a/(float)pc->lifetime);
+        light_manager.update_light_color(pc->light_index, pc->tint);
+    }
 
 
     for(int i = 0; i < pc->members.size(); i++){
@@ -59,6 +63,7 @@ void partical_system::update(){
             simulate_partical_cluster(&particles[i]);
 
             if(status == true){
+                light_manager.remove_light(particles[i].light_index);
                 particles.erase(particles.begin() + i);
                 i--;
             }
@@ -88,9 +93,11 @@ void partical_system::spawn_partical_custome(partical_preset pp, Vector2 pos){
 
     pc.tint = pp.tint;
 
-   
+    pc.has_light = pp.has_light;
 
     float spawn_radius = pp.spawn_range / 2;
+
+    pc.light_index = light_manager.add_light(pc.tint, pp.spawn_range*2, pos, 1, pc.lifetime);
 
     std::random_device rd;
     std::mt19937 gen(rd());

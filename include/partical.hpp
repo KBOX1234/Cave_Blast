@@ -32,6 +32,10 @@ struct partical_cluster{
 
     Color tint;
 
+    bool has_light;
+
+    int light_index;
+
     
 };
 
@@ -49,6 +53,8 @@ struct partical_preset{
     std::string name;
 
     Color tint;
+
+    bool has_light;
 };
 
 class partical_system{
