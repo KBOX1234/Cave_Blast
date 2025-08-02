@@ -49,7 +49,9 @@ void partical_system::draw_partical(partical_cluster* pc){
 
     if(delta_time_master.can_game_continue() == true){
         pc->tint.a = pc->tint.a - (pc->tint.a/(float)pc->lifetime);
-        light_manager.update_light_color(pc->light_index, pc->tint);
+        //light_manager.update_light_color(pc->light_index, pc->tint);
+        pc->light_power = pc->light_power + 10;
+        light_manager.update_light_strength(pc->light_index, pc->light_power);
     }
 
 
@@ -84,6 +86,7 @@ void partical_system::load_partical_presets_from_json_file(std::string path){
         pp.spawn_range = json_item.value("spawn_range", 1);
         pp.name = json_item.value("name", "no_name");
         pp.has_light = json_item.value("has_light", false);
+        pp.light_power = json_item.value("light_power", 1);
 
         Color tint = WHITE;
         if (json_item.contains("color") && json_item["color"].is_object()) {
@@ -92,7 +95,7 @@ void partical_system::load_partical_presets_from_json_file(std::string path){
             tint.r = color.value("r", 0); // 0 is default if missing
             tint.g = color.value("g", 0);
             tint.b = color.value("b", 0);
-
+            tint.a = 255;
             //std::cout << "Color RGB: (" << r << ", " << g << ", " << b << ")\n";
         } 
         else {
@@ -155,7 +158,9 @@ void partical_system::spawn_partical_custome(partical_preset pp, Vector2 pos){
 
     float spawn_radius = pp.spawn_range / 2;
 
-    pc.light_index = light_manager.add_light(pc.tint, pp.spawn_range*4, pos, 2,  pc.lifetime);
+    pc.light_power = pp.light_power;
+
+    pc.light_index = light_manager.add_light(pc.tint, pp.spawn_range*8, pos, pc.light_power, pc.lifetime);
 
     std::random_device rd;
     std::mt19937 gen(rd());

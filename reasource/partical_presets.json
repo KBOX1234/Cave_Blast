@@ -2,15 +2,16 @@
     {
         "name": "blood",
         "texture": "no_texture",
-        "partical_count": 2000,
+        "partical_count": 20,
         "lifetime": 15,
         "velocity": 1,
         "spawn_range": 20,
         "has_light": true,
+        "light_power":1,
         "color": {
             "r": 255,
-            "g": 0,
-            "b": 0
+            "g": 2,
+            "b": 2
         }
     }
 ]

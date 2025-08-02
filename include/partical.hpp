@@ -36,6 +36,8 @@ struct partical_cluster{
 
     int light_index;
 
+    float light_power;
+
     
 };
 
@@ -55,6 +57,8 @@ struct partical_preset{
     Color tint;
 
     bool has_light;
+
+    float light_power;
 };
 
 class partical_system{
