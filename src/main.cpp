@@ -125,19 +125,9 @@ int main(int argc, char* argv[]) {
 
     item_convert_manager.init();
 
+    partical_manager.init();
+
     SetTraceLogLevel(LOG_ERROR);
-
-    //temporary testing:
-    //
-
-    partical_preset pp;
-    pp.texture_id = 282;
-    pp.partical_count = 200;
-    pp.lifetime = 15;
-    pp.velocity = 1;
-    pp.spawn_range = 20;
-    pp.tint = RED;
-    pp.has_light = true;
 
 
 
@@ -162,7 +152,7 @@ int main(int argc, char* argv[]) {
         }
 
         if(IsKeyPressed(KEY_V)){
-            partical_manager.spawn_partical_custome(pp, {0, 0});
+            partical_manager.spawn_partical("blood", {0, 0});
         }
 
         BeginDrawing();

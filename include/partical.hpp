@@ -78,7 +78,7 @@ class partical_system{
 
         void spawn_partical_custome(partical_preset pp, Vector2 pos);
 
-        void spawn_partical(std::string name);
+        void spawn_partical(std::string name, Vector2 pos);
         
     
 };

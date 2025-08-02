@@ -5,6 +5,10 @@
 
 #include <cmath>
 #include <random>
+#include <fstream>
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 bool partical_system::is_partical_expired(partical_cluster* pc){
     if(pc->existance >= pc->lifetime){
@@ -29,11 +33,16 @@ void partical_system::simulate_partical_cluster(partical_cluster* pc){
             sinf(radians)
         };
 
-       
+        
         pc->members[i].x = pc->members[i].x + (direction.x * pc->velocity);
         pc->members[i].y = pc->members[i].y + (direction.y * pc->velocity);
 
     }
+    
+
+    pc->spawn_range = pc->spawn_range + pc->velocity;
+    light_manager.update_light_radius(pc->light_index, pc->spawn_range);
+
 }
 
 void partical_system::draw_partical(partical_cluster* pc){
@@ -50,6 +59,55 @@ void partical_system::draw_partical(partical_cluster* pc){
 
         //pc->tint.a = pc->tint.a - (255/(float)pc->lifetime);
     }
+}
+
+void partical_system::load_partical_presets_from_json_file(std::string path){
+    std::ifstream file(path);
+
+    json j;
+
+    if (file.is_open()) {
+        file >> j;
+    } 
+
+    else {
+        std::cerr << "Failed to open " << path << std::endl;
+    }
+
+    for(auto& json_item : j){
+        partical_preset pp;
+
+        pp.texture_id = texture_manager.add_texture(json_item.value("texture", "no_texture"), true);
+        pp.partical_count = json_item.value("partical_count", 1);
+        pp.lifetime = json_item.value("lifetime", 1);
+        pp.velocity = json_item.value("velocity", 1);
+        pp.spawn_range = json_item.value("spawn_range", 1);
+        pp.name = json_item.value("name", "no_name");
+        pp.has_light = json_item.value("has_light", false);
+
+        Color tint = WHITE;
+        if (json_item.contains("color") && json_item["color"].is_object()) {
+            json color = json_item["color"];
+
+            tint.r = color.value("r", 0); // 0 is default if missing
+            tint.g = color.value("g", 0);
+            tint.b = color.value("b", 0);
+
+            //std::cout << "Color RGB: (" << r << ", " << g << ", " << b << ")\n";
+        } 
+        else {
+            //std::cerr << "Color data is missing or not an object.\n";
+        }
+
+        pp.tint = tint;
+
+        presets.push_back(pp);
+    }
+
+}
+
+void partical_system::init(){
+    load_partical_presets_from_json_file("reasource/partical_presets.json");
 }
 
 void partical_system::update(){
@@ -97,7 +155,7 @@ void partical_system::spawn_partical_custome(partical_preset pp, Vector2 pos){
 
     float spawn_radius = pp.spawn_range / 2;
 
-    pc.light_index = light_manager.add_light(pc.tint, pp.spawn_range*2, pos, 1, pc.lifetime);
+    pc.light_index = light_manager.add_light(pc.tint, pp.spawn_range*4, pos, 2,  pc.lifetime);
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -122,4 +180,14 @@ void partical_system::spawn_partical_custome(partical_preset pp, Vector2 pos){
 
     particles.push_back(pc);
 
+}
+
+void partical_system::spawn_partical(std::string name, Vector2 pos){
+    for(int i = 0; i < presets.size(); i++){
+        if(presets[i].name == name){
+            spawn_partical_custome(presets[i], pos);
+
+            return;
+        }
+    }
 }
