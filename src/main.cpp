@@ -70,7 +70,8 @@ crafting_master crafting_manager;
 item_convert_master item_convert_manager;
 #include "partical.hpp"
 partical_system partical_manager;
-
+#include "animate.hpp"
+animation_master animation_manager;
 
 int main(int argc, char* argv[]) {
 
