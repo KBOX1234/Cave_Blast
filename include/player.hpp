@@ -8,6 +8,9 @@
 
 #include "inventory.hpp"
 #include "sphysics.h"
+
+#include "animate.hpp"
+
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 64
 
@@ -71,6 +74,7 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         char current_table = 0;
 
+        animated_sprite_linker amsl;
 
     public:
 

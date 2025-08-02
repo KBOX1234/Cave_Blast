@@ -28,11 +28,9 @@ class animated_sprite_linker{
     
     private:
 
-        animation_master* am_pointer;
+        Vector2* pos;
 
         std::vector<animated_sprite> animations;
-
-        std::string asl_name;
 
         int find_animation_index_by_name(std::string name);
 
@@ -41,36 +39,44 @@ class animated_sprite_linker{
         int current_animation_age;
 
         int playback_status;
+
+        bool looping = false;
+
+        void update_animation();
         
     public:
-        
-        void assign_name(std::string name);
-        
-        void load_animation(animated_sprite am, std::string name);
+                
+        void load_animation(animated_sprite ams);
 
-        void load_animation_from_json(std::string json);
+        void load_animation_from_json(std::string jsonS);
 
         void play_animation(std::string name, bool loop = false);
 
         void pause_animation();
 
         void stop_animation();
+        
+        void set_pos(Vector2* poss);
 };
 
 //this class is in charge of polling all the animated frames to be drawing
 //This is to allow for drawing things all at once
 //The last shall be first and the first shall be last
+//
+
+class render;
+
 class animation_master{
+    friend class render;
     private:
+        std::vector<animated_sprite_linker*> ams_linkers;  
 
-        std::vector<Texture2D*> frames;
-
-        void flush_all_frames();
+        void update_all();
 
 
     public:
 
-        void poll_frame(Texture2D* txt);
+        void link_ams_linker(animated_sprite_linker* ams);
 };
 
 extern animation_master animation_manager;
