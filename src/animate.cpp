@@ -45,6 +45,11 @@ void animated_sprite_linker::load_animation_from_json(std::string jsonS){
 void animated_sprite_linker::play_animation(std::string name, bool loop){
     current_animation_index = find_animation_index_by_name(name);
 
+    if(current_animation_index == -1){
+        std::cout << "could not find animation\n";
+        return;
+    }
+
     looping = loop;
 
     current_animation_age = 0;
@@ -62,14 +67,17 @@ void animated_sprite_linker::stop_animation(){
 }
 
 void animated_sprite_linker::update_animation(){
+
+    if (current_animation_index < 0 || current_animation_index >= animations.size()) return;
+
     if(playback_status == PLAY){
         //sombody fix this
         float current_frame = (float)current_animation_age / (60.0f / (float)animations[current_animation_index].frame_rate);
 
         int current_frame_int = (int)round(current_frame);
 
-        if(current_frame_int < animations[current_animation_index].textures.size() && pos != nullptr){
-            if(animations[current_animation_index].textures[current_frame_int] != nullptr){
+        if(current_frame_int < animations[current_animation_index].textures.size() && current_frame_int >= 0){
+            if(animations[current_animation_index].textures[current_frame_int] != nullptr && pos != nullptr){
                 DrawTextureV(*animations[current_animation_index].textures[current_frame_int], *pos, WHITE);
             }
 
@@ -92,7 +100,7 @@ void animated_sprite_linker::update_animation(){
         float current_frame = (float)current_animation_age / (60.0f / (float)animations[current_animation_index].frame_rate);
 
         int current_frame_int = (int)round(current_frame);
-        if(animations[current_animation_index].textures[current_frame_int] != nullptr && pos != nullptr){
+        if(animations[current_animation_index].textures[current_frame_int] != nullptr && pos != nullptr && current_frame_int < animations[current_animation_index].textures.size() && current_frame_int >= 0){
             DrawTextureV(*animations[current_animation_index].textures[current_frame_int], *pos, WHITE);
         }
 

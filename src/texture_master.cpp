@@ -44,15 +44,18 @@ Texture2D* texture_master::grab_texture_pointer(int id) {
 
 
 void texture_master::update() {
-    auto now = std::chrono::system_clock::now();
+    /*auto now = std::chrono::system_clock::now();
     std::time_t current_time = std::chrono::system_clock::to_time_t(now);
 
     for (auto& tex : textures) {
         if (!tex->locked && tex->loaded && tex->expiration < current_time) {
+
+            std::cout << "unloaded texture\n";
+           
             UnloadTexture(tex->texture);
             tex->loaded = false;
         }
-    }
+    }*/
 }
 
 

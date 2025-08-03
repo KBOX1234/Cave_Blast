@@ -79,7 +79,7 @@ void partical_system::load_partical_presets_from_json_file(std::string path){
     for(auto& json_item : j){
         partical_preset pp;
 
-        pp.texture_id = texture_manager.add_texture(json_item.value("texture", "no_texture"), true);
+        pp.texture_id = texture_manager.add_texture(json_item.value("texture", "reasource/gfx/default.png"), true);
         pp.partical_count = json_item.value("partical_count", 1);
         pp.lifetime = json_item.value("lifetime", 1);
         pp.velocity = json_item.value("velocity", 1);
