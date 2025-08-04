@@ -11,6 +11,30 @@
 #define SPRITE 0
 #define TRANSLATION 1
 
+struct animated_transform{
+    //the original state to translate from
+    float scale1;
+    float rotation1;
+    Vector2 pos1;
+
+    //the state to translate from
+    float scale2;
+    float rotation2;
+    Vector2 pos2;
+    
+    //the amount of frames to run this animation
+    int frames;
+    
+    //the targets state as a pointer
+    float* target_scale;
+    float* target_rotation;
+    Vector2* target_pos;
+    
+    //if set to true, it will ignore scale1, rotation1, and pos1 
+    bool interpolate_from_target_state;
+
+    //
+};
 
 struct animated_sprite{
     std::vector<Texture2D*> textures;

@@ -11,10 +11,6 @@
 #include "lighting.hpp"
 
 player::player() {
-
-    pos = new Vector2;
-
-
     //place in the middle of spawn chunk
     *pos = {2 * BLOCK_SIZE, 2 * BLOCK_SIZE};
     last_move = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -28,7 +24,7 @@ player::player() {
     c.g = 255;
     c.r = 255;
 
-
+    pos = new Vector2;
 
     light_index = light_manager.add_light(c, 150, {0, 0}, 0.5, 0);
 
@@ -189,7 +185,7 @@ void player::move_player_back() {
 }
 
 Vector2 player::get_pos() {
-    return *pos;
+    return pos;
 }
 
 Texture2D* player::get_texture() {
@@ -245,7 +241,7 @@ void player_master::init() {
 
     default_texture_id = texture_manager.add_texture("reasource/gfx/other/player.png", true);
 
-    std::string jsonstr = "{\"frame_rate\":60,\"name\":\"test\",\"textures\":[\"reasource/animations/test/1.png\",\"reasource/animations/test/2.png\",\"reasource/animations/test/3.png\",\"reasource/animations/test/4.png\",\"reasource/animations/test/5.png\",\"reasource/animations/test/6.png\",\"reasource/animations/test/7.png\",\"reasource/animations/test/8.png\",\"reasource/animations/test/9.png\",\"reasource/animations/test/10.png\"]}";
+    std::string jsonstr = "{\"frame_rate\":15,\"name\":\"test\",\"textures\":[\"reasource/animations/test/1.png\",\"reasource/animations/test/2.png\",\"reasource/animations/test/3.png\",\"reasource/animations/test/4.png\",\"reasource/animations/test/5.png\",\"reasource/animations/test/6.png\",\"reasource/animations/test/7.png\",\"reasource/animations/test/8.png\",\"reasource/animations/test/9.png\",\"reasource/animations/test/10.png\"]}";
 
     animation_manager.link_ams_linker(&myself->amsl);
     myself->amsl.load_animation_from_json(jsonstr);
@@ -299,8 +295,8 @@ void player_master::draw_player(player *pl) {
     Texture2D* txt = texture_manager.grab_texture_pointer(default_texture_id);
 
     // Calculate difference
-    float dx = pl->pos->x - pl->interpolation.x;
-    float dy = pl->pos->y - pl->interpolation.y;
+    float dx = pl->pos.x - pl->interpolation.x;
+    float dy = pl->pos.y - pl->interpolation.y;
 
     // Interpolation duration in seconds
     const float duration = 0.1f;
@@ -313,13 +309,13 @@ void player_master::draw_player(player *pl) {
     if (std::abs(dx) > std::abs(step_x))
         pl->interpolation.x += step_x;
     else
-        pl->interpolation.x = pl->pos->x;
+        pl->interpolation.x = pl->pos.x;
 
     // Y
     if (std::abs(dy) > std::abs(step_y))
         pl->interpolation.y += step_y;
     else
-        pl->interpolation.y = pl->pos->y;
+        pl->interpolation.y = pl->pos.y;
 
 
 
@@ -339,7 +335,7 @@ void player_master::draw_player(player *pl) {
 serialized_player player::serialize() {
     serialized_player ser;
 
-    ser.pos = *pos;
+    ser.pos = pos;
     ser.id = id;
     ser.stats = stats;
 
@@ -350,7 +346,7 @@ serialized_player player::serialize() {
 
 void player::set_pos(Vector2 pos2) {
 
-    *pos = pos2;
+    pos = pos2;
 }
 
 bool player_master::does_player_exist(int id) {
@@ -431,7 +427,7 @@ bool player::is_valid_move(Vector2 pos2) {
 
     double max_possible_distance = elapsed * speed_pixels_per_ms;
 
-    if (Vector2Distance(pos2, *pos) <= max_possible_distance) {
+    if (Vector2Distance(pos2, pos) <= max_possible_distance) {
         return true;
     }
 
@@ -512,8 +508,8 @@ bool player::break_block(Vector2 pos){
 Vector2 player::get_block_pos(){
     Vector2 rtv;
 
-    rtv.x = round(pos->x / BLOCK_SIZE);
-    rtv.y = round(pos->y / BLOCK_SIZE);
+    rtv.x = round(pos.x / BLOCK_SIZE);
+    rtv.y = round(pos.y / BLOCK_SIZE);
 
     return rtv;
 }

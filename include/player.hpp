@@ -44,7 +44,7 @@ class player {
     friend class colide;
     friend class server_utls;
     private:
-        Vector2 pos;
+        Vector2* pos;
 
         stat_s stats;
 
@@ -53,7 +53,7 @@ class player {
 
         int speed = 3;
 
-        float rotation = 0;
+        float rotation;
 
         std::string name;
 
