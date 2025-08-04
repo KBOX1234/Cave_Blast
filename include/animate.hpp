@@ -23,15 +23,12 @@ struct animated_transform{
     Vector2 pos2;
     
     //the amount of frames to run this animation
-    int frames;
-    
-    //the targets state as a pointer
-    float* target_scale;
-    float* target_rotation;
-    Vector2* target_pos;
-    
+    int lifetime;
+        
     //if set to true, it will ignore scale1, rotation1, and pos1 
     bool interpolate_from_target_state;
+
+    std::string name;
 
     //
 };
@@ -85,17 +82,56 @@ class animated_sprite_linker{
         void set_pos(Vector2* poss);
 };
 
-//this class is in charge of polling all the animated frames to be drawing
-//This is to allow for drawing things all at once
-//The last shall be first and the first shall be last
-//
+
+class animated_transform_linker{
+    friend class animation_master;
+
+    private:
+
+        Vector2* pos;
+
+        float* rotation;
+
+        float* scale;
+
+        bool is_pos, is_rotation, is_scale;
+
+        std::vector<animated_transform> animations;
+
+        int find_animation_index_by_name(std::string name);
+
+        int current_animation_index;
+
+        int current_animation_age;
+
+        int playback_status;
+
+        void update_animation();
+
+    public:
+
+        void link_pointers(float* scaleS, float* rotationR, Vector2* posP);
+
+        void load_animation(animated_transform amt);
+
+        void load_animation_from_json(std::string jsonJ);
+
+        void play_animation(std::string name);
+
+        void pause_animation();
+
+        void stop_animation();
+};
+
 
 class render;
 
 class animation_master{
     friend class render;
     private:
-        std::vector<animated_sprite_linker*> ams_linkers;  
+        std::vector<animated_sprite_linker*> ams_linkers;
+
+        std::vector<animated_transform_linker*> amt_linkers;     
 
         void update_all();
 
@@ -103,6 +139,8 @@ class animation_master{
     public:
 
         void link_ams_linker(animated_sprite_linker* ams);
+
+        void link_amt_linker(animated_transform_linker* amt);
 };
 
 extern animation_master animation_manager;

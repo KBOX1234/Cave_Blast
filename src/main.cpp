@@ -154,9 +154,6 @@ int main(int argc, char* argv[]) {
             input_manager.update();
         }
 
-        if(IsKeyPressed(KEY_V)){
-            partical_manager.spawn_partical("blood", {0, 0});
-        }
 
         BeginDrawing();
         ClearBackground(BLACK);
@@ -182,6 +179,8 @@ int main(int argc, char* argv[]) {
             imgui_master.craft_view_menue();
         }
         rlImGuiEnd();
+
+
 
         DrawFPS(10, 10);
 
