@@ -245,12 +245,8 @@ void player_master::init() {
 
     default_texture_id = texture_manager.add_texture("reasource/gfx/other/player.png", true);
 
-    std::string jsonstr = "{\"frame_rate\":15,\"name\":\"test\",\"textures\":[\"reasource/animations/test/1.png\",\"reasource/animations/test/2.png\",\"reasource/animations/test/3.png\",\"reasource/animations/test/4.png\",\"reasource/animations/test/5.png\",\"reasource/animations/test/6.png\",\"reasource/animations/test/7.png\",\"reasource/animations/test/8.png\",\"reasource/animations/test/9.png\",\"reasource/animations/test/10.png\"]}";
-
     animation_manager.link_ams_linker(&myself->amsl);
-    myself->amsl.load_animation_from_json(jsonstr);
 
-    myself->amsl.play_animation("test", true);
 
     inv_ui.init();
 }
