@@ -41,3 +41,13 @@ make
 cd ../../
 
 cp ./external/sphysics/libsphysics.a ./lib/libsphysics.a
+
+cd ./external/easy_profiler/
+
+cmake CMakeLists.txt
+
+make
+
+cd ../../
+
+cp ./external/easy_profiler/bin/libeasy_profiler.so ./lib/libeasy_profiler.so

@@ -16,3 +16,6 @@
 [submodule "external/rl_imgui"]
 	path = external/rl_imgui
 	url = https://github.com/raylib-extras/rlImGui.git
+[submodule "external/easy_profiler"]
+	path = external/easy_profiler
+	url = https://github.com/yse/easy_profiler.git

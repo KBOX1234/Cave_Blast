@@ -4,6 +4,10 @@
 #include <string>
 #include <cmath>
 
+#define EASY_PROFILER_ENABLED 1
+#include "../external/easy_profiler/easy_profiler_core/include/easy/profiler.h"
+
+
 #include "raylib.h"
 
 #ifdef _WIN32
@@ -75,7 +79,18 @@ animation_master animation_manager;
 #include "io.hpp"
 save_master save_manager;
 
+void force_linking() {
+    profiler::startCapture(); // Force linker to require this symbol
+}
+
 int main(int argc, char* argv[]) {
+
+    profiler::startListen();
+    profiler::startCapture();
+
+    EASY_FUNCTION(profiler::colors::Yellow);
+
+    EASY_BLOCK("Startup");
 
     int port = 8080;
     bool server = true;
@@ -133,9 +148,11 @@ int main(int argc, char* argv[]) {
     SetTraceLogLevel(LOG_ERROR);
 
 
-
+    EASY_END_BLOCK;
 
     while (!WindowShouldClose()) {
+
+        EASY_BLOCK("generate frame");
 
         delta_time_master.update();
 
@@ -189,9 +206,17 @@ int main(int argc, char* argv[]) {
 
 
         EndDrawing();
+
+        EASY_END_BLOCK;
     }
     texture_manager.clean_up();
-    CloseWindow();
+
     rlImGuiShutdown();
+
+    CloseWindow();
+
+
+    profiler::dumpBlocksToFile("./test_profile.prof");
+    std::cout << "exported test profile\n";
     return 0;
 }
