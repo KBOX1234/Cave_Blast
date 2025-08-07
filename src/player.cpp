@@ -9,6 +9,7 @@
 #include "inventory.hpp"
 #include "colide.hpp"
 #include "lighting.hpp"
+#include "io.hpp"
 
 player::player() {
 
@@ -216,10 +217,19 @@ int player_master::add_player(std::string name) {
 
     new_player->set_name(name);
 
+    new_player->amsl.load_animation_from_json(easy_file_ops::load_text_file("reasource/animations/player/animate.json"));
+    animation_manager.link_ams_linker(&new_player->amsl);
+    new_player->amsl.play_animation("walk", true);
+    new_player->amsl.set_pos(&new_player->interpolation);
+
 
     players.push_back(new_player);
 
     std::cout << "Player " << name << " added" << std::endl;
+
+
+
+
 
     return players.size() - 1;
 }
@@ -247,6 +257,10 @@ void player_master::init() {
 
     animation_manager.link_ams_linker(&myself->amsl);
 
+    myself->amsl.load_animation_from_json(easy_file_ops::load_text_file("reasource/animations/player/animate.json"));
+    animation_manager.link_ams_linker(&myself->amsl);
+    myself->amsl.play_animation("walk", true);
+    myself->amsl.set_pos(&myself->interpolation);
 
     inv_ui.init();
 }
@@ -292,7 +306,7 @@ player_master::~player_master() {
 
 
 void player_master::draw_player(player *pl) {
-    Texture2D* txt = texture_manager.grab_texture_pointer(default_texture_id);
+    //Texture2D* txt = texture_manager.grab_texture_pointer(default_texture_id);
 
     // Calculate difference
     float dx = pl->pos->x - pl->interpolation.x;
@@ -320,7 +334,7 @@ void player_master::draw_player(player *pl) {
 
 
 
-    float scale = (float)txt->width/32;
+    float scale = 4;
 
     scale = 1;
 
@@ -328,7 +342,7 @@ void player_master::draw_player(player *pl) {
 
     drcd = pl->interpolation;
 
-    DrawTextureEx(*txt, drcd, 0, scale, WHITE);
+    //DrawTextureEx(*txt, drcd, 0, scale, WHITE);
     DrawText(pl->get_name().c_str(), drcd.x, drcd.y - 12, 10, WHITE);
 }
 
@@ -373,6 +387,10 @@ int player_master::add_player_from_serialised_player(serialized_player *spl) {
 
     new_player->set_stats(spl->stats);
 
+    new_player->amsl.load_animation_from_json(easy_file_ops::load_text_file("reasource/animations/player/animate.json"));
+    animation_manager.link_ams_linker(&new_player->amsl);
+    new_player->amsl.play_animation("walk", true);
+    new_player->amsl.set_pos(&new_player->interpolation);
 
     players.push_back(new_player);
 

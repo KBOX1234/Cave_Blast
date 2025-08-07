@@ -1,0 +1,11 @@
+{
+    "frame_rate" : 4,
+    "name" : "walk",
+    "textures" : [
+        "reasource/animations/player/1.png",
+        "reasource/animations/player/2.png",
+        "reasource/animations/player/3.png",
+        "reasource/animations/player/4.png",
+        "reasource/animations/player/5.png"
+    ]
+}

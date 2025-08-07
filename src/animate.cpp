@@ -284,7 +284,10 @@ void animated_transform_linker::stop_animation(){
 void animation_master::update_all(){
 
     for(int i = 0; i < ams_linkers.size(); i++){
-        ams_linkers[i]->update_animation();
+        if(ams_linkers[i] != nullptr){
+            ams_linkers[i]->update_animation();
+        }
+        else std::cout << "ams linker " + std::to_string(i) + " was nullptr\n";
     }
     for(int i = 0; i < amt_linkers.size(); i++){
         amt_linkers[i]->update_animation();

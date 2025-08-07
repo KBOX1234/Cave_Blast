@@ -53,7 +53,7 @@ class player {
         int id;
         int player_texture_id;
 
-        int speed = 3;
+        int speed = 1;
 
         float rotation;
 
@@ -99,11 +99,11 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         void set_id(int id);
 
-    void set_pos(Vector2 pos2);
+        void set_pos(Vector2 pos2);
 
-    void set_name(std::string name);
+        void set_name(std::string name);
 
-    int give_texture(std::string path);
+        int give_texture(std::string path);
 
         void move_player();
 
