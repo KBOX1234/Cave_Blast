@@ -96,11 +96,14 @@ class world_gen{
 
 };
 
+class save_master;
 
 class world_class {
     friend class network;
     friend class client;
     friend class server;
+
+    friend class save_master;
     private:
     
         std::vector<chunk> chunks;

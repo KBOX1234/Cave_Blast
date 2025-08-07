@@ -72,6 +72,8 @@ item_convert_master item_convert_manager;
 partical_system partical_manager;
 #include "animate.hpp"
 animation_master animation_manager;
+#include "io.hpp"
+save_master save_manager;
 
 int main(int argc, char* argv[]) {
 
@@ -164,7 +166,9 @@ int main(int argc, char* argv[]) {
 
         }
 
-        
+        if(IsKeyPressed(KEY_V)){
+            save_manager.save_instance();
+        }
 
 
         player_manager.inv_ui.draw_inventory();

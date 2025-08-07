@@ -47,6 +47,8 @@ class inventory{
 
         inventory();
 
+        std::string export_inventory_json();
+
 };
 
 class inventory_ui{

@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <filesystem>
 #include "json.hpp"
+#include "world.hpp"
+
 using json = nlohmann::json;
 namespace fs = std::filesystem;
 
@@ -27,7 +29,7 @@ std::string easy_file_ops::load_text_file(std::string filename){
 int easy_file_ops::save_to_text_file(std::string data, std::string filename){
     std::ofstream file(filename);
     if (!file) {
-        std::cerr << "Unable to open file for writing.\n";
+        std::cerr << "Unable to open file for writing: " + filename + "\n";
         return -1;
     }
 
@@ -50,6 +52,8 @@ std::string save_master::get_home_dir(){
     return home;
 }
 
+#define GAME_FOLDER_NAME "cave_blast"
+
 std::string save_master::get_save_dir(std::string save_name){
     std::string home = get_home_dir();
 
@@ -57,7 +61,7 @@ std::string save_master::get_save_dir(std::string save_name){
         return STRERROR;
     }
 
-    std::string save_dir = home + "/" + save_name;
+    std::string save_dir = home + "/" + GAME_FOLDER_NAME + "/" + save_name;
 
     return save_dir;
 }
@@ -71,9 +75,68 @@ save_master::save_master(){
 #define CHUNK_DIR "chunks"
 
 int save_master::save_chunk(std::string json_data){
-    std::string chnk_save_name;
 
     json chunk_json = json::parse(json_data);
 
+    Vector2 c_pos;
+
+    c_pos.x = chunk_json["pos"]["x"];
+    c_pos.y = chunk_json["pos"]["y"];
+
+    std::string fname = std::to_string((int)round(c_pos.x)) + "," + std::to_string((int)round(c_pos.y)) + ".cjd";
+
+    std::string full_save_path = save_dir + "/" + CHUNK_DIR + "/" + fname;
+
+    return easy_file_ops::save_to_text_file(json_data, full_save_path);
+}
+
+#define PLAYERS_DIR "players"
+
+int save_master::save_player(player* p){
+    json j;
+
+    json player_stat;
+    serialized_player sp;
+
+    json inventory;
+
+    sp = p->serialize();
+
+    player_stat["pos"]["x"] = sp.pos.x;
+    player_stat["pos"]["y"] = sp.pos.y;
+
+    player_stat["stats"]["health"] = sp.stats.health;
+    player_stat["stats"]["hunger"] = sp.stats.hunger;
+    player_stat["stats"]["thirst"] = sp.stats.thirst;
+
+    player_stat["id"] = sp.id;
+
+    player_stat["angle"] = sp.angle;
+
+    player_stat["name"] = sp.name;
+
+    inventory = json::parse(p->inv.export_inventory_json());
+
+    j["player_dat"] = player_stat;
+    j["inventory"] = inventory;
     
+
+    std::string fname = std::to_string(sp.id) + ".pdat";
+
+    std::string full_p_save_f = save_dir + "/" + PLAYERS_DIR + "/" + fname;
+
+    return easy_file_ops::save_to_text_file(j.dump(), full_p_save_f);
+
+}
+
+int save_master::save_instance(){
+    for(int i = 0; i < world.chunks.size(); i++){
+        save_chunk(world.chunks[i].serialize_chunk().dump());
+    }
+
+    for(int i = 0; i < player_manager.players.size(); i++){
+        save_player(player_manager.players[i]);
+    }
+
+    return 0;
 }

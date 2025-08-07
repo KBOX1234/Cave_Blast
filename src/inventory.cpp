@@ -4,7 +4,8 @@
 #include "texture_master.hpp"
 #include "player.hpp"
 #include "input.hpp"
-
+#include "json.hpp"
+using json = nlohmann::json;
 
 inventory::inventory(){
     for(int i = 0; i < MAX_INVENTORY_SIZE; i++){
@@ -293,4 +294,19 @@ bool inventory::take_item(item *itm, char count) {
     }
 
     return false;
+}
+
+std::string inventory::export_inventory_json(){
+    json inventory_json;
+
+    for(int i = 0; i < MAX_INVENTORY_SIZE; i++){
+        json slot_json;
+
+        slot_json["name"] = slots[i].item_i.name;
+        slot_json["count"] = slots[i].count;
+
+        inventory_json.push_back(slot_json);
+    }
+
+    return inventory_json.dump();
 }

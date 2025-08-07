@@ -37,12 +37,14 @@ struct serialized_player {
 class player_master;
 class colide;
 class server_utls;
+class save_master;
 
 class player {
     friend class player_master;
     friend class render;
     friend class colide;
     friend class server_utls;
+    friend class save_master;
     private:
         Vector2* pos;
 
@@ -97,11 +99,11 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
         void set_id(int id);
 
-        void set_pos(Vector2 pos2);
+    void set_pos(Vector2 pos2);
 
-        void set_name(std::string name);
+    void set_name(std::string name);
 
-        int give_texture(std::string path);
+    int give_texture(std::string path);
 
         void move_player();
 
@@ -140,7 +142,7 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 };
 
 class colide;
-
+class save_master;
 class player_master {
     friend class imgui_win;
     friend class input;
@@ -149,7 +151,7 @@ class player_master {
     friend class client;
     friend class render;
     friend class server_utls;
-
+    friend class save_master;
     friend class colide;
     private:
         std::vector<player*> players;
