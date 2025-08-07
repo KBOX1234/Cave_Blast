@@ -77,8 +77,6 @@ save_master save_manager;
 
 int main(int argc, char* argv[]) {
 
-    SetTargetFPS(165);
-
     int port = 8080;
     bool server = true;
     std::string ip = "localhost";
