@@ -211,27 +211,20 @@ std::string player::get_name() {
 
 
 int player_master::add_player(std::string name) {
-    player* new_player = new player;
 
-    new_player->set_id(players.size());
+    serialized_player sp;
 
-    new_player->set_name(name);
+    sp.id = players.size();
 
-    new_player->amsl.load_animation_from_json(easy_file_ops::load_text_file("reasource/animations/player/animate.json"));
-    animation_manager.link_ams_linker(&new_player->amsl);
-    new_player->amsl.play_animation("walk", true);
-    new_player->amsl.set_pos(&new_player->interpolation);
+    memcpy(sp.name, name.c_str(), MAX_NAME_LENGTH);
 
-
-    players.push_back(new_player);
+    sp.angle = 0;
+    sp.pos = {0, 0};
+    sp.stats = {0, 0, 0};
 
     std::cout << "Player " << name << " added" << std::endl;
 
-
-
-
-
-    return players.size() - 1;
+    return add_player_from_serialised_player(&sp);
 }
 
 player_master::player_master() {
