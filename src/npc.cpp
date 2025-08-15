@@ -9,6 +9,10 @@ npc_object::npc_object(){
     scale = 1;
 
     rotation = 0;
+
+    amtl.link_pointers(&scale, &rotation, &pos);
+
+    amsl.set_pos(&pos);
 }
 
 void npc_object::update_colide_box(){
