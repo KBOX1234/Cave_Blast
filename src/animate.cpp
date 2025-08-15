@@ -287,10 +287,11 @@ void animation_master::update_all(){
         if(ams_linkers[i] != nullptr){
             ams_linkers[i]->update_animation();
         }
-        else std::cout << "ams linker " + std::to_string(i) + " was nullptr\n";
+        //else std::cout << "ams linker " + std::to_string(i) + " was nullptr\n";
     }
     for(int i = 0; i < amt_linkers.size(); i++){
-        amt_linkers[i]->update_animation();
+
+        if(amt_linkers[i] != nullptr) amt_linkers[i]->update_animation();
     }  
 }
 
