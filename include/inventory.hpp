@@ -31,13 +31,13 @@ class inventory{
         inventory_slot* find_empty_slot();
         inventory_slot* get_slot_for_item(item* itm);
 
-        int player_id = 0;
+        int owner_id = 0;
 
     public:
 
-        int get_player_id();
+        int get_owner_id();
 
-        void set_player_id(int id);
+        void set_owner_id(int id);
 
         bool give_item(item* itm, char count);
 

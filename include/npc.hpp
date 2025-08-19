@@ -3,6 +3,8 @@
 #include "raylib.h"
 #include "animate.hpp"
 #include "sphysics.h"
+#include "inventory.hpp"
+#include <vector>
 
 class npc;
 
@@ -34,15 +36,73 @@ class npc_object{
         bool does_npc_colide_with(colideBox* other_box);
 };
 
-struct npc_status{
-    bool is_aggro;
+class npc_scripts;
+
+struct npc_stats{
+    int health;
+    int max_health;
+
+    int maximum_damage;
+    int maximum_sheild;
 };
 
-struct npc_cheif_end{
-    bool (* cheif_end_to_exicute)(npc_status* status, npc_object* npc_obj);
-    std::string description;
+class npc{
+    friend class npc_scripts;
+    private:
+        //this is realy cursed
+        void* myself;
+
+        npc_object* npc_data;
+
+        Vector2* pos;
+
+        float* rotation;
+
+        float* scale;
+
+        Vector2* size;
+
+        void (*npc_cheif_end)(void* npc_ptr) = nullptr;
+
+        int id;
+
+        int texture_id;
+
+        Texture2D cache;
+
+        
+
+    public:
+        npc();
+
+        void assign_my_pointer(void* ptr);
+
+        void update_npc();
 };
 
-class cheif_end_manager{
-      
+struct npc_template{
+    std::string name;
+
+    Vector2 size;
+    npc_stats stat;
+
+    int texture_id;
+
+    void (*npc_cheif_end)(void* npc_ptr) = nullptr;
 };
+
+class npc_template_loader{
+    private:
+        std::vector<npc_template> templates;
+
+        std::vector<int> find_duplicate_named_templates(std::string name);
+
+    public:
+
+        bool load_template(npc_template npct, bool remove_duplicate = false);
+
+        npc_template* get_npc_template(std::string name);
+        
+};
+
+

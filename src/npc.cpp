@@ -31,3 +31,58 @@ bool npc_object::does_npc_colide_with(colideBox* other_box){
 
     return result;
 }
+
+npc::npc(){
+    npc_data = new npc_object;
+
+    pos = &npc_data->pos;
+    rotation = &npc_data->rotation;
+    scale = &npc_data->scale;
+    size = &npc_data->size;
+}
+
+std::vector<int> npc_template_loader::find_duplicate_named_templates(std::string name){
+    std::vector<int> rtv;
+
+    for(int i = 0; i < templates.size(); i++){
+        if(templates[i].name == name){
+            rtv.push_back(i);
+        }
+    }
+
+    return rtv;
+}
+
+bool npc_template_loader::load_template(npc_template npct, bool remove_duplicates){
+    
+    std::vector<int> duplicates = find_duplicate_named_templates(npct.name);
+        
+    if(duplicates.size() > 0){
+        if(remove_duplicates == false){
+            return false;
+        }
+
+        else{
+            for(int i = 0; i < duplicates.size(); i++){
+                int j = duplicates[i];
+
+                templates.erase(templates.begin() + j);
+            }
+        }
+    }
+    
+    templates.push_back(npct);
+    
+}
+
+npc_template* npc_template_loader::get_npc_template(std::string name){
+    for(int i = 0; i < templates.size(); i++){
+        if(name == templates[i].name){
+            return &templates[i];
+        }
+    }
+
+    return nullptr;
+}
+
+

@@ -56,12 +56,12 @@ bool inventory::does_have_item(item* itm, char count){
     return false;
 }
 
-int inventory::get_player_id(){
-    return player_id;
+int inventory::get_owner_id(){
+    return owner_id;
 }
 
-void inventory::set_player_id(int id){
-    player_id = id;
+void inventory::set_owner_id(int id){
+    owner_id = id;
 }
 
 bool inventory::give_item(item* itm, char count){
@@ -84,11 +84,11 @@ bool inventory::give_item(item* itm, char count){
 
     add_item_slot->item_i = *itm;
 
-    if(network_manager.is_host() == true && player_id != player_manager.host_id){
-        std::cout << "player id is: " << std::to_string(player_id) << std::endl;
+    if(network_manager.is_host() == true && owner_id != player_manager.host_id){
+        std::cout << "owner id is: " << std::to_string(owner_id) << std::endl;
 
 
-        server_utls::give_player_item(network_manager.server_obj.get_peer_by_player_id(player_id), item_manager.get_item_name_by_id(itm->item_id), count);
+        server_utls::give_player_item(network_manager.server_obj.get_peer_by_player_id(owner_id), item_manager.get_item_name_by_id(itm->item_id), count);
 
     }
 

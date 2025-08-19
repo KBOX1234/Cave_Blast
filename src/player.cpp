@@ -47,7 +47,7 @@ void player::update_colide_box(){
 void player::set_id(int id2) {
     id = id2;
 
-    inv.set_player_id(id2);
+    inv.set_owner_id(id2);
 }
 
 void player::set_name(std::string name2) {
