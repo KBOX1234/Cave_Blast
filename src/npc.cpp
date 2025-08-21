@@ -1,4 +1,5 @@
 #include "npc.hpp"
+#include "texture_master.hpp"
 
 npc_object::npc_object(){
     animation_manager.link_ams_linker(&amsl);
@@ -40,6 +41,24 @@ npc::npc(){
     scale = &npc_data->scale;
     size = &npc_data->size;
 }
+
+void npc::draw(){
+    
+    if(texture_cache == nullptr){
+        texture_cache = texture_manager.grab_texture_pointer(texture_id);
+
+        if(texture_cache == nullptr || pos == nullptr || rotation ==  nullptr || scale == nullptr) return;
+    }
+
+    DrawTexture(*texture_cache, *pos, *rotation, *scale, WHITE);
+    
+}
+
+void npc::assign_my_pointer(void* ptr){
+    myself = ptr;
+}
+
+
 
 std::vector<int> npc_template_loader::find_duplicate_named_templates(std::string name){
     std::vector<int> rtv;

@@ -68,16 +68,14 @@ class npc{
 
         int texture_id;
 
-        Texture2D cache;
-
-        
+        Texture2D* cache;
 
     public:
         npc();
 
         void assign_my_pointer(void* ptr);
 
-        void update_npc();
+        void draw();
 };
 
 struct npc_template{
