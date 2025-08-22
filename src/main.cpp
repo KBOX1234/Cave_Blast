@@ -74,6 +74,9 @@ partical_system partical_manager;
 animation_master animation_manager;
 #include "io.hpp"
 save_master save_manager;
+#include "npc.hpp"
+npc_template_loader npc_template_manager;
+npc_master npc_manager;
 
 
 
@@ -150,6 +153,7 @@ int main(int argc, char* argv[]) {
         if (delta_time_master.can_game_continue() == true) {
             texture_manager.update();
             network_manager.update();
+            npc_manager.update_npcs();
 
             if (player_manager.get_host() != nullptr) {
                 player_manager.update_predicted_player();

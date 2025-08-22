@@ -7,6 +7,8 @@
 #include "lighting.hpp"
 #include "partical.hpp"
 #include "../include/animate.hpp"
+#include "npc.hpp"
+
 render::render() {
     camera.target = {1, 1};
 }
@@ -154,6 +156,8 @@ void render::update() {
     animation_manager.update_all();
 
     player_manager.draw_player(player_manager.myself);
+
+    npc_manager.draw_npcs();
 
     render_lights();
     

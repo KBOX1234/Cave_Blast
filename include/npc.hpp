@@ -44,10 +44,17 @@ struct npc_stats{
 
     int maximum_damage;
     int maximum_sheild;
+
+    float speed;
+
+
 };
+
+class npc_master;
 
 class npc{
     friend class npc_scripts;
+    friend class npc_master;
     private:
         //this is realy cursed
         void* myself;
@@ -67,6 +74,8 @@ class npc{
         int id;
 
         int texture_id;
+
+        npc_stats stat;
 
         Texture2D* cache;
 
@@ -103,4 +112,24 @@ class npc_template_loader{
         
 };
 
+extern npc_template_loader npc_template_manager;
 
+class render;
+
+class npc_master {
+    friend class render;
+    private:
+        std::vector<npc*> npcs;
+
+        void draw_npcs();
+
+    public:
+
+        void update_npcs();
+
+        int new_npc(std::string npc_type, Vector2 pos);
+
+        bool remove_npc(int id);
+};
+
+extern npc_master npc_manager;

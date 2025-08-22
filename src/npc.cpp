@@ -91,6 +91,8 @@ bool npc_template_loader::load_template(npc_template npct, bool remove_duplicate
     }
     
     templates.push_back(npct);
+
+    return true;
     
 }
 
