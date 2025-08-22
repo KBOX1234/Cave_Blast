@@ -44,13 +44,13 @@ npc::npc(){
 
 void npc::draw(){
     
-    if(texture_cache == nullptr){
-        texture_cache = texture_manager.grab_texture_pointer(texture_id);
-
-        if(texture_cache == nullptr || pos == nullptr || rotation ==  nullptr || scale == nullptr) return;
+    if(cache == nullptr){
+        cache = texture_manager.grab_texture_pointer(texture_id);
     }
 
-    DrawTexture(*texture_cache, *pos, *rotation, *scale, WHITE);
+    if(cache == nullptr || pos == nullptr || rotation ==  nullptr || scale == nullptr) return;
+
+    DrawTextureEx(*cache, *pos, *rotation, *scale, WHITE);
     
 }
 
