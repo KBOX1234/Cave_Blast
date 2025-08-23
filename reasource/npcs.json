@@ -1,0 +1,15 @@
+[
+    {
+        "name":"test",
+        "size" : {
+            "x": 16,
+            "y": 16
+        },
+        "max_health":100,
+        "damage_output": 2,
+        "max_block": 2,
+        "speed": 0.5,
+        "target_player": true,
+        "texture" : "reasource/test/jr.png"
+    }
+]

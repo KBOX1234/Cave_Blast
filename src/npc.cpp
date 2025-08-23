@@ -1,6 +1,8 @@
 #include "npc.hpp"
 #include "texture_master.hpp"
-
+#include "json.hpp"
+#include "io.hpp"
+using json = nlohmann::json;
 npc_object::npc_object(){
     animation_manager.link_ams_linker(&amsl);
     animation_manager.link_amt_linker(&amtl);
@@ -46,11 +48,18 @@ void npc::draw(){
     
     if(cache == nullptr){
         cache = texture_manager.grab_texture_pointer(texture_id);
+
+        if(cache == nullptr){
+           // printf("NULLLLLLLLL\n");
+        }
     }
 
-    if(cache == nullptr || pos == nullptr || rotation ==  nullptr || scale == nullptr) return;
+    if(cache != nullptr && pos != nullptr && rotation !=  nullptr && scale != nullptr){
+    
+        //printf("debug:\npos = {%f, %f}\nrotation = %f\nscale = %f\n", pos->x, pos->y, *rotation, *scale);
 
-    DrawTextureEx(*cache, *pos, *rotation, *scale, WHITE);
+        DrawTextureEx(*cache, *pos, *rotation, *scale, WHITE);
+    }
     
 }
 
@@ -106,4 +115,36 @@ npc_template* npc_template_loader::get_npc_template(std::string name){
     return nullptr;
 }
 
+bool npc_template_loader::load_templates_from_json(std::string fname){
+    json j_list = json::parse(easy_file_ops::load_text_file(fname));
 
+    for(int i = 0; i < j_list.size(); i++){
+        json j_object = j_list[i];
+
+        npc_template nt;
+
+        nt.name = j_object.value("name", "no_name");
+        Vector2 size;
+
+        if(j_object.contains("size")){
+            size.x = j_object["size"]["x"];
+            size.y = j_object["size"]["y"];
+        }
+        else{
+            size = {0, 0};
+        }
+
+        nt.stat.max_health = j_object.value("max_health", 1);
+        nt.stat.max_damage = j_object.value("damage_output", 1);
+        nt.stat.max_block = j_object.value("max_block", 1);
+        nt.stat.speed = j_object.value("speed", 0);
+        nt.stat.target_player = j_object.value("target_player", false);
+
+
+        nt.texture_id = texture_manager.add_texture(j_object.value("texture", " "));
+
+        load_template(nt, true);
+    }
+
+    return true;
+}

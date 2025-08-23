@@ -36,7 +36,11 @@ int npc_master::new_npc(std::string npc_type, Vector2 pos) {
 
     new_npc->id = random_num.get_random_int();
 
+    //new_npc->cache = texture_manager.grab_texture_pointer(nt->texture_id);
+    new_npc->cache = nullptr;
     npcs.push_back(new_npc);
+
+    
 
     return new_npc->id;
 

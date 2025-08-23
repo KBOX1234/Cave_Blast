@@ -137,6 +137,8 @@ int main(int argc, char* argv[]) {
 
     partical_manager.init();
 
+    npc_template_manager.load_templates_from_json("reasource/npcs.json");
+
     SetTraceLogLevel(LOG_ERROR);
 
 
@@ -175,7 +177,7 @@ int main(int argc, char* argv[]) {
         }
 
         if(IsKeyPressed(KEY_V)){
-            save_manager.save_instance();
+            npc_manager.new_npc("test", {0, 0});
         }
 
 

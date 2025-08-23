@@ -42,11 +42,11 @@ struct npc_stats{
     int health;
     int max_health;
 
-    int maximum_damage;
-    int maximum_sheild;
+    int max_damage;
+    int max_block;
 
     float speed;
-
+    bool target_player;
 
 };
 
@@ -109,6 +109,8 @@ class npc_template_loader{
         bool load_template(npc_template npct, bool remove_duplicate = false);
 
         npc_template* get_npc_template(std::string name);
+
+        bool load_templates_from_json(std::string path);
         
 };
 
