@@ -23,16 +23,10 @@ npc_object::npc_object(){
     
 }
 
-npc_object::~npc_object(){
-    delete amsl;
-    delete amtl;
-}
+
 
 npc::~npc(){
-    delete pos;
-    delete rotation;
-    delete scale;
-    delete size;
+    delete npc_data;
 }
 
 void npc_object::update_colide_box(){
@@ -59,6 +53,9 @@ npc::npc(){
     rotation = &npc_data->rotation;
     scale = &npc_data->scale;
     size = &npc_data->size;
+
+    amsl = &npc_data->amsl;
+    amtl = &npc_data->amtl;
 }
 
 void npc::draw(){
@@ -164,4 +161,12 @@ bool npc_template_loader::load_templates_from_json(std::string fname){
     }
 
     return true;
+}
+
+void npc_template_loader::assign_func_to_npc(void (*func)(void* npc_ptr), std::string name){
+    for(int i = 0; i < templates.size(); i++){
+        if(templates[i].name == name){
+            templates[i].npc_cheif_end = func;
+        }
+    }
 }

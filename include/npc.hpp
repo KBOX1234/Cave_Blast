@@ -7,7 +7,7 @@
 #include <vector>
 
 class npc;
-
+class npc_scripts;
 //npc object is the shell of an npc which defines the basic data needed to represent it
 class npc_object{
   friend class npc;
@@ -25,18 +25,18 @@ class npc_object{
 
     public:
 
-        animated_sprite_linker* amsl;
+        animated_sprite_linker amsl;
 
-        animated_transform_linker* amtl;
+        animated_transform_linker amtl;
 
         npc_object();
-        ~npc_object();
+        
         void update_colide_box();
 
         bool does_npc_colide_with(colideBox* other_box);
 };
 
-class npc_scripts;
+
 
 struct npc_stats{
     int health;
@@ -77,6 +77,10 @@ class npc{
 
         npc_stats stat;
 
+        animated_sprite_linker* amsl;
+
+        animated_transform_linker* amtl;
+
         Texture2D* cache;
 
     public:
@@ -96,6 +100,7 @@ struct npc_template{
 
     int texture_id;
 
+    //npc_ptr is the npc object
     void (*npc_cheif_end)(void* npc_ptr) = nullptr;
 };
 
@@ -113,7 +118,7 @@ class npc_template_loader{
 
         bool load_templates_from_json(std::string path);
 
-        
+        void assign_func_to_npc(void (*func)(void* npc_ptr), std::string name);
        
 };
 

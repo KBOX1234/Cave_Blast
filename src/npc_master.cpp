@@ -7,7 +7,7 @@ void npc_master::update_npcs() {
             npcs[i]->npc_data->update_colide_box();
         }
         if (npcs[i]->npc_cheif_end != nullptr) {
-            npcs[i]->npc_cheif_end((void*)npcs[i]->npc_data);
+            npcs[i]->npc_cheif_end((void*)npcs[i]);
         }
 
     }

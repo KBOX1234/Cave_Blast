@@ -77,7 +77,7 @@ save_master save_manager;
 #include "npc.hpp"
 npc_template_loader npc_template_manager;
 npc_master npc_manager;
-
+#include "npcs.hpp"
 
 
 int main(int argc, char* argv[]) {
@@ -138,6 +138,8 @@ int main(int argc, char* argv[]) {
     partical_manager.init();
 
     npc_template_manager.load_templates_from_json("reasource/npcs.json");
+
+    npc_template_manager.assign_func_to_npc(npc_scripts::test, "test");
 
     SetTraceLogLevel(LOG_ERROR);
 
