@@ -4,8 +4,12 @@
 #include "io.hpp"
 using json = nlohmann::json;
 npc_object::npc_object(){
-    animation_manager.link_ams_linker(&amsl);
-    animation_manager.link_amt_linker(&amtl);
+
+    animated_sprite_linker* amsl = new animated_sprite_linker;
+    animated_transform_linker* amtl = new animated_transform_linker;
+
+    animation_manager.link_ams_linker(amsl);
+    animation_manager.link_amt_linker(amtl);
 
     pos = {0, 0};
 
@@ -13,9 +17,22 @@ npc_object::npc_object(){
 
     rotation = 0;
 
-    amtl.link_pointers(&scale, &rotation, &pos);
+    amtl->link_pointers(&scale, &rotation, &pos);
 
-    amsl.set_pos(&pos);
+    amsl->set_pos(&pos);
+    
+}
+
+npc_object::~npc_object(){
+    delete amsl;
+    delete amtl;
+}
+
+npc::~npc(){
+    delete pos;
+    delete rotation;
+    delete scale;
+    delete size;
 }
 
 void npc_object::update_colide_box(){

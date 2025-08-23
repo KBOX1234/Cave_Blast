@@ -25,12 +25,12 @@ class npc_object{
 
     public:
 
-        animated_sprite_linker amsl;
+        animated_sprite_linker* amsl;
 
-        animated_transform_linker amtl;
+        animated_transform_linker* amtl;
 
         npc_object();
-
+        ~npc_object();
         void update_colide_box();
 
         bool does_npc_colide_with(colideBox* other_box);
@@ -82,6 +82,7 @@ class npc{
     public:
         npc();
 
+        ~npc();
         void assign_my_pointer(void* ptr);
 
         void draw();
@@ -111,7 +112,9 @@ class npc_template_loader{
         npc_template* get_npc_template(std::string name);
 
         bool load_templates_from_json(std::string path);
+
         
+       
 };
 
 extern npc_template_loader npc_template_manager;
