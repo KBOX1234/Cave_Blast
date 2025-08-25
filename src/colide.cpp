@@ -64,7 +64,7 @@ bool colide::check_player(player* p){
 
                     p->move_player();
 
-                    std::cout << "colide\n";
+                    //std::cout << "colide\n";
 
                     //DrawRectangleLines(pointer_p.x, pointer_p.y, BLOCK_SIZE, BLOCK_SIZE, RED);
                 }

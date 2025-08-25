@@ -132,6 +132,8 @@ npc_template* npc_template_loader::get_npc_template(std::string name){
 bool npc_template_loader::load_templates_from_json(std::string fname){
     json j_list = json::parse(easy_file_ops::load_text_file(fname));
 
+    int count = 0;
+
     for(int i = 0; i < j_list.size(); i++){
         json j_object = j_list[i];
 
@@ -158,7 +160,11 @@ bool npc_template_loader::load_templates_from_json(std::string fname){
         nt.texture_id = texture_manager.add_texture(j_object.value("texture", " "));
 
         load_template(nt, true);
+
+        count++;
     }
+
+    std::cout << "(NPC_TEMPLATE_LOADER): Loaded " << count << " templates\n";
 
     return true;
 }

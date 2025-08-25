@@ -46,7 +46,7 @@ void client_utls::move_myself(float angle, Vector2 pos, ENetPeer* srv_r) {
     char* buff = net_utills::convert_to_buffer(p);
 
     if (buff == nullptr) {
-        std::cout << "\nissue packing packet\n";
+        std::cout << "(CLIENT): Issue packing packet\n";
         return;
     }
 
@@ -73,7 +73,7 @@ void client_utls::player_creation_request(std::string name, ENetPeer* srv_r) {
     char* buff = net_utills::convert_to_buffer(p);
 
     if (buff == nullptr) {
-        std::cout << "\nissue packing packet\n";
+        std::cout << "(CLIENT): Issue packing packet\n";
         return;
     }
 

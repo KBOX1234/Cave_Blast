@@ -6,7 +6,7 @@
 #include "lighting.hpp"
 
 void server::handle_connect(ENetEvent *event) {
-    printf("A new client connected from %x:%u.\n",
+    printf("(SERVER): A new client connected from %x:%u.\n",
     event->peer->address.host,
     event->peer->address.port);
 
@@ -71,7 +71,7 @@ void server::handle_disconnect(ENetEvent *event) {
 
     memcpy(&id, event->peer->data, sizeof(int));
 
-    std::cout <<  "client disconnected: "<< std::to_string(id) << std::endl;
+    std::cout <<  "(SERVER): Client disconnected: "<< std::to_string(id) << std::endl;
 
     light_manager.remove_light(player_manager.fetch_player_data(id)->get_light_index());
 
@@ -151,7 +151,7 @@ void server::start_server(const std::string ip, int port2){
             std::exit(EXIT_FAILURE);
         }
 
-        std::cout << "Server listening on port: " << std::to_string(address.port) << std::endl;
+
 
         svr.Post("/chunk", [](const httplib::Request& req, httplib::Response& res) {
 
@@ -186,7 +186,7 @@ void server::start_server(const std::string ip, int port2){
 
         });
 
-        std::cout << "API server at http://localhost:" << std::to_string(port) << std::endl;
+
         std::thread server_thread(&server::start_api, this);
         server_thread.detach();
 }
@@ -232,7 +232,7 @@ void server::broadcast_disconnect(ENetEvent* event){
         int in;
         memcpy(&in, clients[i]->data, sizeof(int));
 
-        std::cout << "player ids to send: " << std::to_string(in) << std::endl;
+        //std::cout << "player ids to send: " << std::to_string(in) << std::endl;
     }
 }
 

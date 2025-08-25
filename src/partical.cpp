@@ -76,6 +76,8 @@ void partical_system::load_partical_presets_from_json_file(std::string path){
         std::cerr << "Failed to open " << path << std::endl;
     }
 
+    int count = 0;
+
     for(auto& json_item : j){
         partical_preset pp;
 
@@ -105,7 +107,11 @@ void partical_system::load_partical_presets_from_json_file(std::string path){
         pp.tint = tint;
 
         presets.push_back(pp);
+
+        count++;
     }
+
+    std::cout << "(PARTICAL_MANAGER): Loaded " << count << "partical effects\n";
 
 }
 

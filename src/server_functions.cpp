@@ -151,7 +151,7 @@ void server_utls::send_player_data(ENetEvent *event, packet *p) {
     int* id = (int*)p->data;
 
     if (player_manager.fetch_player_data(*id) == nullptr) {
-        std::cout << "id: " << std::to_string(*id) << "does not exist\n";
+        std::cout << "(SERVER): ID: " << std::to_string(*id) << "does not exist\n";
     }
 
     else {
@@ -295,7 +295,7 @@ void server_utls::give_player_item(ENetPeer* peer, std::string item, char count)
     char* buffer = net_utills::convert_to_buffer(&p);
 
     if(peer == nullptr){
-        std::cout << "[cannot give player item\nerror: peer is NULL]";
+        //std::cout << "[cannot give player item\nerror: peer is NULL]";
         return;
     }
 

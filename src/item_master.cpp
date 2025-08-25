@@ -20,8 +20,6 @@ int item_master::add_item(std::unique_ptr<item> i) {
 
     items.push_back(std::move(i));
 
-    //std::cout << "from add_item() -> Item id is: " << std::to_string(i->item_id) << std::endl;
-
     return static_cast<int>(items.size() - 1);
 }
 
@@ -37,6 +35,7 @@ item* item_master::fetch_item(const std::string& name) {
 
 int item_master::load_items_from_json(json j) {
     int count = 0;
+
     for (auto& json_item : j) {
         auto new_item = std::make_unique<item>();
 
@@ -72,27 +71,29 @@ int item_master::load_items_from_json(json j) {
                 new_block.item_id = new_item->item_id;
 
                 if (json_item.contains("block_texture_path")) {
-                    std::cout << "\nblock texture: " << json_item["block_texture_path"].get<std::string>() << std::endl;
+
                     new_block.texture_id = texture_manager.add_texture(json_item["block_texture_path"]);
-                    std::cout << "\nblock texture id: " << new_block.texture_id << std::endl;
-                    std::cout << "\nblock type: " << new_block.type << std::endl;
+
                 } else {
                     new_block.texture_id = texture_manager.default_texture();
                 }
-                std::cout << "block item id is: " + std::to_string(new_block.item_id) << "\n item id is: " << std::to_string(new_item->item_id) << std::endl;
+
                 block_manager.add_block_type(new_block);
                 new_item->block_type_ptr = block_manager.fetch_block_type(new_block.type);
             }
 
-            std::cout << "item id: " << std::to_string(new_item->item_id) << "\n";
+
 
             add_item(std::move(new_item));
 
             count++;
         } else {
-            std::cout << "Item name not found\n";
+
         }
     }
+
+    std::cout << "(ITEM_MANAGER): Loaded " << std::to_string(count) << " items\n";
+
     return count;
 }
 

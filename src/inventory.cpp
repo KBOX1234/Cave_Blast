@@ -69,7 +69,7 @@ bool inventory::give_item(item* itm, char count){
     //std::cout << "gave item: " + itm->name << std::endl;
 
     if (itm == nullptr) {
-        std::cout << "null item\n";
+        std::cout << "(INVENTORY): Failed to give item\n";
 
         return false;
     }
@@ -85,7 +85,7 @@ bool inventory::give_item(item* itm, char count){
     add_item_slot->item_i = *itm;
 
     if(network_manager.is_host() == true && owner_id != player_manager.host_id){
-        std::cout << "owner id is: " << std::to_string(owner_id) << std::endl;
+        //std::cout << "owner id is: " << std::to_string(owner_id) << std::endl;
 
 
         server_utls::give_player_item(network_manager.server_obj.get_peer_by_player_id(owner_id), item_manager.get_item_name_by_id(itm->item_id), count);

@@ -18,7 +18,7 @@ int texture_master::add_texture(std::string path, bool locked) {
 
     auto now = std::chrono::system_clock::now();
     tex->expiration = std::chrono::system_clock::to_time_t(now + std::chrono::minutes(1));
-    std::cout << "Added texture " << std::to_string(id) << " to the texture archive" << std::endl << "index is: " + std::to_string(textures.size());
+
     textures.push_back(std::move(tex));
 
     return id;
@@ -67,6 +67,8 @@ int texture_master::set_default_texture(std::string path) {
     default_texture_id = add_texture(path, true);
 
     default_texture_T = LoadTexture(path.c_str());
+
+    std::cout << "(TEXTURE_MANAGER): Set default texture: " + path + "\n";
 
     return default_texture_id;
 }

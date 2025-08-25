@@ -40,6 +40,7 @@ void item_convert_master::init() {
         std::cerr << "Expected JSON array at top level\n";
         std::exit(EXIT_FAILURE);
     }
+    int count = 0;
 
     for (int i = 0; i < j.size(); i++) {
         swap_ic ic;
@@ -54,5 +55,8 @@ void item_convert_master::init() {
         //std::cout << j[i]["table"] << std::endl;
 
         swap_ic_table.push_back(ic);
+        count++;
     }
+
+    std::cout << "(CONVERT): Loaded " << count << " convert recipies\n";
 }

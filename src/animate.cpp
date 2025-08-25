@@ -46,7 +46,7 @@ void animated_sprite_linker::play_animation(std::string name, bool loop){
     current_animation_index = find_animation_index_by_name(name);
 
     if(current_animation_index == -1){
-        std::cout << "could not find animation\n";
+        std::cout << "(ANIMATED_SPRITE_LINKER): Could not find animation\n";
         return;
     }
 
@@ -129,17 +129,6 @@ void animated_transform_linker::link_pointers(float* scaleS, float* rotationR, V
 
     pos = posP;
 
-    if(scale != nullptr){
-        std::cout << "scale is set\n";
-    }
-
-    if(rotation != nullptr){
-        std::cout << "rotation is set\n";
-    }
-
-    if(pos != nullptr){
-        std::cout << "pos is set\n";
-    }
 }
 
 void animated_transform_linker::update_animation(){
@@ -235,7 +224,7 @@ void animated_transform_linker::load_animation_from_json(std::string jsonJ){
     amt.rotation2 = j.value("rotation2", 0);
 
     if(j.contains("pos2") == false){
-        std::cout << "animation does not contain pos2\n";
+        std::cout << "(ANIMATED_TRANSFORM_LINKER): Animation does not contain pos2\n";
         return;
     }
 
@@ -254,7 +243,7 @@ void animated_transform_linker::play_animation(std::string name){
     int res = find_animation_index_by_name(name);
 
     if(res == -1) {
-        std::cout << "animation not found\n";
+        std::cout << "(ANIMATED_TRANSFORM_LINKER): Animation not found\n";
         return;
     }
 

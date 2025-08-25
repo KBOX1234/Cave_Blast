@@ -11,8 +11,8 @@
 
 #include "animate.hpp"
 
-#define PLAYER_WIDTH 32
-#define PLAYER_HEIGHT 64
+#define PLAYER_WIDTH 16
+#define PLAYER_HEIGHT 32
 
 struct stat_s {
     int health;

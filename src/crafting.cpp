@@ -1,5 +1,6 @@
 #include "../include/crafting.hpp"
 #include "../include/networking.hpp"
+#include <string>
 
 void crafting_master::init() {
     std::ifstream file(CRAFT_RECIPE_JSON_PATH);
@@ -15,6 +16,8 @@ void crafting_master::init() {
         std::cerr << "Expected JSON array at top level\n";
         std::exit(EXIT_FAILURE);
     }
+
+    int count = 0;
 
     for (auto& json_item : j) {
         craft_mix cm;
@@ -42,7 +45,11 @@ void crafting_master::init() {
 
             crafting_recipes.push_back(cm);
         }
+
+        count++;
     }
+
+    std::cout << "(CRAFTING_MANAGER): Loaded " << std::to_string(count) << " recipies\n";
 }
 
 bool crafting_master::craft_item(int craft_index, player *pl) {

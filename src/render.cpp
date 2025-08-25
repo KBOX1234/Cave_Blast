@@ -93,7 +93,7 @@ void render::draw_chunk(Vector2 chnk_pos) {
         Texture2D* t = texture_manager.grab_texture_pointer(texture_id);
 
         if (t  == nullptr) {
-            std::cout << "texture is invalid" << std::endl;
+            std::cout << "(RENDER): Texture is null, skipping" << std::endl;
         }
         float texture_scale = BLOCK_SIZE / (float)t->width;
         //std::cout << "\ntexture scale: " << std::to_string(texture_scale) + ", Height is: " << std::to_string(t->height) << ", BLOCK_SIZE is: " << std::to_string(BLOCK_SIZE)<< std::endl;

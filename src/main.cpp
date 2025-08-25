@@ -109,7 +109,14 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    std::cout << "Port: " << port << "\nServer: " << server << "\nIP: " << ip << std::endl;
+    //std::cout << "Port: " << port << "\nServer: " << server << "\nIP: " << ip << std::endl;
+
+    std::cout << "(NETWORK): Port is set to: " << port << std::endl;
+    std::cout << "(NETWORK): IP address is: " << ip << std::endl;
+
+    if (server == true) {
+        std::cout << "(SERVER): Server started on: " << ip << ":" << port << std::endl;
+    }
 
     network_manager.start(ip, port, server);
 
@@ -118,11 +125,13 @@ int main(int argc, char* argv[]) {
         client_utls::player_creation_request(name, network_manager.get_server());
     }
 
+    SetTraceLogLevel(LOG_ERROR);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGTH, "Cave Blast");
     rlImGuiSetup(true);
 
     texture_manager.set_default_texture("reasource/gfx/default.png");
+
     item_manager.load_item_declaration_file("reasource/items.json");
 
     block bl;
@@ -141,7 +150,7 @@ int main(int argc, char* argv[]) {
 
     npc_template_manager.assign_func_to_npc(npc_scripts::test, "test");
 
-    SetTraceLogLevel(LOG_ERROR);
+
 
 
 

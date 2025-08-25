@@ -58,7 +58,7 @@ void client::update() {
             } // End of scope for RECEIVE case
 
             case ENET_EVENT_TYPE_DISCONNECT:
-                std::cout << "Server Disconnected\n";
+                std::cout << "(CLIENT): Server Disconnected\n";
                 exit(-2);
                 break;
         }
@@ -105,17 +105,17 @@ void client::start_client(std::string ip, int port){
             std::cerr << "Error connecting to server" << std::endl;
             std::exit(EXIT_FAILURE);
         }
-        std::cout << "connecting to server port: " << std::to_string(address.port) << std::endl;
+        std::cout << "(CLIENT): Connecting to server port: " << std::to_string(address.port) << std::endl;
 
         ENetEvent event;
 
         if (enet_host_service(myself, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
-            std::cout << "Connection established" << std::endl;
+            std::cout << "(CLIENT): Connection established" << std::endl;
             //move_myself({10, 3});
         }
 
         else{
-            std::cout << "could not connect\n";
+            std::cout << "(CLIENT): Could not connect\n";
             std::exit(EXIT_FAILURE);
         }
 }
@@ -151,7 +151,7 @@ void client::handle_player_get_response(ENetEvent* event, packet* p){
 
         }
         else {
-            std::cout << "player id: " + std::to_string(spl.id) + " does not exist\n";
+            std::cerr << "player id: " + std::to_string(spl.id) + " does not exist\n";
         }
     }
 }
@@ -159,7 +159,7 @@ void client::handle_player_get_response(ENetEvent* event, packet* p){
 void client::handle_player_creation_response(ENetEvent* event, packet* p){
     serialized_player splr;
 
-    std::cout << "got player creation response from server.\nplayer id: " << std::to_string(splr.id) << std::endl;
+    std::cout << "(CLIENT): New player\n(CLIENT): Player id: " << std::to_string(splr.id) << std::endl;
 
     memcpy(&splr, p->data, sizeof(serialized_player));
 
@@ -168,7 +168,7 @@ void client::handle_player_creation_response(ENetEvent* event, packet* p){
     player_manager.host_id = splr.id;
 
     player_manager.myself->set_id(splr.id);
-    std::cout << "my id is: " << std::to_string(splr.id) << std::endl;
+    //std::cout << "my id is: " << std::to_string(splr.id) << std::endl;
 
     if (player_manager.re_sync_timer < 2 * GetFPS()) {
         player_manager.re_sync_timer ++;

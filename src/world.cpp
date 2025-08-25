@@ -14,7 +14,7 @@ int world_class::look_up_chunk_index(Vector2 coord){
     int y = (int)round(coord.y);
 
     if (x < -2147483648 || y < -2147483648) {
-        std::cout << "intager underflow\n";
+        //std::cout << "intager underflow\n";
 
         return -1;
     }
