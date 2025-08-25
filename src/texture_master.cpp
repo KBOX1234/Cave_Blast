@@ -24,11 +24,18 @@ int texture_master::add_texture(std::string path, bool locked) {
     return id;
 }
 
+void SafeUnloadTexture(Texture2D *tex) {
+    if (tex && tex->id != 0) {
+        UnloadTexture(*tex);
+        tex->id = 0; // make sure it stays marked invalid
+    }
+}
 
 Texture2D* texture_master::grab_texture_pointer(int id) {
     for (auto& tex : textures) {
         if (tex->id == id) {
-            if (!tex->loaded) {
+            if (!tex->loaded || tex->texture.id == 0) {
+                std::cout << "HAH! GOT YOU >>>:)))\n";
                 tex->texture = LoadTexture(tex->origin.c_str());
                 tex->loaded = true;
                 tex->expiration = std::chrono::system_clock::to_time_t(
@@ -44,18 +51,18 @@ Texture2D* texture_master::grab_texture_pointer(int id) {
 
 
 void texture_master::update() {
-    /*auto now = std::chrono::system_clock::now();
+    auto now = std::chrono::system_clock::now();
     std::time_t current_time = std::chrono::system_clock::to_time_t(now);
 
     for (auto& tex : textures) {
         if (!tex->locked && tex->loaded && tex->expiration < current_time) {
 
             std::cout << "unloaded texture\n";
-           
-            UnloadTexture(tex->texture);
+
+            SafeUnloadTexture(&tex->texture);
             tex->loaded = false;
         }
-    }*/
+    }
 }
 
 

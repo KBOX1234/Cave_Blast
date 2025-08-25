@@ -143,7 +143,9 @@ void render::update() {
 
     Vector2 offset = {camera.target.x - (GetScreenWidth() / 2), camera.target.y - (GetScreenHeight() / 2)};
 
-    light_map = light_manager.generate_lights(offset, {(float)GetScreenWidth(), (float)GetScreenHeight()});
+    light_manager.generate_lights(offset, {(float)GetScreenWidth(), (float)GetScreenHeight()});
+
+    light_map = light_manager.light_map;
 
     BeginMode2D(camera);
 
@@ -218,6 +220,6 @@ void render::render_lights() {
 
     EndBlendMode();
 
-    UnloadRenderTexture(light_map);
+    //UnloadRenderTexture(light_map);
 }
 

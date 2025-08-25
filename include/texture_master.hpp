@@ -28,7 +28,7 @@ class texture_master{
 
         int default_texture();
 
-        int add_texture(std::string path, bool locked = false);
+        int add_texture(std::string path, bool locked = true);
 
         Texture2D* grab_texture_pointer(int id);
 

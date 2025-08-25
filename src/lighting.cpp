@@ -1,5 +1,6 @@
 #include "../include/lighting.hpp"
 #include <math.h>
+#include <iostream>
 
 
 template<typename T>
@@ -9,11 +10,15 @@ inline T Clamp(T value, T min, T max) {
     else return value;
 }
 
-RenderTexture2D light_master::generate_lights(Vector2 viewport_pos, Vector2 viewport_size){
+void light_master::init() {
+    light_map = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
+}
 
-    RenderTexture2D rnd = LoadRenderTexture((int)viewport_size.x, (int)viewport_size.y);
 
-    BeginTextureMode(rnd);
+void light_master::generate_lights(Vector2 viewport_pos, Vector2 viewport_size){
+    //std::cout << "skibidi\n";
+
+    BeginTextureMode(light_map);
 
     ClearBackground(BLACK);
 
@@ -34,7 +39,6 @@ RenderTexture2D light_master::generate_lights(Vector2 viewport_pos, Vector2 view
     EndBlendMode();
     EndTextureMode();
 
-    return rnd;
 }
 
 int light_master::add_light(Color color, float radius, Vector2 pos, float strength, long frames_till_expire){

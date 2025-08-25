@@ -11,6 +11,7 @@ struct light{
     float strength;
 
     bool skip;
+
 };
 
 class render;
@@ -22,9 +23,12 @@ class light_master{
 
         std::vector<light> lights;
 
-        RenderTexture2D generate_lights(Vector2 viewport_pos, Vector2 viewport_size);
+        RenderTexture2D light_map;
 
-     public:
+        void generate_lights(Vector2 viewport_pos, Vector2 viewport_size);
+
+    public:
+        void init();
 
         int add_light(Color color, float radius, Vector2 pos, float strength, long frames_till_expire);
 

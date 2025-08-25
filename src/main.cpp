@@ -143,6 +143,8 @@ int main(int argc, char* argv[]) {
     bl.state = 0;
     bl.attr = item_manager.fetch_item("air")->block_type_ptr;
 
+    light_manager.init();
+
     player_manager.init();
 
     crafting_manager.init();
