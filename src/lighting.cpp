@@ -18,6 +18,12 @@ void light_master::init() {
 void light_master::generate_lights(Vector2 viewport_pos, Vector2 viewport_size){
     //std::cout << "skibidi\n";
 
+    if (viewport_size.x != light_map.texture.width || viewport_size.y != light_map.texture.height) {
+        UnloadRenderTexture(light_map);
+
+        light_map = LoadRenderTexture(viewport_size.x, viewport_size.y);
+    }
+
     BeginTextureMode(light_map);
 
     ClearBackground(BLACK);

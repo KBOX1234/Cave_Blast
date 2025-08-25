@@ -75,6 +75,8 @@ void render::draw_chunk(Vector2 chnk_pos) {
     const block* render_chnk = world.chunk_buffer(chnk_pos);
     Vector2 pointer = {0, 0};
 
+    if (render_chnk == nullptr) return;
+
     for (int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
 
         if (pointer.x >= CHUNK_SIZE) {
@@ -83,22 +85,24 @@ void render::draw_chunk(Vector2 chnk_pos) {
         }
         pointer.x++;
 
-        if (render_chnk == nullptr) {
-            //std::cout << "somthing went wrong" << std::endl;
-            break;
-        }
+        if (render_chnk[i].attr == nullptr) continue;
 
         int texture_id = render_chnk[i].attr->texture_id;
 
         Texture2D* t = texture_manager.grab_texture_pointer(texture_id);
 
-        if (t  == nullptr) {
-            std::cout << "(RENDER): Texture is null, skipping" << std::endl;
-        }
-        float texture_scale = BLOCK_SIZE / (float)t->width;
-        //std::cout << "\ntexture scale: " << std::to_string(texture_scale) + ", Height is: " << std::to_string(t->height) << ", BLOCK_SIZE is: " << std::to_string(BLOCK_SIZE)<< std::endl;
+        if (t  != nullptr) {
 
-        DrawTextureEx(*t, {(pointer.x + (chnk_pos.x * CHUNK_SIZE))*BLOCK_SIZE, (pointer.y + (chnk_pos.y * CHUNK_SIZE))*BLOCK_SIZE}, 0, texture_scale,  WHITE);
+            if (t->id != 0) {
+                float texture_scale = BLOCK_SIZE / (float)t->width;
+                //std::cout << "\ntexture scale: " << std::to_string(texture_scale) + ", Height is: " << std::to_string(t->height) << ", BLOCK_SIZE is: " << std::to_string(BLOCK_SIZE)<< std::endl;
+
+                DrawTextureEx(*t, {(pointer.x + (chnk_pos.x * CHUNK_SIZE))*BLOCK_SIZE, (pointer.y + (chnk_pos.y * CHUNK_SIZE))*BLOCK_SIZE}, 0, texture_scale,  WHITE);
+            }
+
+        }
+        else std::cout << "(RENDER): Texture is null, skipping" << std::endl;
+
 
     }
 }
@@ -130,7 +134,7 @@ void render::render_players(bool debug) {
         }
 
         else if (debug == true){
-            DrawRectangleLines(player_manager.players[i]->get_pos().x, player_manager.players[i]->get_pos().y, 32, 64, RED);
+            DrawRectangleLines(player_manager.players[i]->get_pos().x, player_manager.players[i]->get_pos().y, PLAYER_WIDTH, PLAYER_HEIGHT, RED);
         }
 
     }
