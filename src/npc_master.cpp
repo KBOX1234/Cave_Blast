@@ -4,8 +4,12 @@
 #include "../include/player.hpp"
 #include "../include/rng.hpp"
 #include "../external/raylib/src/raymath.h"
+#include "../include/networking.hpp"
 
 void npc_master::update_npcs() {
+    if (network_manager.is_host() != true) {
+
+    }
     for (int i = 0; i < npcs.size(); i++) {
         if (npcs[i]->npc_data != nullptr) {
             npcs[i]->npc_data->update_colide_box();
@@ -24,6 +28,12 @@ void npc_master::draw_npcs() {
 }
 
 int npc_master::new_npc(std::string npc_type, Vector2 pos) {
+
+    if (network_manager.is_host() != true) {
+        std::cout << "(NPC_MANAGER) Cannot spawn entity as client!\n";
+        return -1;
+    }
+
     npc_template* nt = npc_template_manager.get_npc_template(npc_type);
 
     npc* new_npc = new npc;
@@ -51,6 +61,9 @@ int npc_master::new_npc(std::string npc_type, Vector2 pos) {
 }
 
 bool npc_master::remove_npc(int id) {
+    if (network_manager.is_host() != true) {
+        std::cout << "(NPC_MANAGER): Cannot remove npc as client!\n";
+    }
     for (int i = 0; i < npcs.size(); i++) {
         if (npcs[i]->id == id) {
             npcs.erase(npcs.begin() + i);

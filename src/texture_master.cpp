@@ -12,7 +12,10 @@ int texture_master::add_texture(std::string path, bool locked) {
     tex->loaded = true;
     tex->locked = locked;
 
+    //std::cout << "(TEXTURE_MANAGER): Loaded texture: " << tex->texture.id << std::endl;
+
     if (tex->texture.id == 0) {
+        std::cout << "(TEXTURE_MANAGER): Failed to load texture: " << path << std::endl;
         return default_texture();
     }
 
@@ -20,6 +23,8 @@ int texture_master::add_texture(std::string path, bool locked) {
     tex->expiration = std::chrono::system_clock::to_time_t(now + std::chrono::minutes(1));
 
     textures.push_back(std::move(tex));
+
+
 
     return id;
 }
