@@ -2,6 +2,7 @@
 #include "world.hpp"
 #include "rng.hpp"
 #include "httplib.h"
+#include "npc.hpp"
 #include "player.hpp"
 
 void client_utls::fetch_player(int id, ENetPeer* srv_r) {
@@ -219,4 +220,16 @@ void client_utls::convert_item(item *itm, item *table) {
 
     delete[] other_b;
     delete[] p.data;
+}
+
+void client_utls::send_npc_list_request(ENetPeer *srv_r) {
+    packet* p = new packet;
+
+    p->type = GET_NPC_LIST;
+    p->size = 0;
+    p->data = nullptr;
+
+    char* buffer = net_utills::convert_to_buffer(p);
+
+    net_utills::send_msg_safe(buffer, net_utills::get_packet_size(p), srv_r, 0);
 }

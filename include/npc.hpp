@@ -7,6 +7,8 @@
 #include <vector>
 #include "player.hpp"
 
+#define SERIALIZED_NPC_TYPE_STR_SIZE 200
+
 class npc;
 class npc_scripts;
 //npc object is the shell of an npc which defines the basic data needed to represent it
@@ -58,6 +60,9 @@ class npc{
     friend class npc_master;
     private:
         //this is realy cursed
+
+        std::string template_name;
+
         void* myself;
 
         Vector2* pos;
@@ -125,6 +130,24 @@ struct npc_template{
     void (*npc_cheif_end)(void* npc_ptr) = nullptr;
 };
 
+
+
+struct serialized_npc {
+    Vector2 pos;
+
+    float rotation;
+
+    float scale;
+
+    Vector2 size;
+
+    npc_stats stat;
+
+    int id;
+
+    char type[SERIALIZED_NPC_TYPE_STR_SIZE];
+};
+
 class npc_template_loader{
     private:
         std::vector<npc_template> templates;
@@ -146,15 +169,25 @@ class npc_template_loader{
 extern npc_template_loader npc_template_manager;
 
 class render;
+class server_utls;
 
 class npc_master {
     friend class render;
+    friend class server_utls;
     private:
         std::vector<npc*> npcs;
 
         void draw_npcs();
 
+        int find_npc_slot_by_id(int id);
+
+        int new_npc_from_serialized_npc(serialized_npc npc_c);
+
     public:
+
+        serialized_npc serialize_npc(npc* npc_c);
+
+        void update_npc_from_serialized_npc(serialized_npc npc_c);
 
         void update_npcs();
 

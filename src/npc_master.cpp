@@ -6,18 +6,117 @@
 #include "../external/raylib/src/raymath.h"
 #include "../include/networking.hpp"
 
+int npc_master::find_npc_slot_by_id(int id) {
+    for (int i = 0; i < npcs.size(); i++) {
+        if (npcs[i]->id == id) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+
+serialized_npc npc_master::serialize_npc(npc *npc_c) {
+    serialized_npc snpc;
+
+    snpc.id = npc_c->id;
+    snpc.pos = *npc_c->pos;
+    snpc.rotation = *npc_c->rotation;
+    snpc.scale = *npc_c->scale;
+    snpc.size = *npc_c->size;
+    snpc.stat = npc_c->stat;
+
+    memset(snpc.type, 0, SERIALIZED_NPC_TYPE_STR_SIZE);
+
+    size_t str_len = npc_c->template_name.size();
+
+    if (str_len >= SERIALIZED_NPC_TYPE_STR_SIZE) {
+        str_len = SERIALIZED_NPC_TYPE_STR_SIZE - 1;
+    }
+
+    memcpy(snpc.type, npc_c->template_name.c_str(), str_len);
+    snpc.type[str_len] = '\0';
+
+    return snpc;
+}
+
+int npc_master::new_npc_from_serialized_npc(serialized_npc npc_c) {
+
+    std::string npc_type = npc_c.type;
+
+
+    npc_template* nt = npc_template_manager.get_npc_template(npc_type);
+
+    npc* new_npc = new npc;
+
+    new_npc->assign_my_pointer((void*)new_npc);
+
+    *new_npc->pos = npc_c.pos;
+
+    *new_npc->size = npc_c.size;
+    new_npc->stat = npc_c.stat;
+    new_npc->texture_id = nt->texture_id;
+
+    new_npc->npc_cheif_end = nt->npc_cheif_end;
+
+    new_npc->id = npc_c.id;
+
+    //new_npc->cache = texture_manager.grab_texture_pointer(nt->texture_id);
+    new_npc->cache = nullptr;
+    npcs.push_back(new_npc);
+
+
+
+    return new_npc->id;
+}
+
+
+void npc_master::update_npc_from_serialized_npc(serialized_npc npc_c) {
+
+    int slot = find_npc_slot_by_id(npc_c.id);
+
+    if (slot == -1) {
+        new_npc_from_serialized_npc(npc_c);
+    }
+
+    else {
+        npc* npc_u = npcs[slot];
+
+
+        npc_u->last_pos = *npc_u->pos;
+
+        *npc_u->pos = npc_c.pos;
+
+        *npc_u->rotation = npc_c.rotation;
+
+        *npc_u->scale = npc_c.scale;
+
+        *npc_u->size = npc_c.size;
+
+        npc_u->stat = npc_c.stat;
+    }
+}
+
+
+
+
 void npc_master::update_npcs() {
     if (network_manager.is_host() != true) {
-
+        if (delta_time_master.can_game_continue()) {
+            client_utls::send_npc_list_request(network_manager.get_server());
+        }
     }
-    for (int i = 0; i < npcs.size(); i++) {
-        if (npcs[i]->npc_data != nullptr) {
-            npcs[i]->npc_data->update_colide_box();
-        }
-        if (npcs[i]->npc_cheif_end != nullptr  && delta_time_master.can_game_continue()) {
-            npcs[i]->npc_cheif_end((void*)npcs[i]);
-        }
+    else {
+        for (int i = 0; i < npcs.size(); i++) {
+            if (npcs[i]->npc_data != nullptr) {
+                npcs[i]->npc_data->update_colide_box();
+            }
+            if (npcs[i]->npc_cheif_end != nullptr  && delta_time_master.can_game_continue()) {
+                npcs[i]->npc_cheif_end((void*)npcs[i]);
+            }
 
+        }
     }
 }
 
@@ -37,6 +136,8 @@ int npc_master::new_npc(std::string npc_type, Vector2 pos) {
     npc_template* nt = npc_template_manager.get_npc_template(npc_type);
 
     npc* new_npc = new npc;
+
+    new_npc->template_name = npc_type;
 
     new_npc->assign_my_pointer((void*)new_npc);
 

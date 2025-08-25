@@ -165,9 +165,9 @@ void render::update() {
 
     npc_manager.draw_npcs();
 
-    render_lights();
-    
     partical_manager.update();
+
+    render_lights();
 
     draw_cursor(input_manager.cursor);
 

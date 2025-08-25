@@ -7,6 +7,8 @@
 
 #include <iostream>
 
+#include "npc.hpp"
+
 
 std::unique_ptr<client> networking_client = nullptr;
 
@@ -51,6 +53,8 @@ void client::update() {
                 if (p->type == GET_ALL_PLAYERS) handle_big_ahh_player_packet_with_all_players_from_the_server_for_which_data_is_comming_from(&event, p);
 
                 if(p->type == GIVE_BLOCK) handel_get_item_from_server(&event, p);
+
+                if (p->type == GET_NPC_LIST) handle_npc_updates(&event, p);
 
 
                 enet_packet_destroy(event.packet);
@@ -251,4 +255,12 @@ void client::handel_get_item_from_server(ENetEvent* client, packet* p){
     item* itm = item_manager.fetch_item(tmp_str);
 
     player_manager.myself->inv.give_item(itm, count);
+}
+
+void client::handle_npc_updates(ENetEvent *event, packet *p) {
+    serialized_npc snpc;
+
+    memcpy(&snpc, p->data, sizeof(serialized_npc));
+
+    npc_manager.update_npc_from_serialized_npc(snpc);
 }

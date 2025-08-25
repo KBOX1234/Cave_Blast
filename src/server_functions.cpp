@@ -8,6 +8,8 @@
 #include "lighting.hpp"
 #include "crafting.hpp"
 #include "item_convert.hpp"
+#include "npc.hpp"
+#include "../external/raylib/src/raymath.h"
 
 void server::add_block_change(block_change blk_chng) {
 
@@ -356,4 +358,34 @@ void server_utls::handle_convert_request(ENetEvent *event, packet *p) {
     item_convert_manager.convert_item(itm, blk, pl);
 
 
+}
+
+#define MAX_SEE_DISTANCE 800
+void server_utls::handle_npc_list_request(ENetEvent *event, packet *p) {
+    player* pl = player_manager.fetch_player_data(*(int*)event->peer->data);
+
+    if (pl == nullptr) return;
+
+    for (int i = 0; i < npc_manager.npcs.size(); i++) {
+        npc* current_npc = npc_manager.npcs[i];
+
+        float distance = Vector2Distance(current_npc->get_pos(), pl->get_pos());
+
+        if (distance < MAX_SEE_DISTANCE) {
+            serialized_npc n = npc_manager.serialize_npc(current_npc);
+
+            packet out;
+
+            out.type = GET_NPC_LIST;
+
+            out.size = sizeof(serialized_npc);
+            out.data = (char*)&n;
+
+            char* buffer = net_utills::convert_to_buffer(&out);
+
+            net_utills::send_msg_safe(buffer, net_utills::get_packet_size(&out), event->peer, 0);
+
+            delete[] buffer;
+        }
+    }
 }

@@ -41,7 +41,8 @@ typedef enum PacketType {
     BREAK_BLOCK,
     GIVE_BLOCK,
     CRAFT_ITEM,
-    CONVERT_ITEM
+    CONVERT_ITEM,
+    GET_NPC_LIST
 } PacketType;
 
 
@@ -96,6 +97,8 @@ class client_utls {
 
         static void convert_item(item* itm, item* table);
 
+        static void send_npc_list_request(ENetPeer* srv_r);
+
 };
 
 class server_utls {
@@ -121,6 +124,8 @@ class server_utls {
         static void handle_craft_request(ENetEvent* event, packet* p);
 
         static void handle_convert_request(ENetEvent* event, packet* p);
+
+        static void handle_npc_list_request(ENetEvent* event, packet* p);
 
 };
 
@@ -172,6 +177,7 @@ class server : public server_utls{
         void broadcast_disconnect(ENetEvent *event);
 
         bool async_chunk_fetch_on = false;
+
 
     public:
 
@@ -235,6 +241,9 @@ class client : public client_utls{
         void handle_big_ahh_player_packet_with_all_players_from_the_server_for_which_data_is_comming_from(ENetEvent* event, packet* p);
 
         void handel_get_item_from_server(ENetEvent* event, packet* p);
+
+        void handle_npc_updates(ENetEvent* event, packet* p);
+
 };
 
 class network : public net_utills {

@@ -56,6 +56,9 @@ void server::handle_request(ENetEvent* event) {
         case CONVERT_ITEM:
             server_utls::handle_convert_request(event, p);
             break;
+
+        case GET_NPC_LIST:
+            server_utls::handle_npc_list_request(event, p);
         default:
             std::cerr << "Unknown packet type: " << static_cast<int>(p->type) << std::endl;
             break;
