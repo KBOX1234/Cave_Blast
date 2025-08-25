@@ -72,7 +72,7 @@ void npc::draw(){
     
         //printf("debug:\npos = {%f, %f}\nrotation = %f\nscale = %f\n", pos->x, pos->y, *rotation, *scale);
 
-        DrawTextureEx(*cache, *pos, *rotation, *scale, WHITE);
+        DrawTextureEx(*cache, *pos, 0, *scale, WHITE);
     }
     
 }
