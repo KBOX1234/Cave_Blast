@@ -11,6 +11,7 @@ struct texture_archive{
     std::string origin;
     bool loaded;
     bool locked;
+    bool needs_reload;
 
     std::time_t expiration;
 };
@@ -37,6 +38,8 @@ class texture_master{
         void update();
 
         void clean_up();
+
+        void print_all_ids();
 };
 
 extern texture_master texture_manager;

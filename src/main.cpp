@@ -167,11 +167,12 @@ int main(int argc, char* argv[]) {
 
 
         delta_time_master.update();
+        texture_manager.update();
 
         //everything that needs delta time:
 
         if (delta_time_master.can_game_continue() == true) {
-            texture_manager.update();
+
             network_manager.update();
             npc_manager.update_npcs();
 
@@ -195,7 +196,9 @@ int main(int argc, char* argv[]) {
         }
 
         if(IsKeyPressed(KEY_V)){
-            npc_manager.new_npc("test", {64, 64});
+            //npc_manager.new_npc("test", {64, 64});
+
+            texture_manager.print_all_ids();
         }
 
 
