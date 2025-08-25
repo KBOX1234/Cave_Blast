@@ -38,6 +38,7 @@ class player_master;
 class colide;
 class server_utls;
 class save_master;
+class npc;
 
 class player {
     friend class player_master;
@@ -45,6 +46,7 @@ class player {
     friend class colide;
     friend class server_utls;
     friend class save_master;
+    friend class npc;
     private:
         Vector2* pos;
 
@@ -153,6 +155,7 @@ class player_master {
     friend class server_utls;
     friend class save_master;
     friend class colide;
+    friend class npc;
     private:
         std::vector<player*> players;
 

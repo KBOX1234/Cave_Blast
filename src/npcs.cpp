@@ -7,7 +7,7 @@ void npc_scripts::test(void* obj){
 
     //npc_obj->pos->x++;
 
-    npc_obj->set_rotation(-90);
+    npc_obj->face_player();
 
     npc_obj->move();
 }

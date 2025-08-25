@@ -5,6 +5,7 @@
 #include "sphysics.h"
 #include "inventory.hpp"
 #include <vector>
+#include "player.hpp"
 
 class npc;
 class npc_scripts;
@@ -104,6 +105,12 @@ class npc{
         void add_rotation(float rot);
 
         void move();
+
+        player* closest_player();
+
+        Vector2 get_pos();
+
+        void face_player();
 };
 
 struct npc_template{

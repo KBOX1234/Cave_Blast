@@ -1,6 +1,9 @@
+#include "../external/raylib/src/raylib.h"
 #include "../include/delta_time.hpp"
 #include "../include/npc.hpp"
+#include "../include/player.hpp"
 #include "../include/rng.hpp"
+#include "../external/raylib/src/raymath.h"
 
 void npc_master::update_npcs() {
     for (int i = 0; i < npcs.size(); i++) {
@@ -59,5 +62,42 @@ bool npc_master::remove_npc(int id) {
     return false;
 }
 
+Vector2 npc::get_pos() {
+    return *pos;
+}
+
+player* npc::closest_player() {
+
+    player* p;
+    float fp = 0xffffffff;
+
+    for (int i = 0; i < player_manager.players.size(); i++) {
+        float p2 = Vector2Distance(*pos, *player_manager.players[i]->pos);
+
+        if (p2 < fp) {
+            fp = p2;
+
+            p = player_manager.players[i];
+
+        }
+    }
+
+    return p;
+}
+
+void npc::face_player() {
+    Vector2 object = *pos;
+    player* p = closest_player();
+
+    Vector2 target = p->get_pos();
 
 
+    float dx = target.x - object.x;
+    float dy = target.y - object.y;
+
+    float angleRad = std::atan2(dy, dx);
+
+    float angleDeg = angleRad * 180.0f / M_PI;
+
+    *rotation = angleDeg;
+}
