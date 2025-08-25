@@ -1,3 +1,4 @@
+#include "../include/delta_time.hpp"
 #include "../include/npc.hpp"
 #include "../include/rng.hpp"
 
@@ -6,7 +7,7 @@ void npc_master::update_npcs() {
         if (npcs[i]->npc_data != nullptr) {
             npcs[i]->npc_data->update_colide_box();
         }
-        if (npcs[i]->npc_cheif_end != nullptr) {
+        if (npcs[i]->npc_cheif_end != nullptr  && delta_time_master.can_game_continue()) {
             npcs[i]->npc_cheif_end((void*)npcs[i]);
         }
 

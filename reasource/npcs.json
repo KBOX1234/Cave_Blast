@@ -8,7 +8,7 @@
         "max_health":100,
         "damage_output": 2,
         "max_block": 2,
-        "speed": 0.5,
+        "speed": 1,
         "target_player": true,
         "texture" : "reasource/test/jr.png"
     }

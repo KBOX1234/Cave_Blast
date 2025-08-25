@@ -98,13 +98,10 @@ void player::move_player() {
     light_manager.update_light_pos(light_index, *pos);
 }
 
-#define BOX_WIDTH  32
-#define BOX_HEIGHT 64
-
 bool player::is_valid_move_2(Vector2 pos2) {
 
-    const float box_width = BOX_WIDTH;
-    const float box_height = BOX_HEIGHT;
+    const float box_width = PLAYER_WIDTH;
+    const float box_height = PLAYER_HEIGHT;
 
     colideBox test_box;
         test_box.a = colide::v2p(pos2);

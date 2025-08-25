@@ -86,6 +86,7 @@ int main(int argc, char* argv[]) {
 
     int port = 8080;
     bool server = true;
+    bool headless = false;
     std::string ip = "localhost";
     std::string name = "master";
 
@@ -102,6 +103,10 @@ int main(int argc, char* argv[]) {
         }
         else if (strcmp(argv[i], "-n") == 0 && i + 1 < argc) {
             name = argv[++i];
+        }
+        else if (strcmp(argv[i], "--headless") == 0 && i + 1 < argc) {
+            int val = std::stoi(argv[++i]);
+            headless = (val != 0);
         }
         else {
             std::cerr << "Unknown or incomplete argument: " << argv[i] << std::endl;
@@ -188,7 +193,7 @@ int main(int argc, char* argv[]) {
         }
 
         if(IsKeyPressed(KEY_V)){
-            npc_manager.new_npc("test", {0, 0});
+            npc_manager.new_npc("test", {64, 64});
         }
 
 

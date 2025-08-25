@@ -10,7 +10,7 @@ class npc;
 class npc_scripts;
 //npc object is the shell of an npc which defines the basic data needed to represent it
 class npc_object{
-  friend class npc;
+    friend class npc;
     private:
         Vector2 pos;
 
@@ -53,13 +53,11 @@ struct npc_stats{
 class npc_master;
 
 class npc{
-    friend class npc_scripts;
+    //friend class npc_scripts;
     friend class npc_master;
     private:
         //this is realy cursed
         void* myself;
-
-        npc_object* npc_data;
 
         Vector2* pos;
 
@@ -83,13 +81,29 @@ class npc{
 
         Texture2D* cache;
 
+        Vector2 last_pos;
+
+        Vector2 get_move_target();
+
+        bool is_valid_move_2(Vector2 pos2);
+
+        void update_time_stamp();
+
     public:
+
+        npc_object* npc_data;
         npc();
 
         ~npc();
         void assign_my_pointer(void* ptr);
 
         void draw();
+
+        void set_rotation(float rot);
+
+        void add_rotation(float rot);
+
+        void move();
 };
 
 struct npc_template{
