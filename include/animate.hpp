@@ -11,6 +11,8 @@
 #define SPRITE 0
 #define TRANSLATION 1
 
+#define MAX_ANIMATE_NAME_LENGTH 20
+
 struct animated_transform{
     //the original state to translate from
     float scale1;

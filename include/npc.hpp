@@ -7,7 +7,7 @@
 #include <vector>
 #include "player.hpp"
 
-#define SERIALIZED_NPC_TYPE_STR_SIZE 200
+#define NPC_TYPE_STR_SIZE 20
 
 class npc;
 class npc_scripts;
@@ -145,7 +145,9 @@ struct serialized_npc {
 
     int id;
 
-    char type[SERIALIZED_NPC_TYPE_STR_SIZE];
+    char type[NPC_TYPE_STR_SIZE];
+
+    char current_animation[MAX_ANIMATE_NAME_LENGTH];
 };
 
 class npc_template_loader{

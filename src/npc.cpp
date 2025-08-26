@@ -112,6 +112,8 @@ bool npc_template_loader::load_template(npc_template npct, bool remove_duplicate
             }
         }
     }
+    std::string truncated = npct.name.substr(0, NPC_TYPE_STR_SIZE);
+    npct.name = truncated;
     
     templates.push_back(npct);
 
@@ -120,6 +122,8 @@ bool npc_template_loader::load_template(npc_template npct, bool remove_duplicate
 }
 
 npc_template* npc_template_loader::get_npc_template(std::string name){
+    std::string truncated = name.substr(0, NPC_TYPE_STR_SIZE);
+    name = truncated;
     for(int i = 0; i < templates.size(); i++){
         if(name == templates[i].name){
             return &templates[i];
@@ -170,6 +174,8 @@ bool npc_template_loader::load_templates_from_json(std::string fname){
 }
 
 void npc_template_loader::assign_func_to_npc(void (*func)(void* npc_ptr), std::string name){
+    std::string truncated = name.substr(0, NPC_TYPE_STR_SIZE);
+    name = truncated;
     for(int i = 0; i < templates.size(); i++){
         if(templates[i].name == name){
             templates[i].npc_cheif_end = func;

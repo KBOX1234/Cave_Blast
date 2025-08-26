@@ -5,6 +5,8 @@
 using json = nlohmann::json;
 
 int animated_sprite_linker::find_animation_index_by_name(std::string name){
+    std::string truncated = name.substr(0, MAX_ANIMATE_NAME_LENGTH);
+    name = truncated;
     for(int i = 0; i < animations.size(); i++){
         if(animations[i].name == name){
             return i;
@@ -15,6 +17,8 @@ int animated_sprite_linker::find_animation_index_by_name(std::string name){
 }
 
 void animated_sprite_linker::load_animation(animated_sprite ams){
+    std::string truncated = ams.name.substr(0, MAX_ANIMATE_NAME_LENGTH);
+    ams.name = truncated;
     animations.push_back(ams);
 }
 
@@ -43,6 +47,9 @@ void animated_sprite_linker::load_animation_from_json(std::string jsonS){
 }
 
 void animated_sprite_linker::play_animation(std::string name, bool loop){
+    std::string truncated = name.substr(0, MAX_ANIMATE_NAME_LENGTH);
+    name = truncated;
+
     current_animation_index = find_animation_index_by_name(name);
 
     if(current_animation_index == -1){
