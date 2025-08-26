@@ -51,3 +51,17 @@ make
 cd ../../
 
 cp ./external/easy_profiler/bin/libeasy_profiler.so ./lib/libeasy_profiler.so
+
+cd ./external/soloud/build/
+
+genie gmake "SOLOUD_NO_OPENAL=1" "SOLOUD_NO_SDL1=1" "SOLOUD_NO_PORTAUDIO=1"
+
+cd gmake
+
+make
+
+cd ../../../..
+
+cp ./external/soloud/lib/libsolouddemocommon_x86_d.a ./lib/
+
+
