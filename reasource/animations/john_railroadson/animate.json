@@ -1,0 +1,11 @@
+{
+    "frame_rate" : 16,
+    "name" : "bounce",
+    "textures" : [
+        "reasource/animations/john_railroadson/1.png",
+        "reasource/animations/john_railroadson/2.png",
+        "reasource/animations/john_railroadson/3.png",
+        "reasource/animations/john_railroadson/4.png",
+        "reasource/animations/john_railroadson/5.png"
+    ]
+}

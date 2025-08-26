@@ -126,6 +126,8 @@ struct npc_template{
 
     int texture_id;
 
+    std::vector<std::string> animation_jsons;
+
     //npc_ptr is the npc object
     void (*npc_cheif_end)(void* npc_ptr) = nullptr;
 };

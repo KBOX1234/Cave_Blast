@@ -56,6 +56,10 @@ npc::npc(){
 
     amsl = &npc_data->amsl;
     amtl = &npc_data->amtl;
+
+    animation_manager.link_ams_linker(amsl);
+
+    amsl->set_pos(pos);
 }
 
 void npc::draw(){
@@ -72,7 +76,7 @@ void npc::draw(){
     
         //printf("debug:\npos = {%f, %f}\nrotation = %f\nscale = %f\n", pos->x, pos->y, *rotation, *scale);
 
-        DrawTextureEx(*cache, *pos, 0, *scale, WHITE);
+        if (amsl->get_playback_status() == STOP) DrawTextureEx(*cache, *pos, 0, *scale, WHITE);
     }
     
 }
@@ -134,6 +138,7 @@ npc_template* npc_template_loader::get_npc_template(std::string name){
 }
 
 bool npc_template_loader::load_templates_from_json(std::string fname){
+    //std::cout << fname << std::endl;
     json j_list = json::parse(easy_file_ops::load_text_file(fname));
 
     int count = 0;
@@ -162,6 +167,13 @@ bool npc_template_loader::load_templates_from_json(std::string fname){
 
 
         nt.texture_id = texture_manager.add_texture(j_object.value("texture", " "));
+
+        if (j_object.contains("animations")) {
+            for (int i = 0; i < j_object["animations"].size(); i++) {
+                //std::cout << j_object["animations"] << std::endl;
+                nt.animation_jsons.push_back(j_object["animations"][i]);
+            }
+        }
 
         load_template(nt, true);
 

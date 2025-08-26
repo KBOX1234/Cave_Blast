@@ -4,6 +4,7 @@
 #include "../include/player.hpp"
 #include "../include/rng.hpp"
 #include "../external/raylib/src/raymath.h"
+#include "../include/io.hpp"
 #include "../include/networking.hpp"
 
 int npc_master::find_npc_slot_by_id(int id) {
@@ -51,6 +52,7 @@ serialized_npc npc_master::serialize_npc(npc *npc_c) {
 
 int npc_master::new_npc_from_serialized_npc(serialized_npc npc_c) {
 
+
     std::string npc_type = npc_c.type;
 
 
@@ -72,6 +74,13 @@ int npc_master::new_npc_from_serialized_npc(serialized_npc npc_c) {
 
     //new_npc->cache = texture_manager.grab_texture_pointer(nt->texture_id);
     new_npc->cache = nullptr;
+
+    for (int i = 0; i < nt->animation_jsons.size(); i++) {
+
+        std::string json_str = easy_file_ops::load_text_file(nt->animation_jsons[i]);
+
+        new_npc->amsl->load_animation_from_json(json_str);
+    }
 
     if (npc_c.playback_status == PLAY || npc_c.playback_status == PAUSE) {
         new_npc->amsl->play_animation(npc_c.current_animation, npc_c.looping_animation);
@@ -177,6 +186,17 @@ int npc_master::new_npc(std::string npc_type, Vector2 pos) {
 
     //new_npc->cache = texture_manager.grab_texture_pointer(nt->texture_id);
     new_npc->cache = nullptr;
+
+    for (int i = 0; i < nt->animation_jsons.size(); i++) {
+
+        std::string json_str = easy_file_ops::load_text_file(nt->animation_jsons[i]);
+        //std::cout << json_str << std::endl;
+
+        new_npc->amsl->load_animation_from_json(json_str);
+    }
+
+    new_npc->amsl->play_animation("bounce", true);
+
     npcs.push_back(new_npc);
 
     

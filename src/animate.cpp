@@ -111,7 +111,7 @@ void animated_sprite_linker::update_animation(){
         int current_frame_int = (int)round(current_frame);
 
         if(current_frame_int < animations[current_animation_index].textures.size() && current_frame_int >= 0){
-            if(animations[current_animation_index].textures[current_frame_int] != nullptr && pos != nullptr){
+            if(animations[current_animation_index].textures[current_frame_int] != nullptr && pos != nullptr && animations[current_animation_index].textures[current_frame_int]->id != 0){
                 DrawTextureV(*animations[current_animation_index].textures[current_frame_int], *pos, WHITE);
             }
 

@@ -10,6 +10,9 @@
         "max_block": 2,
         "speed": 1,
         "target_player": true,
-        "texture" : "reasource/test/jr.png"
+        "texture" : "reasource/test/jr.png",
+        "animations" : [
+            "reasource/animations/john_railroadson/animate.json"
+        ]
     }
 ]
