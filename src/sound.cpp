@@ -1,4 +1,5 @@
 #include "../include/sound.hpp"
+#include "../include/render.hpp"
 
 smart_sound *sound_master::find_sound_by_name(std::string name) {
     for (int i = 0; i < sounds.size(); i++) {
@@ -53,6 +54,10 @@ void sound_master::play_sound(std::string name, Vector2 pos, bool dynamic) {
     }
     else {
         //just do the same for now
-        sound->handle = backend.play3d(sound->wave_data, pos.x, pos.y, 1);
+        Vector2 offset;
+
+        offset = render_master.get_camera_pos();
+
+        sound->handle = backend.play3d(sound->wave_data, pos.x + offset.x, pos.y + offset.y, 1);
     }
 }

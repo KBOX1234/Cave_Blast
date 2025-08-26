@@ -204,7 +204,7 @@ int main(int argc, char* argv[]) {
 
             //texture_manager.print_all_ids();
 
-            sound_manager.play_sound("boom",  {0, 100}, true);
+            sound_manager.play_sound("boom",  {0, 0}, true);
         }
 
 
