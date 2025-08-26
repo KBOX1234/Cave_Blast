@@ -1,6 +1,6 @@
 # Compiler and general settings
 CC = g++
-INCLUDE = -I./include -I./external/rl_imgui/ -I./external/raylib/src/ -I./external/imgui/ -I./external/enet/include/ -I./external/sphysics/
+INCLUDE = -I./include -I./external/rl_imgui/ -I./external/raylib/src/ -I./external/imgui/ -I./external/enet/include/ -I./external/sphysics/ -I./external/soloud/include/
 LINKS = -L./lib
 LIBS = -lraylib -lgdi32 -lm -lrlImGui -lenet -lsphysics -lws2_32 -lwinmm
 
