@@ -27,16 +27,24 @@ serialized_npc npc_master::serialize_npc(npc *npc_c) {
     snpc.size = *npc_c->size;
     snpc.stat = npc_c->stat;
 
-    memset(snpc.type, 0, SERIALIZED_NPC_TYPE_STR_SIZE);
+    memset(snpc.type, 0, NPC_TYPE_STR_SIZE);
 
     size_t str_len = npc_c->template_name.size();
 
-    if (str_len >= SERIALIZED_NPC_TYPE_STR_SIZE) {
-        str_len = SERIALIZED_NPC_TYPE_STR_SIZE - 1;
+    if (str_len >= NPC_TYPE_STR_SIZE) {
+        str_len = NPC_TYPE_STR_SIZE - 1;
     }
 
     memcpy(snpc.type, npc_c->template_name.c_str(), str_len);
     snpc.type[str_len] = '\0';
+
+    if (npc_c->amsl->get_playback_status() == PLAY || npc_c->amsl->get_playback_status() == PAUSE) {
+        snpc.playback_status = npc_c->amsl->get_playback_status();
+        snpc.current_animation_age = npc_c->amsl->get_current_animation_age();
+
+        std::strncpy(snpc.current_animation, npc_c->amsl->get_current_animation_name().c_str(), MAX_ANIMATE_NAME_LENGTH - 1);
+        snpc.current_animation[MAX_ANIMATE_NAME_LENGTH - 1] = '\0';
+    }
 
     return snpc;
 }
@@ -64,6 +72,15 @@ int npc_master::new_npc_from_serialized_npc(serialized_npc npc_c) {
 
     //new_npc->cache = texture_manager.grab_texture_pointer(nt->texture_id);
     new_npc->cache = nullptr;
+
+    if (npc_c.playback_status == PLAY || npc_c.playback_status == PAUSE) {
+        new_npc->amsl->play_animation(npc_c.current_animation, npc_c.looping_animation);
+        new_npc->amsl->current_animation_age = npc_c.current_animation_age;
+        if (npc_c.playback_status == PAUSE) {
+            new_npc->amsl->pause_animation();
+        }
+    }
+
     npcs.push_back(new_npc);
 
 
@@ -95,6 +112,13 @@ void npc_master::update_npc_from_serialized_npc(serialized_npc npc_c) {
         *npc_u->size = npc_c.size;
 
         npc_u->stat = npc_c.stat;
+
+        if (npc_c.playback_status == PLAY || npc_c.playback_status == PAUSE) {
+            npc_u->amsl->current_animation_age = npc_c.current_animation_age;
+            npc_u->amsl->current_animation_index = npc_u->amsl->find_animation_index_by_name(npc_c.current_animation);
+            npc_u->amsl->playback_status = npc_c.playback_status;
+            npc_u->amsl->looping = npc_c.looping_animation;
+        }
     }
 }
 

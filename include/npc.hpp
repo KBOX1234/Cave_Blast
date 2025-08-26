@@ -148,6 +148,12 @@ struct serialized_npc {
     char type[NPC_TYPE_STR_SIZE];
 
     char current_animation[MAX_ANIMATE_NAME_LENGTH];
+
+    int current_animation_age;
+
+    int playback_status;
+
+    bool looping_animation;
 };
 
 class npc_template_loader{

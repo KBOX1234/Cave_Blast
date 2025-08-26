@@ -13,6 +13,10 @@
 
 #define MAX_ANIMATE_NAME_LENGTH 20
 
+#define NO_ANIMATION_ACTIVE -1
+
+class npc_master;
+
 struct animated_transform{
     //the original state to translate from
     float scale1;
@@ -50,6 +54,7 @@ class animation_master;
 //its in charge of everything animated exept for drawing
 class animated_sprite_linker{
     friend class animation_master;
+    friend class npc_master;
     
     private:
 
@@ -63,13 +68,19 @@ class animated_sprite_linker{
 
         int current_animation_age;
 
-        int playback_status;
+        int playback_status = STOP;
 
         bool looping = false;
 
         void update_animation();
         
     public:
+
+        std::string get_current_animation_name();
+
+        int get_current_animation_age();
+
+        int get_playback_status();
                 
         void load_animation(animated_sprite ams);
 

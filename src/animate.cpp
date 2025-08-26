@@ -4,6 +4,33 @@
 #include "../include/delta_time.hpp"
 using json = nlohmann::json;
 
+std::string animated_sprite_linker::get_current_animation_name() {
+    if (playback_status != STOP) {
+        if (playback_status == PLAY || playback_status == PAUSE) {
+            return animations[current_animation_index].name;
+        }
+    }
+
+    return "NO_ANIMATION_ACTIVE";
+}
+
+int animated_sprite_linker::get_playback_status() {
+    return playback_status;
+}
+
+int animated_sprite_linker::get_current_animation_age() {
+    if (playback_status != STOP) {
+        if (playback_status == PLAY || playback_status == PAUSE) {
+            return current_animation_age;
+        }
+    }
+
+    return NO_ANIMATION_ACTIVE;
+}
+
+
+
+
 int animated_sprite_linker::find_animation_index_by_name(std::string name){
     std::string truncated = name.substr(0, MAX_ANIMATE_NAME_LENGTH);
     name = truncated;
