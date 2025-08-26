@@ -111,7 +111,7 @@ void partical_system::load_partical_presets_from_json_file(std::string path){
         count++;
     }
 
-    std::cout << "(PARTICAL_MANAGER): Loaded " << count << "partical effects\n";
+    std::cout << "(PARTICAL_MANAGER): Loaded " << count << " partical effects\n";
 
 }
 
