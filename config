@@ -62,6 +62,6 @@ make
 
 cd ../../../..
 
-cp ./external/soloud/lib/libsolouddemocommon_x86_d.a ./lib/
+cp ./external/soloud/lib/libsoloud_static.a ./lib/libsoloud.a
 
 

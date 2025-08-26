@@ -78,6 +78,8 @@ save_master save_manager;
 npc_template_loader npc_template_manager;
 npc_master npc_manager;
 #include "npcs.hpp"
+#include "sound.hpp"
+sound_master sound_manager;
 
 
 int main(int argc, char* argv[]) {
@@ -157,6 +159,8 @@ int main(int argc, char* argv[]) {
 
     npc_template_manager.assign_func_to_npc(npc_scripts::test, "test");
 
+    sound_manager.load_sound("reasource/sound/vine-boom.wav", "boom");
+
 
 
 
@@ -199,6 +203,8 @@ int main(int argc, char* argv[]) {
             //npc_manager.new_npc("test", {64, 64});
 
             //texture_manager.print_all_ids();
+
+            sound_manager.play_sound("boom",  {0, 100}, true);
         }
 
 
