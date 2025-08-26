@@ -154,6 +154,7 @@ bool npc_template_loader::load_templates_from_json(std::string fname){
         if(j_object.contains("size")){
             size.x = j_object["size"]["x"];
             size.y = j_object["size"]["y"];
+            //std::cout << size.x << ", " << size.y << std::endl;
         }
         else{
             size = {0, 0};
@@ -164,6 +165,7 @@ bool npc_template_loader::load_templates_from_json(std::string fname){
         nt.stat.max_block = j_object.value("max_block", 1);
         nt.stat.speed = j_object.value("speed", 0);
         nt.stat.target_player = j_object.value("target_player", false);
+        nt.size = size;
 
 
         nt.texture_id = texture_manager.add_texture(j_object.value("texture", " "));

@@ -177,12 +177,15 @@ int npc_master::new_npc(std::string npc_type, Vector2 pos) {
     *new_npc->pos = pos;
 
     *new_npc->size = nt->size;
+
     new_npc->stat = nt->stat;
     new_npc->texture_id = nt->texture_id;
 
     new_npc->npc_cheif_end = nt->npc_cheif_end;
 
     new_npc->id = random_num.get_random_int();
+
+    *new_npc->scale = 1;
 
     //new_npc->cache = texture_manager.grab_texture_pointer(nt->texture_id);
     new_npc->cache = nullptr;

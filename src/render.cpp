@@ -155,7 +155,7 @@ void render::update() {
 
     update_drawing_coords();
 
-    //render_world();
+    render_world();
 
     render_players(true);
 

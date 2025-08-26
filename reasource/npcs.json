@@ -2,8 +2,8 @@
     {
         "name":"test",
         "size" : {
-            "x": 16,
-            "y": 16
+            "x": 64,
+            "y": 64
         },
         "max_health":100,
         "damage_output": 2,
