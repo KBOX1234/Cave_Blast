@@ -39,5 +39,15 @@ std::optional<std::any> isb::get_object(const std::string& name) {
     return data[index];
 }
 
+bool isb::does_object_exist(const std::string &name) {
+    int does = find_object_index(name);
+
+    if (does != -1) {
+        return true;
+    }
+    return false;
+}
+
+
 
 

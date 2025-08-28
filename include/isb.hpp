@@ -24,4 +24,6 @@ class isb {
 
         int free_object(const std::string& name);
 
+        bool does_object_exist(const std::string& name);
+
 };
