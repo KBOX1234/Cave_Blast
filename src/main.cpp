@@ -200,7 +200,7 @@ int main(int argc, char* argv[]) {
         }
 
         if(IsKeyPressed(KEY_V)){
-            //npc_manager.new_npc("test", {64, 64});
+            npc_manager.new_npc("test", {64, 64});
 
             //texture_manager.print_all_ids();
 
