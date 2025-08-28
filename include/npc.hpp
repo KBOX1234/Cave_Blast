@@ -192,6 +192,7 @@ class server_utls;
 class npc_master {
     friend class render;
     friend class server_utls;
+    friend class npc;
     private:
         std::vector<npc*> npcs;
 

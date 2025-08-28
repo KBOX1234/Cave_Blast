@@ -30,37 +30,75 @@ void npc::move() {
 }
 
 bool npc::is_valid_move_2(Vector2 pos2) {
-
     const float box_width = size->x * *scale;
     const float box_height = size->y * *scale;
 
+    // NPC bounding box
     colideBox test_box;
     test_box.a = colide::v2p(pos2);
-    //test_box.a.x = test_box.a.x - box_width;
-
-
-    Vector2 bottom_right = { pos2.x + box_width, pos2.y + box_height};
+    Vector2 bottom_right = { pos2.x + box_width, pos2.y + box_height };
     test_box.b = colide::v2p(bottom_right);
 
+    // --- Player collision checks ---
+    for (const auto& playerp : player_manager.players) {
+        Vector2 playerPos = playerp->get_pos();
+        playerPos.x = playerPos.x + 4;
+        playerPos.y = playerPos.y + 8;
+        Vector2 player_bottom_right = {
+            playerPos.x + PLAYER_WIDTH - 8,
+            playerPos.y + PLAYER_HEIGHT - 16 // (keeping your macro spelling)
+        };
 
+        colideBox player_box;
+        player_box.a = colide::v2p(playerPos);
+        player_box.b = colide::v2p(player_bottom_right);
+
+        if (doesBoxAndBoxColide(&test_box, &player_box)) {
+            return false; // move invalid, NPC would collide with a player
+        }
+    }
+
+    //npcs
+    for (const auto& npcs : npc_manager.npcs) {
+
+        Vector2 playerPos = npcs->get_pos();
+
+        if (playerPos.x == pos->x && playerPos.y == pos->y) {
+            continue;
+        }
+
+        playerPos.x = playerPos.x + 4;
+        playerPos.y = playerPos.y + 8;
+        Vector2 player_bottom_right = {
+            playerPos.x + PLAYER_WIDTH - 8,
+            playerPos.y + PLAYER_HEIGHT - 16 // (keeping your macro spelling)
+        };
+
+        colideBox player_box;
+        player_box.a = colide::v2p(playerPos);
+        player_box.b = colide::v2p(player_bottom_right);
+
+        if (doesBoxAndBoxColide(&test_box, &player_box)) {
+            return false; // move invalid, NPC would collide with a player
+        }
+    }
+
+    // --- Block collision checks ---
     int start_block_x = (int)(pos2.x / BLOCK_SIZE) - 1;
     int start_block_y = (int)(pos2.y / BLOCK_SIZE) - 1;
     int end_block_x = (int)((pos2.x + box_width) / BLOCK_SIZE) + 1;
     int end_block_y = (int)((pos2.y + box_height) / BLOCK_SIZE) + 1;
 
-
     for (int by = start_block_y; by <= end_block_y; ++by) {
         for (int bx = start_block_x; bx <= end_block_x; ++bx) {
-            Vector2 block_vec = { (float)bx - 1, (float)by};
+            Vector2 block_vec = { (float)bx - 1, (float)by };
             block* blk = world.get_block(block_vec);
 
             if (blk != nullptr) {
                 auto item = item_manager.fetch_item_by_id(blk->attr->item_id);
                 if (item->is_block == false || item->is_solid == false) continue;
 
-
                 Vector2 block_top_left = { (float)(bx * BLOCK_SIZE), (float)(by * BLOCK_SIZE) };
-
                 Vector2 block_bottom_right = {
                     block_top_left.x + BLOCK_SIZE,
                     block_top_left.y + BLOCK_SIZE
@@ -70,16 +108,17 @@ bool npc::is_valid_move_2(Vector2 pos2) {
                 block_box.a = colide::v2p(block_top_left);
                 block_box.b = colide::v2p(block_bottom_right);
 
-                // 4. Check for collision
                 if (doesBoxAndBoxColide(&test_box, &block_box)) {
-                    return false;
+                    return false; // invalid, collides with world block
                 }
             }
         }
     }
 
-    return true; // No collisions
+    return true; // no collisions with players or blocks
 }
+
+
 
 Vector2 npc::get_move_target() {
 
