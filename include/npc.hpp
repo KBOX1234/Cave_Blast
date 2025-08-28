@@ -6,6 +6,7 @@
 #include "inventory.hpp"
 #include <vector>
 #include "player.hpp"
+#include "isb.hpp"
 
 #define NPC_TYPE_STR_SIZE 20
 
@@ -88,6 +89,8 @@ class npc{
         Texture2D* cache;
 
         Vector2 last_pos;
+
+        isb data_bank;
 
         Vector2 get_move_target();
 
