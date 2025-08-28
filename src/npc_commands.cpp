@@ -21,6 +21,36 @@ void npc::move() {
         last_pos = *pos;
         *pos = next;
 
+        if (npc_data->does_npc_colide_with(&player_manager.myself->box)) {
+            // NPC and player bounding boxes
+            auto& npc_box = npc_data->box;
+            auto& player_box = player_manager.myself->box;
+
+            // Overlap distances
+            float overlapX = std::min(npc_box.b.x, player_box.b.x) - std::max(npc_box.a.x, player_box.a.x);
+            float overlapY = std::min(npc_box.b.y, player_box.b.y) - std::max(npc_box.a.y, player_box.a.y);
+
+            if (overlapX > 0 && overlapY > 0) {
+                // Decide whether to resolve in X or Y (smaller overlap wins)
+                if (overlapX < overlapY) {
+                    // Push left or right
+                    if (npc_box.a.x < player_box.a.x) {
+                        pos->x -= (overlapX + stat.speed * 2); // push left
+                    } else {
+                        pos->x += (overlapX + stat.speed * 2); // push right
+                    }
+                } else {
+                    // Push up or down
+                    if (npc_box.a.y < player_box.a.y) {
+                        pos->y -= (overlapY + stat.speed * 2); // push up
+                    } else {
+                        pos->y += (overlapY + stat.speed * 2); // push down
+                    }
+                }
+            }
+        }
+
+
 
         //update_time_stamp();
 
@@ -33,57 +63,13 @@ bool npc::is_valid_move_2(Vector2 pos2) {
     const float box_width = size->x * *scale;
     const float box_height = size->y * *scale;
 
-    // NPC bounding box
+
     colideBox test_box;
     test_box.a = colide::v2p(pos2);
     Vector2 bottom_right = { pos2.x + box_width, pos2.y + box_height };
     test_box.b = colide::v2p(bottom_right);
 
-    // --- Player collision checks ---
-    for (const auto& playerp : player_manager.players) {
-        Vector2 playerPos = playerp->get_pos();
-        playerPos.x = playerPos.x + 4;
-        playerPos.y = playerPos.y + 8;
-        Vector2 player_bottom_right = {
-            playerPos.x + PLAYER_WIDTH - 8,
-            playerPos.y + PLAYER_HEIGHT - 16 // (keeping your macro spelling)
-        };
 
-        colideBox player_box;
-        player_box.a = colide::v2p(playerPos);
-        player_box.b = colide::v2p(player_bottom_right);
-
-        if (doesBoxAndBoxColide(&test_box, &player_box)) {
-            return false; // move invalid, NPC would collide with a player
-        }
-    }
-
-    //npcs
-    for (const auto& npcs : npc_manager.npcs) {
-
-        Vector2 playerPos = npcs->get_pos();
-
-        if (playerPos.x == pos->x && playerPos.y == pos->y) {
-            continue;
-        }
-
-        playerPos.x = playerPos.x + 4;
-        playerPos.y = playerPos.y + 8;
-        Vector2 player_bottom_right = {
-            playerPos.x + PLAYER_WIDTH - 8,
-            playerPos.y + PLAYER_HEIGHT - 16 // (keeping your macro spelling)
-        };
-
-        colideBox player_box;
-        player_box.a = colide::v2p(playerPos);
-        player_box.b = colide::v2p(player_bottom_right);
-
-        if (doesBoxAndBoxColide(&test_box, &player_box)) {
-            return false; // move invalid, NPC would collide with a player
-        }
-    }
-
-    // --- Block collision checks ---
     int start_block_x = (int)(pos2.x / BLOCK_SIZE) - 1;
     int start_block_y = (int)(pos2.y / BLOCK_SIZE) - 1;
     int end_block_x = (int)((pos2.x + box_width) / BLOCK_SIZE) + 1;
@@ -109,13 +95,13 @@ bool npc::is_valid_move_2(Vector2 pos2) {
                 block_box.b = colide::v2p(block_bottom_right);
 
                 if (doesBoxAndBoxColide(&test_box, &block_box)) {
-                    return false; // invalid, collides with world block
+                    return false;
                 }
             }
         }
     }
 
-    return true; // no collisions with players or blocks
+    return true;
 }
 
 
