@@ -14,5 +14,18 @@
         "animations" : [
             "reasource/animations/john_railroadson/animate.json"
         ]
+    },
+    {
+        "name":"rattle_bones",
+        "size" : {
+            "x": 34,
+            "y": 64
+        },
+        "max_health":100,
+        "damage_output": 2,
+        "max_block": 2,
+        "speed": 1,
+        "target_player": true,
+        "texture" : "reasource/animations/npc/rattle_bones/default.png"
     }
 ]

@@ -245,20 +245,3 @@ player* npc::closest_player() {
 
     return p;
 }
-
-void npc::face_player() {
-    Vector2 object = *pos;
-    player* p = closest_player();
-
-    Vector2 target = p->get_pos();
-
-
-    float dx = target.x - object.x;
-    float dy = target.y - object.y;
-
-    float angleRad = std::atan2(dy, dx);
-
-    float angleDeg = angleRad * 180.0f / M_PI;
-
-    *rotation = angleDeg;
-}

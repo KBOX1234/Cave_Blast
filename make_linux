@@ -2,12 +2,16 @@
 CC = c++
 INCLUDE = -I./include -I./external/rl_imgui/ -I./external/raylib/src/ -I./external/imgui/ -I./external/enet/include/ -I./external/sphysics/ -I./external/easy_profiler/easy_profiler_core/include -I./external/soloud/include/
 LINKS = -L./lib
-LIBS = -lraylib -lm -ldl -lpthread -lGL -lX11 -lrlImGui -lenet -lsphysics -leasy_profiler -Wl,-rpath=./lib -lsoloud
+LIBS = LIBS = -lraylib -lm -ldl -lpthread -lGL -lX11 -lrlImGui -lenet -lsphysics -leasy_profiler -lsoloud -lasound -Wl,-rpath=./lib
 
 SRC_DIR = src
 OBJ_DIR = obj
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
-OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
+
+# Find all .cpp files recursively
+SRCS := $(shell find $(SRC_DIR) -type f -name '*.cpp')
+
+# Turn src/foo/bar.cpp into obj/foo/bar.o
+OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
 TARGET = main
 
@@ -27,12 +31,9 @@ $(TARGET): $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LINKS) $(LIBS) $(CFLAGS)
 
 # Compile each source file to object
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(dir $@)   # make sure subdirectory exists
 	$(CC) -c $< -o $@ $(CFLAGS)
-
-# Create obj directory if not exists
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
 
 # Clean build files
 clean:

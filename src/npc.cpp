@@ -200,5 +200,6 @@ void npc_template_loader::assign_func_to_npc(void (*func)(void* npc_ptr), std::s
 
 void npc_template_loader::assign_funcs() {
     npc_template_manager.assign_func_to_npc(npc_scripts::test, "test");
+    npc_template_manager.assign_func_to_npc(npc_scripts::rattle_bones, "rattle_bones");
 }
 

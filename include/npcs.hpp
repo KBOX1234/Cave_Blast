@@ -9,4 +9,6 @@ class npc_scripts{
     public:
 
         static void test(void* obj);
+
+        static void rattle_bones(void* obj);
 };

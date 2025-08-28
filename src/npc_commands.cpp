@@ -21,6 +21,7 @@ void npc::move() {
         last_pos = *pos;
         *pos = next;
 
+
         //update_time_stamp();
 
     } else {
@@ -93,7 +94,34 @@ Vector2 npc::get_move_target() {
 
 float npc::distance_to_player() {
     Vector2 me = *pos;
+
+    me.x = me.x + (size->x / 2);
+    me.y = me.y + (size->y / 2);
+
     Vector2 player = player_manager.myself->get_pos();
+
+    player.x = player.x + (PLAYER_WIDTH / 2);
+    player.y = player.y + (PLAYER_HEIGHT / 2);
 
     return Vector2Distance(me, player);
 }
+void npc::face_player() {
+    Vector2 object = *pos;
+    player* p = closest_player();
+
+    Vector2 target = p->get_pos();
+
+    target.x = target.x + (PLAYER_WIDTH / 2);
+    target.y = target.y + (PLAYER_HEIGHT / 2);
+
+
+    float dx = target.x - object.x;
+    float dy = target.y - object.y;
+
+    float angleRad = std::atan2(dy, dx);
+
+    float angleDeg = angleRad * 180.0f / M_PI;
+
+    *rotation = angleDeg;
+}
+

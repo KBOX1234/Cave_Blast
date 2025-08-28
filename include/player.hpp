@@ -55,7 +55,7 @@ class player {
         int id;
         int player_texture_id;
 
-        int speed = 1;
+        int speed = 2;
 
         float rotation;
 
