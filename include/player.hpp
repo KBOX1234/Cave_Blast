@@ -39,6 +39,8 @@ class colide;
 class server_utls;
 class save_master;
 class npc;
+class npc_master;
+
 
 class player {
     friend class player_master;
@@ -47,6 +49,7 @@ class player {
     friend class server_utls;
     friend class save_master;
     friend class npc;
+    friend class npc_master;
     private:
         Vector2* pos;
 
@@ -145,6 +148,7 @@ std::chrono::high_resolution_clock::now().time_since_epoch()
 
 class colide;
 class save_master;
+
 class player_master {
     friend class imgui_win;
     friend class input;
@@ -156,6 +160,7 @@ class player_master {
     friend class save_master;
     friend class colide;
     friend class npc;
+    friend class npc_master;
     private:
         std::vector<player*> players;
 

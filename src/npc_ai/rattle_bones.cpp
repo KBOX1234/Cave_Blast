@@ -9,9 +9,10 @@ void npc_scripts::rattle_bones(void *obj) {
 
     }
 
+    player* pp = npc_obj->closest_player();
 
-    if (npc_obj->distance_to_player() < aggro) {
-        npc_obj->face_player();
+    if (npc_obj->distance_to_player(pp) < aggro) {
+        npc_obj->face_player(pp);
         npc_obj->move();
     }
 

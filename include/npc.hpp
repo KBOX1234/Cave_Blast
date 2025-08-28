@@ -24,10 +24,11 @@ class npc_object{
 
         Vector2 size;
 
-        colideBox box;
 
 
     public:
+
+        colideBox box;
 
         animated_sprite_linker amsl;
 
@@ -119,9 +120,11 @@ class npc{
 
         Vector2 get_pos();
 
-        void face_player();
+        void face_player(player* p);
 
-        float distance_to_player();
+        float distance_to_player(player* p);
+
+        void colide(colideBox* box);
 };
 
 struct npc_template{

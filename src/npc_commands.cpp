@@ -21,39 +21,6 @@ void npc::move() {
         last_pos = *pos;
         *pos = next;
 
-        if (npc_data->does_npc_colide_with(&player_manager.myself->box)) {
-            // NPC and player bounding boxes
-            auto& npc_box = npc_data->box;
-            auto& player_box = player_manager.myself->box;
-
-            // Overlap distances
-            float overlapX = std::min(npc_box.b.x, player_box.b.x) - std::max(npc_box.a.x, player_box.a.x);
-            float overlapY = std::min(npc_box.b.y, player_box.b.y) - std::max(npc_box.a.y, player_box.a.y);
-
-            if (overlapX > 0 && overlapY > 0) {
-                // Decide whether to resolve in X or Y (smaller overlap wins)
-                if (overlapX < overlapY) {
-                    // Push left or right
-                    if (npc_box.a.x < player_box.a.x) {
-                        pos->x -= (overlapX + stat.speed * 2); // push left
-                    } else {
-                        pos->x += (overlapX + stat.speed * 2); // push right
-                    }
-                } else {
-                    // Push up or down
-                    if (npc_box.a.y < player_box.a.y) {
-                        pos->y -= (overlapY + stat.speed * 2); // push up
-                    } else {
-                        pos->y += (overlapY + stat.speed * 2); // push down
-                    }
-                }
-            }
-        }
-
-
-
-        //update_time_stamp();
-
     } else {
 
     }
@@ -117,8 +84,8 @@ Vector2 npc::get_move_target() {
     return { pos->x + d.x, pos->y + d.y };
 }
 
-float npc::distance_to_player() {
-    Vector2 me = *pos;
+float npc::distance_to_player(player* p) {
+    Vector2 me = p->get_pos();
 
     me.x = me.x + (size->x / 2);
     me.y = me.y + (size->y / 2);
@@ -130,9 +97,8 @@ float npc::distance_to_player() {
 
     return Vector2Distance(me, player);
 }
-void npc::face_player() {
+void npc::face_player(player* p) {
     Vector2 object = *pos;
-    player* p = closest_player();
 
     Vector2 target = p->get_pos();
 
@@ -150,3 +116,48 @@ void npc::face_player() {
     *rotation = angleDeg;
 }
 
+void npc::colide(colideBox *box) {
+    auto& npc_box = npc_data->box;
+    auto& player_box = *box;
+
+    // Overlap distances
+    float overlapX = std::min(npc_box.b.x, player_box.b.x) - std::max(npc_box.a.x, player_box.a.x);
+    float overlapY = std::min(npc_box.b.y, player_box.b.y) - std::max(npc_box.a.y, player_box.a.y);
+
+    if (overlapX > 0 && overlapY > 0) {
+        // Decide whether to resolve in X or Y (smaller overlap wins)
+        if (overlapX < overlapY) {
+            // Push left or right
+            if (npc_box.a.x < player_box.a.x) {
+
+                Vector2 new_pos = *pos;
+                new_pos.x -= (overlapX + stat.speed * 2); // push left
+
+                if (is_valid_move_2(new_pos)) {
+                    *pos = new_pos;
+                }
+            } else {
+                Vector2 new_pos = *pos;
+                new_pos.x += (overlapX + stat.speed * 2); // push right
+                if (is_valid_move_2(new_pos)) {
+                    *pos = new_pos;
+                }
+            }
+        } else {
+            // Push up or down
+            if (npc_box.a.y < player_box.a.y) {
+                Vector2 new_pos = *pos;
+                new_pos.y -= (overlapY + stat.speed * 2); // push up
+                if (is_valid_move_2(new_pos)) {
+                    *pos = new_pos;
+                }
+            } else {
+                Vector2 new_pos = *pos;
+                pos->y += (overlapY + stat.speed * 2); // push down
+                if (is_valid_move_2(new_pos)) {
+                    *pos = new_pos;
+                }
+            }
+        }
+    }
+}

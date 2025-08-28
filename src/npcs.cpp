@@ -14,8 +14,10 @@ void npc_scripts::test(void* obj){
         test_npc_setup(npc_obj);
     }
 
-    if (npc_obj->distance_to_player() < aggro) {
-        npc_obj->face_player();
+    player* pp = npc_obj->closest_player();
+
+    if (npc_obj->distance_to_player(pp) < aggro) {
+        npc_obj->face_player(pp);
         npc_obj->move();
     }
 }

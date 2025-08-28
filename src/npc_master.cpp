@@ -131,7 +131,7 @@ void npc_master::update_npc_from_serialized_npc(serialized_npc npc_c) {
     }
 }
 
-
+#define SIMULATION_DISTANCE 4000
 
 
 void npc_master::update_npcs() {
@@ -142,11 +142,25 @@ void npc_master::update_npcs() {
     }
     else {
         for (int i = 0; i < npcs.size(); i++) {
+
+            if (npcs[i]->distance_to_player(npcs[i]->closest_player()) > SIMULATION_DISTANCE) continue;
+
             if (npcs[i]->npc_data != nullptr) {
                 npcs[i]->npc_data->update_colide_box();
             }
             if (npcs[i]->npc_cheif_end != nullptr  && delta_time_master.can_game_continue()) {
                 npcs[i]->npc_cheif_end((void*)npcs[i]);
+            }
+            for (int j = 0; j < player_manager.players.size(); j++) {
+                player_manager.players[j]->update_colide_box();
+                npcs[i]->colide(&player_manager.players[j]->box);
+            }
+
+            auto* npc = npcs[i];
+
+            for (size_t j = i + 1; j < npcs.size(); j++) {
+                npc->colide(&npcs[j]->npc_data->box);
+                npcs[j]->colide(&npc->npc_data->box);
             }
 
         }
