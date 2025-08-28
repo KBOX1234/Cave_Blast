@@ -14,13 +14,13 @@ class isb {
 
         void remove_entry(int index);
 
-        void add_entry(std::any object, const std::string& name);
-
         int find_object_index(const std::string& name);
 
     public:
 
         std::optional<std::any> get_object(const std::string& name);
+
+        void add_entry(std::any object, const std::string& name);
 
         int free_object(const std::string& name);
 

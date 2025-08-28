@@ -90,7 +90,7 @@ class npc{
 
         Vector2 last_pos;
 
-        isb data_bank;
+
 
         Vector2 get_move_target();
 
@@ -101,6 +101,7 @@ class npc{
     public:
 
         npc_object* npc_data;
+        isb data_bank;
         npc();
 
         ~npc();
@@ -119,6 +120,8 @@ class npc{
         Vector2 get_pos();
 
         void face_player();
+
+        float distance_to_player();
 };
 
 struct npc_template{

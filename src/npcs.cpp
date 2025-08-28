@@ -1,13 +1,20 @@
 #include "../include/npcs.hpp"
 
+void test_npc_setup(npc* obj) {
+
+}
+
 void npc_scripts::test(void* obj){
     npc* npc_obj = (npc*)obj;
+    const float aggro = 64;
 
-    //printf("coords: %d, %d\n", npc_obj->pos->x, npc_obj->pos->y);
+    if (npc_obj->data_bank.does_object_exist("is_loaded")) {
+        npc_obj->data_bank.add_entry(true, "is_loaded");
 
-    //npc_obj->pos->x++;
+        test_npc_setup(npc_obj);
+    }
 
-    npc_obj->face_player();
-
-    npc_obj->move();
+    if (npc_obj->distance_to_player() < aggro) {
+        
+    }
 }

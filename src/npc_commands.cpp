@@ -1,3 +1,7 @@
+#include "../external/raylib/src/raylib.h"
+
+#include "../external/raylib/src/raymath.h"
+
 #include "../include/npc.hpp"
 #include "../external/sphysics/sphysics.h"
 #include "../include/colide.hpp"
@@ -85,4 +89,11 @@ Vector2 npc::get_move_target() {
     d.y = std::sin(rad) * speed;
 
     return { pos->x + d.x, pos->y + d.y };
+}
+
+float npc::distance_to_player() {
+    Vector2 me = *pos;
+    Vector2 player = player_manager.myself->get_pos();
+
+    return Vector2Distance(me, player);
 }
