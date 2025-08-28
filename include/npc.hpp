@@ -176,6 +176,8 @@ class npc_template_loader{
         bool load_templates_from_json(std::string path);
 
         void assign_func_to_npc(void (*func)(void* npc_ptr), std::string name);
+
+        void assign_funcs();
        
 };
 

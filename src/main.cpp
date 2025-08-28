@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
 
     npc_template_manager.load_templates_from_json("reasource/npcs.json");
 
-    npc_template_manager.assign_func_to_npc(npc_scripts::test, "test");
+    npc_template_manager.assign_funcs();
 
     sound_manager.load_sound("reasource/sound/vine-boom.wav", "boom");
 

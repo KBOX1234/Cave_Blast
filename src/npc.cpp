@@ -1,4 +1,5 @@
 #include "npc.hpp"
+#include "npcs.hpp"
 #include "texture_master.hpp"
 #include "json.hpp"
 #include "io.hpp"
@@ -196,3 +197,8 @@ void npc_template_loader::assign_func_to_npc(void (*func)(void* npc_ptr), std::s
         }
     }
 }
+
+void npc_template_loader::assign_funcs() {
+    npc_template_manager.assign_func_to_npc(npc_scripts::test, "test");
+}
+

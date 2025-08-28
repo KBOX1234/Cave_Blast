@@ -198,7 +198,7 @@ int npc_master::new_npc(std::string npc_type, Vector2 pos) {
         new_npc->amsl->load_animation_from_json(json_str);
     }
 
-    new_npc->amsl->play_animation("bounce", true);
+    new_npc->amsl->play_animation("default", true);
 
     npcs.push_back(new_npc);
 
