@@ -41,3 +41,31 @@ make
 cd ../../
 
 cp ./external/sphysics/libsphysics.a ./lib/libsphysics.a
+
+git clone https://github.com/bkaradzic/GENie.git
+
+cd GENie
+
+make
+
+cd ../
+
+cp ./GENie/bin/windows/genie.exe ./
+
+rm -rf GENie
+
+export PATH="$(pwd):$PATH"
+
+cd ./external/soloud/build/
+
+genie gmake "SOLOUD_NO_OPENAL=1" "SOLOUD_NO_SDL2=1" "SOLOUD_NO_PORTAUDIO=1"
+
+cd gmake
+
+make SoloudStatic LDFLAGS="-lwinmm"
+
+cd ../../../../
+
+cp ./external/soloud/lib/libsoloud_static.a ./lib/libsoloud.a
+
+rm -rf genie.exe
