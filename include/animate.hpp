@@ -45,6 +45,7 @@ struct animated_sprite{
 
     int frame_rate;
     std::string name;
+    Vector2 offset;
 };
 
 class animation_master;

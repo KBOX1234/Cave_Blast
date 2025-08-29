@@ -1,6 +1,10 @@
 {
   "frame_rate" : 10,
   "name" : "walk",
+  "offset" : {
+      "x": -4,
+      "y": -4
+  },
   "textures" : [
     "reasource/animations/npc/rattle_bones/walk/1.png",
     "reasource/animations/npc/rattle_bones/walk/2.png"

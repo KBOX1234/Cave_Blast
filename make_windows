@@ -18,11 +18,13 @@ TARGET = main.exe
 all: debug
 
 # Debug build: includes symbols, no optimization
-debug: CFLAGS = -g -O0 $(INCLUDE)
+debug: CFLAGS = -g -O0 $(INCLUDE) -Wl,--stack,8388608
+
 debug: $(TARGET)
 
 # Release build: optimized, no symbols, stripped
-release: CFLAGS = -O2 -s $(INCLUDE)
+release: CFLAGS = -O2 -s $(INCLUDE) -Wl,--stack,8388608
+
 release: $(TARGET)
 	strip $(TARGET)
 

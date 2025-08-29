@@ -68,6 +68,12 @@ void animated_sprite_linker::load_animation_from_json(std::string jsonS){
         ams.textures.push_back(txt);
         ams.texture_ids.push_back(texture_id);
     }
+    if (j.contains("offset")) {
+        json offset = j["offset"];
+
+        ams.offset.x = offset.value("x", 0);
+        ams.offset.y = offset.value("y", 0);
+    }
 
     load_animation(ams);
 
@@ -112,7 +118,10 @@ void animated_sprite_linker::update_animation(){
 
         if(current_frame_int < animations[current_animation_index].textures.size() && current_frame_int >= 0){
             if(animations[current_animation_index].textures[current_frame_int] != nullptr && pos != nullptr && animations[current_animation_index].textures[current_frame_int]->id != 0){
-                DrawTextureV(*animations[current_animation_index].textures[current_frame_int], *pos, WHITE);
+                Vector2 offset_pos;
+                offset_pos.x = pos->x + animations[current_animation_index].offset.x;
+                offset_pos.y = pos->y + animations[current_animation_index].offset.y;
+                DrawTextureV(*animations[current_animation_index].textures[current_frame_int], offset_pos, WHITE);
             }
 
             if(delta_time_master.can_game_continue() == true){
