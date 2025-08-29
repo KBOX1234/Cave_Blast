@@ -231,6 +231,9 @@ int main(int argc, char* argv[]) {
 
 
     }
+
+    std::cout << "(MAIN): Closing\n";
+
     texture_manager.clean_up();
 
     rlImGuiShutdown();

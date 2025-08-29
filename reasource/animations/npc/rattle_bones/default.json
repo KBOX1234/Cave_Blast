@@ -1,0 +1,7 @@
+{
+  "frame_rate" : 1,
+  "name" : "default",
+  "textures" : [
+    "reasource/animations/npc/rattle_bones/default.png"
+  ]
+}

@@ -94,10 +94,14 @@ int texture_master::set_default_texture(std::string path) {
 }
 
 void texture_master::clean_up() {
+    int count = 0;
     for (int i = 0; i < textures.size(); i++) {
         if (textures[i] == nullptr) continue;
         SafeUnloadTexture(&textures[i]->texture);
+        count++;
     }
+
+    std::cout << "(TEXTURE_MANAGER): Unloaded " << count << " textures\n";
 }
 
 void texture_master::print_all_ids() {
