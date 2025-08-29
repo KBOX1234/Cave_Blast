@@ -6,7 +6,10 @@ LIBS = -lraylib -lgdi32 -lm -lrlImGui -lenet -lsphysics -lws2_32 -lsoloud -lwinm
 
 SRC_DIR = src
 OBJ_DIR = obj
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+
+# Recursive wildcard in pure Make (no 'find')
+rwildcard = $(foreach d,$(wildcard $1/*),$(call rwildcard,$d,$2)) $(wildcard $1/$2)
+SRCS = $(call rwildcard,$(SRC_DIR),*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
 TARGET = main.exe
@@ -27,13 +30,14 @@ release: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LINKS) $(LIBS) $(CFLAGS)
 
-# Compile each source file to object
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+# Compile each source file to object (creates dirs as needed)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(dir $@)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 # Create obj directory if not exists
 $(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)
 
 # Clean all build files
 clean:
