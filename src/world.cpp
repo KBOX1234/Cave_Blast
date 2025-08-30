@@ -230,7 +230,7 @@ chunk *world_class::generate_chunk(Vector2 pos) {
 }
 
 
-const block* world_class::chunk_buffer(Vector2 pos){
+const block* world_class::chunk_buffer(Vector2 pos, bool bg){
 
     chunk* tmp_chunk = get_chunk(pos);
 
@@ -247,6 +247,9 @@ const block* world_class::chunk_buffer(Vector2 pos){
         }
     }
 
+    if (bg == true) {
+        return tmp_chunk->blocks_buffer(true);
+    }
     return tmp_chunk->blocks_buffer();
 }
 

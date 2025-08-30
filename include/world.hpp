@@ -154,7 +154,7 @@ class world_class {
         //gets a block in the world
         block* get_block(Vector2 pos);
 
-        const block* chunk_buffer(Vector2 pos);
+        const block* chunk_buffer(Vector2 pos, bool bg = false);
 
         json serialize_chunk(Vector2 pos);
 

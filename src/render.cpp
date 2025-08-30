@@ -72,10 +72,12 @@ void render::draw_chunk(Vector2 chnk_pos) {
     chnk_pos.x = round(chnk_pos.x);
     chnk_pos.y = round(chnk_pos.y);
 
-    const block* l1_chnk = world.chunk_buffer(chnk_pos);
+    const block* l1_chnk = world.chunk_buffer(chnk_pos, true);
+    const block* l2_chnk = world.chunk_buffer(chnk_pos);
+
     Vector2 pointer = {0, 0};
 
-    if (l1_chnk == nullptr) return;
+    if (l1_chnk == nullptr || l2_chnk == nullptr) return;
 
     for (int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
 
@@ -85,19 +87,24 @@ void render::draw_chunk(Vector2 chnk_pos) {
         }
         pointer.x++;
 
-        if (l1_chnk[i].attr == nullptr) continue;
+        if (l1_chnk[i].attr == nullptr || l2_chnk[i].attr == nullptr) continue;
 
         int l1_texture_id = l1_chnk[i].attr->texture_id;
+        int l2_texture_id = l2_chnk[i].attr->texture_id;
 
         Texture2D* l1_t = texture_manager.grab_texture_pointer(l1_texture_id);
+        Texture2D* l2_t = texture_manager.grab_texture_pointer(l2_texture_id);
 
-        if (l1_t  != nullptr) {
+        if (l1_t  != nullptr && l2_t  != nullptr) {
 
-            if (l1_t->id != 0) {
+            if (l1_t->id != 0 && l2_t->id != 0) {
                 float l1_texture_scale = BLOCK_SIZE / (float)l1_t->width;
-                //std::cout << "\ntexture scale: " << std::to_string(l1_texture_scale) + ", Height is: " << std::to_string(t->height) << ", BLOCK_SIZE is: " << std::to_string(BLOCK_SIZE)<< std::endl;
+                float l2_texture_scale = BLOCK_SIZE / (float)l2_t->width;
 
-                DrawTextureEx(*l1_t, {(pointer.x + (chnk_pos.x * CHUNK_SIZE))*BLOCK_SIZE, (pointer.y + (chnk_pos.y * CHUNK_SIZE))*BLOCK_SIZE}, 0, l1_texture_scale,  WHITE);
+                Vector2 pos = {(pointer.x + (chnk_pos.x * CHUNK_SIZE))*BLOCK_SIZE, (pointer.y + (chnk_pos.y * CHUNK_SIZE))*BLOCK_SIZE};
+
+                DrawTextureEx(*l1_t, pos, 0, l1_texture_scale,  {255, 255, 255, 50});
+                DrawTextureEx(*l2_t, pos, 0, l2_texture_scale,  WHITE);
             }
 
         }
