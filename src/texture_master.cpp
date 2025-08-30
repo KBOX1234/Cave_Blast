@@ -110,3 +110,9 @@ void texture_master::print_all_ids() {
     }
 }
 
+int texture_master::does_texture_exist(const std::string &path) {
+    for (int i = 0; i < textures.size(); i++) {
+        if (textures[i]->origin == path) return textures[i]->id;
+    }
+    return -1;
+}

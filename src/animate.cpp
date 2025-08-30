@@ -61,7 +61,10 @@ void animated_sprite_linker::load_animation_from_json(std::string jsonS){
 
 
     for(int i = 0; i < texture_files.size(); i++){
-        int texture_id = texture_manager.add_texture(texture_files[i], true);
+
+        int texture_id = texture_manager.does_texture_exist(texture_files[i]);
+
+        if (texture_id == -1) texture_id = texture_manager.add_texture(texture_files[i], true);
 
         Texture2D* txt = texture_manager.grab_texture_pointer(texture_id);
 

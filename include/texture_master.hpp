@@ -40,6 +40,9 @@ class texture_master{
         void clean_up();
 
         void print_all_ids();
+
+        //if texture does not exist then return -1 otherwise it returns the texture id
+        int does_texture_exist(const std::string& path);
 };
 
 extern texture_master texture_manager;
