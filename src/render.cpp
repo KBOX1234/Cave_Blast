@@ -72,10 +72,10 @@ void render::draw_chunk(Vector2 chnk_pos) {
     chnk_pos.x = round(chnk_pos.x);
     chnk_pos.y = round(chnk_pos.y);
 
-    const block* render_chnk = world.chunk_buffer(chnk_pos);
+    const block* l1_chnk = world.chunk_buffer(chnk_pos);
     Vector2 pointer = {0, 0};
 
-    if (render_chnk == nullptr) return;
+    if (l1_chnk == nullptr) return;
 
     for (int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
 
@@ -85,19 +85,19 @@ void render::draw_chunk(Vector2 chnk_pos) {
         }
         pointer.x++;
 
-        if (render_chnk[i].attr == nullptr) continue;
+        if (l1_chnk[i].attr == nullptr) continue;
 
-        int texture_id = render_chnk[i].attr->texture_id;
+        int l1_texture_id = l1_chnk[i].attr->texture_id;
 
-        Texture2D* t = texture_manager.grab_texture_pointer(texture_id);
+        Texture2D* l1_t = texture_manager.grab_texture_pointer(l1_texture_id);
 
-        if (t  != nullptr) {
+        if (l1_t  != nullptr) {
 
-            if (t->id != 0) {
-                float texture_scale = BLOCK_SIZE / (float)t->width;
-                //std::cout << "\ntexture scale: " << std::to_string(texture_scale) + ", Height is: " << std::to_string(t->height) << ", BLOCK_SIZE is: " << std::to_string(BLOCK_SIZE)<< std::endl;
+            if (l1_t->id != 0) {
+                float l1_texture_scale = BLOCK_SIZE / (float)l1_t->width;
+                //std::cout << "\ntexture scale: " << std::to_string(l1_texture_scale) + ", Height is: " << std::to_string(t->height) << ", BLOCK_SIZE is: " << std::to_string(BLOCK_SIZE)<< std::endl;
 
-                DrawTextureEx(*t, {(pointer.x + (chnk_pos.x * CHUNK_SIZE))*BLOCK_SIZE, (pointer.y + (chnk_pos.y * CHUNK_SIZE))*BLOCK_SIZE}, 0, texture_scale,  WHITE);
+                DrawTextureEx(*l1_t, {(pointer.x + (chnk_pos.x * CHUNK_SIZE))*BLOCK_SIZE, (pointer.y + (chnk_pos.y * CHUNK_SIZE))*BLOCK_SIZE}, 0, l1_texture_scale,  WHITE);
             }
 
         }
