@@ -189,6 +189,20 @@ int world_class::new_chunk_from_json(json j) {
 }
 
 world_class::world_class() {
+    pos_x_pos_y = new int*[MAX_TABLE_SIZE];
+    neg_x_pos_y = new int*[MAX_TABLE_SIZE];
+    pos_x_neg_y = new int*[MAX_TABLE_SIZE];
+    neg_x_neg_y = new int*[MAX_TABLE_SIZE];
+
+
+    for (int i = 0; i < MAX_TABLE_SIZE; i++) {
+        pos_x_pos_y[i] = new int[MAX_TABLE_SIZE];
+        neg_x_pos_y[i] = new int[MAX_TABLE_SIZE];
+        pos_x_neg_y[i] = new int[MAX_TABLE_SIZE];
+        neg_x_neg_y[i] = new int[MAX_TABLE_SIZE];
+    }
+
+
     for (int i = 0; i < MAX_TABLE_SIZE; i++) {
         for (int j = 0; j < MAX_TABLE_SIZE; j++) {
             pos_x_pos_y[i][j] = -1;

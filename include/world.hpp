@@ -110,12 +110,12 @@ class world_class {
 
         world_gen generator;
 
-        #define MAX_TABLE_SIZE 512
+        #define MAX_TABLE_SIZE 2560
 
-        int pos_x_neg_y[MAX_TABLE_SIZE][MAX_TABLE_SIZE];
-        int neg_x_neg_y[MAX_TABLE_SIZE][MAX_TABLE_SIZE];
-        int neg_x_pos_y[MAX_TABLE_SIZE][MAX_TABLE_SIZE];
-        int pos_x_pos_y[MAX_TABLE_SIZE][MAX_TABLE_SIZE];
+        int** pos_x_neg_y;
+        int** neg_x_neg_y;
+        int** neg_x_pos_y;
+        int** pos_x_pos_y;
 
         //looks for the index of a chunk based on its coordinates using a table since a chunk's position in the chunks array does not determin its location
         int look_up_chunk_index(Vector2 coord);
