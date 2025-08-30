@@ -3,6 +3,11 @@
 #include "rng.hpp"
 
 int texture_master::add_texture(std::string path, bool locked) {
+
+    if (does_texture_exist(path) != -1) {
+        return does_texture_exist(path);
+    }
+
     int id = random_num.get_random_int();
 
     auto tex = std::make_unique<texture_archive>();

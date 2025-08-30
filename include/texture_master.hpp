@@ -24,6 +24,9 @@ class texture_master{
 
         Texture2D default_texture_T;
 
+        //if texture does not exist then return -1 otherwise it returns the texture id
+        int does_texture_exist(const std::string& path);
+
     public:
 
 
@@ -41,8 +44,7 @@ class texture_master{
 
         void print_all_ids();
 
-        //if texture does not exist then return -1 otherwise it returns the texture id
-        int does_texture_exist(const std::string& path);
+
 };
 
 extern texture_master texture_manager;
