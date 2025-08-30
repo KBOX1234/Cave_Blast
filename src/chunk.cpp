@@ -8,7 +8,8 @@
 
 chunk::chunk(){
     chunk_id = random_num.get_random_int();
-    blocks.resize(CHUNK_SIZE*CHUNK_SIZE);
+    l1.resize(CHUNK_SIZE*CHUNK_SIZE);
+    l2.resize(CHUNK_SIZE*CHUNK_SIZE);
 }
 
 void chunk::set_global_pos(Vector2 pos){
@@ -21,7 +22,7 @@ void chunk::set_global_pos(Vector2 pos){
     #endif
 }
 
-int chunk::set_block(block_type* b, Vector2 pos){
+int chunk::set_block(block_type* b, Vector2 pos, bool bg){
     int index = ((int)round(pos.y)*CHUNK_SIZE) + (int)round(pos.x);
 
         //std::cout << "\nindex = " + std::to_string(index) + "\n";
@@ -39,12 +40,17 @@ int chunk::set_block(block_type* b, Vector2 pos){
     new_blk.state = 0;
     new_blk.attr = b;
 
-    blocks[index] = new_blk;
+    if (bg == true) {
+        l1[index] = new_blk;
+    }
+    else {
+        l2[index] = new_blk;
+    }
 
     return 0;
 }
 
-int chunk::set_block_index(block_type* b, int index){
+int chunk::set_block_index(block_type* b, int index, bool bg){
     if(index > CHUNK_SIZE*CHUNK_SIZE){
         return -1;
 
@@ -53,17 +59,24 @@ int chunk::set_block_index(block_type* b, int index){
         #endif
     }
 
-    if (index >= blocks.size()) {
-        blocks.resize(index + 1);
+    if (index >= l1.size()) {
+        return -1;
     }
 
-    blocks[index].state = 0;
-    blocks[index].attr = b;
+    if (bg == true) {
+        l1[index].state = 0;
+        l1[index].attr = b;
+    }
+    else {
+        l2[index].state = 0;
+        l2[index].attr = b;
+    }
+
 
     return 0;
 }
 
-block* chunk::get_block(Vector2 pos){
+block* chunk::get_block(Vector2 pos, bool bg){
     int index = ((int)round(pos.y)*CHUNK_SIZE) + (int)round(pos.x);
 
     if(index > CHUNK_SIZE*CHUNK_SIZE){
@@ -74,11 +87,12 @@ block* chunk::get_block(Vector2 pos){
         #endif
     }
 
-    return &blocks[index];
+    if (bg == true) return &l1[index];
+    return &l2[index];
 
 }
 
-block* chunk::get_block_index(int index){
+block* chunk::get_block_index(int index, bool bg){
 
     if(index > CHUNK_SIZE*CHUNK_SIZE){
         return nullptr;
@@ -88,7 +102,8 @@ block* chunk::get_block_index(int index){
         #endif
     }
 
-    return &blocks[index];
+    if (bg == true) return &l1[index];
+    return &l2[index];
 
 }
 
@@ -107,17 +122,31 @@ json chunk::serialize_chunk() {
 
     json block_data;
     //only shares block type val for simplicity and size
+    //l1
     for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
-        std::string name = item_manager.get_item_name_by_id(blocks[i].attr->item_id);
+        std::string name = item_manager.get_item_name_by_id(l1[i].attr->item_id);
         if (name == "null") {
-            block_data[i] = blocks[i].attr->item_id;
+            block_data[i] = l1[i].attr->item_id;
 
         }
         else {
             block_data[i] = name;
         }
     }
-    j["block_data"] = block_data;
+    j["l1_data"] = block_data;
+
+    //l2
+    for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
+        std::string name = item_manager.get_item_name_by_id(l2[i].attr->item_id);
+        if (name == "null") {
+            block_data[i] = l2[i].attr->item_id;
+
+        }
+        else {
+            block_data[i] = name;
+        }
+    }
+    j["l2_data"] = block_data;
 
     return j;
 }
@@ -142,11 +171,18 @@ int chunk::new_chunk_from_json(json j) {
     }
     else return NO_CHUNK_ID;
 
-    if (j.contains("block_data")) {
+    if (j.contains("l1_data")) {
 
-        json data = j["block_data"];
+        json data = j["l1_data"];
         for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
-            blocks[i].attr = item_manager.fetch_item(data[i])->block_type_ptr;
+            l1[i].attr = item_manager.fetch_item(data[i])->block_type_ptr;
+        }
+    }
+    if (j.contains("l2_data")) {
+
+        json data = j["l2_data"];
+        for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
+            l1[i].attr = item_manager.fetch_item(data[i])->block_type_ptr;
         }
     }
 
@@ -155,6 +191,7 @@ int chunk::new_chunk_from_json(json j) {
     return 0;
 }
 
-const block* chunk::blocks_buffer() const {
-    return blocks.data();
+const block* chunk::blocks_buffer(bool bg) const {
+    if (bg == true) return l1.data();
+    return l2.data();
 }

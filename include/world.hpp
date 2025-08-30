@@ -23,12 +23,13 @@ struct item;
 using json = nlohmann::json;
 #define CHUNK_SIZE 16
 #define BLOCK_SIZE 32
-#define NOISE_SCALE 4
+#define NOISE_SCALE 1
 
 class chunk{
     private:
 
-        std::vector<block> blocks;
+        std::vector<block> l1;
+        std::vector<block> l2;
 
         Vector2 global_pos;
 
@@ -42,16 +43,16 @@ class chunk{
     void set_global_pos(Vector2 pos);
 
     //sets a block inside of itself (pass sub chunk coords (example a corner of a chunk it 0, 0))
-    int set_block(block_type* b, Vector2 pos);
+    int set_block(block_type* b, Vector2 pos, bool bg = false);
 
     //same as befor but with an index and not a Vector2
-    int set_block_index(block_type* b, int index);
+    int set_block_index(block_type* b, int index, bool bg = false);
 
     //gets the block
-    block* get_block(Vector2 pos);
+    block* get_block(Vector2 pos, bool bg = false);
 
     //gets the block by index
-    block* get_block_index(int index);
+    block* get_block_index(int index, bool bg = false);
 
     //gets the chunk pos
     Vector2 get_chunk_pos();
@@ -63,7 +64,7 @@ class chunk{
     //creates new chunk from json
     int new_chunk_from_json(json j);
 
-    const block* blocks_buffer() const;
+    const block* blocks_buffer(bool bg = false) const;
 };
 
 

@@ -158,5 +158,11 @@ chunk* world_gen::generate_chunk(Vector2 pos){
 
     generate_caves(chnk, pos);
 
+    for (int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
+        block_type* b;
+        b = block_manager.fetch_block_type(item_manager.fetch_item("stone")->block_type_ptr->type);
+        chnk->set_block_index(b, i, true);
+    }
+
     return chnk;
 }
