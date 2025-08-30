@@ -3,10 +3,10 @@
 #include <iostream>
 #include <chrono>
 #include <memory>
+#include <unordered_map>
 #include "raylib.h"
 
 struct texture_archive{
-    int id;
     Texture2D texture;
     std::string origin;
     bool loaded;
@@ -18,7 +18,8 @@ struct texture_archive{
 
 class texture_master{
     private:
-    std::vector<std::unique_ptr<texture_archive>> textures;
+        //std::vector<std::unique_ptr<texture_archive>> textures;
+        std::unordered_map<int, texture_archive*> textures;
 
         int default_texture_id;
 

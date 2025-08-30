@@ -10,8 +10,7 @@ int texture_master::add_texture(std::string path, bool locked) {
 
     int id = random_num.get_random_int();
 
-    auto tex = std::make_unique<texture_archive>();
-    tex->id = id;
+    texture_archive* tex = new texture_archive;
     tex->texture = LoadTexture(path.c_str());
     tex->origin = path;
     tex->loaded = true;
@@ -27,7 +26,7 @@ int texture_master::add_texture(std::string path, bool locked) {
     auto now = std::chrono::system_clock::now();
     tex->expiration = std::chrono::system_clock::to_time_t(now + std::chrono::minutes(1));
 
-    textures.push_back(std::move(tex));
+    textures[id] = tex;
 
 
 
@@ -42,20 +41,20 @@ void SafeUnloadTexture(Texture2D *tex) {
 }
 
 Texture2D* texture_master::grab_texture_pointer(int id) {
-    for (auto& tex : textures) {
-        if (tex->id == id) {
 
-            if (tex->texture.id == 1 || tex->texture.id == 2 || tex->texture.id == 4) {
-                std::cout << "ssssssssssssssssssssssssssssssssssss\n";
-                break;
-            }
+    texture_archive* tex = textures[id];
 
-            if (!tex->loaded || tex->texture.id == 0) {
-                tex->needs_reload = true;
-            }
-            else {
-                return &tex->texture;
-            }
+    if (tex != nullptr) {
+
+        if (tex->texture.id == 1 || tex->texture.id == 2 || tex->texture.id == 4) {
+            std::cout << "ssssssssssssssssssssssssssssssssssss\n";
+        }
+
+        if (!tex->loaded || tex->texture.id == 0) {
+            tex->needs_reload = true;
+        }
+        else {
+            return &tex->texture;
         }
     }
     return &default_texture_T;
@@ -67,20 +66,24 @@ void texture_master::update() {
     auto now = std::chrono::system_clock::now();
     std::time_t current_time = std::chrono::system_clock::to_time_t(now);
 
-    for (auto& tex : textures) {
+    // Pass 1: mark expired textures
+    for (auto& [id, tex] : textures) {
+        if (tex == nullptr) continue; // <- check here
         if (!tex->locked && tex->loaded && tex->expiration < current_time) {
             tex->loaded = false;
             tex->needs_reload = true; // defer actual unload
         }
     }
 
-    // actually unload
-    for (auto& tex : textures) {
+    // Pass 2: actually unload
+    for (auto& [id, tex] : textures) {
+        if (tex == nullptr) continue; // <- and here
         if (!tex->loaded && tex->texture.id != 0) {
             SafeUnloadTexture(&tex->texture);
         }
     }
 }
+
 
 
 
@@ -100,9 +103,10 @@ int texture_master::set_default_texture(std::string path) {
 
 void texture_master::clean_up() {
     int count = 0;
-    for (int i = 0; i < textures.size(); i++) {
-        if (textures[i] == nullptr) continue;
-        SafeUnloadTexture(&textures[i]->texture);
+
+    for (auto& [id, tex] : textures) {
+        if (tex == nullptr) continue;
+        SafeUnloadTexture(&tex->texture);
         count++;
     }
 
@@ -110,14 +114,18 @@ void texture_master::clean_up() {
 }
 
 void texture_master::print_all_ids() {
-    for (int i = 0; i < textures.size(); i++) {
-        std::cout << "texture id: " << textures[i]->texture.id << std::endl;
+    for (auto& [id, tex] : textures) {
+        if (tex == nullptr) continue;
+        std::cout << "texture id: " << tex->texture.id << std::endl;
     }
 }
 
+
 int texture_master::does_texture_exist(const std::string &path) {
-    for (int i = 0; i < textures.size(); i++) {
-        if (textures[i]->origin == path) return textures[i]->id;
+    for (auto& [id, tex] : textures) {
+        if (tex != nullptr && tex->origin == path) {
+            return id;
+        }
     }
     return -1;
 }
