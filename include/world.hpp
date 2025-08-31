@@ -141,6 +141,8 @@ class world_class {
 
         chunk* generate_chunk(Vector2 pos);
 
+        void reset_chunks();
+
 
     public:
         world_class();

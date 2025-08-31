@@ -163,3 +163,56 @@ int save_master::save_instance(){
     return 0;
 }
 
+void save_master::load_chunks() {
+    world.reset_chunks();
+
+    std::string dir = save_dir + "/" + CHUNK_DIR + "/";
+
+    try {
+        for (const auto& entry : fs::directory_iterator(dir)) {
+            try {
+                auto data = json::parse(easy_file_ops::load_text_file(entry.path()));
+                world.new_chunk_from_json(data);
+            } catch (const json::parse_error& e) {
+                std::cerr << "(SAVE_MANAGER): Failed to parse " << entry.path() << ": " << e.what() << '\n';
+            }
+
+        }
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "(SAVE_MANAGER): Error: " << e.what() << '\n';
+    }
+}
+
+void save_master::load_npcs() {
+    npc_manager.clear_npcs();
+
+
+    std::string dir = save_dir + "/" + NPC_DIR + "/";
+
+    try {
+        for (const auto& entry : fs::directory_iterator(dir)) {
+            try {
+                auto data = json::parse(easy_file_ops::load_text_file(entry.path()));
+                npc_manager.load_serialized_npc_from_json(data.dump());
+            } catch (const json::parse_error& e) {
+                std::cerr << "(SAVE_MANAGER): Failed to parse " << entry.path() << ": " << e.what() << '\n';
+            }
+
+        }
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "(SAVE_MANAGER): Error: " << e.what() << '\n';
+    }
+}
+
+void save_master::load_players() {
+
+}
+
+void save_master::load_save() {
+    load_chunks();
+    load_npcs();
+    load_players();
+}
+
+
+

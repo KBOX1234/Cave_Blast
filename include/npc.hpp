@@ -209,6 +209,8 @@ class npc_master {
 
         int load_serialized_npc_from_json(std::string json_str);
 
+        void clear_npcs();
+
     public:
 
         serialized_npc serialize_npc(npc* npc_c);

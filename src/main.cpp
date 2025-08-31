@@ -210,6 +210,9 @@ int main(int argc, char* argv[]) {
         if (IsKeyPressed(KEY_Z)) {
             save_manager.save_instance();
         }
+        if (IsKeyPressed(KEY_X)) {
+            save_manager.load_save();
+        }
 
 
         player_manager.inv_ui.draw_inventory();

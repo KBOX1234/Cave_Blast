@@ -312,3 +312,10 @@ int npc_master::load_serialized_npc_from_json(std::string json_str) {
     return npc_id;
 }
 
+void npc_master::clear_npcs() {
+    for (int i = 0; i < npcs.size(); i++) {
+        delete npcs[i];
+    }
+
+    npcs.clear();
+}

@@ -36,6 +36,14 @@ class save_master{
         int save_npc(npc* npc_obj);
 
         int save_instance();
+
+        void load_chunks();
+
+        void load_players();
+
+        void load_npcs();
+
+        void load_save();
 };
 
 extern save_master save_manager;

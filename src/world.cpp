@@ -300,3 +300,16 @@ void world_class::break_block(Vector2 pos){
 
     place_block(pos, blk);
 }
+
+void world_class::reset_chunks() {
+    chunks.clear();
+
+    for (int i = 0; i < MAX_TABLE_SIZE; i++) {
+        for (int j = 0; j < MAX_TABLE_SIZE; j++) {
+            pos_x_pos_y[i][j] = -1;
+            neg_x_pos_y[i][j] = -1;
+            pos_x_neg_y[i][j] = -1;
+            neg_x_neg_y[i][j] = -1;
+        }
+    }
+}
