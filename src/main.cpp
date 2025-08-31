@@ -207,6 +207,10 @@ int main(int argc, char* argv[]) {
             sound_manager.play_sound("boom",  {64, 64}, true);
         }
 
+        if (IsKeyPressed(KEY_Z)) {
+            save_manager.save_instance();
+        }
+
 
         player_manager.inv_ui.draw_inventory();
 

@@ -191,11 +191,13 @@ extern npc_template_loader npc_template_manager;
 
 class render;
 class server_utls;
+class save_master;
 
 class npc_master {
     friend class render;
     friend class server_utls;
     friend class npc;
+    friend class save_master;
     private:
         std::vector<npc*> npcs;
 
@@ -205,9 +207,13 @@ class npc_master {
 
         int new_npc_from_serialized_npc(serialized_npc npc_c);
 
+        int load_serialized_npc_from_json(std::string json_str);
+
     public:
 
         serialized_npc serialize_npc(npc* npc_c);
+
+        std::string serialize_npc_to_json(npc* npc_c);
 
         void update_npc_from_serialized_npc(serialized_npc npc_c);
 

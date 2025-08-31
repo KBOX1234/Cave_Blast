@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include "json.hpp"
+#include "npc.hpp"
 #include "world.hpp"
 
 using json = nlohmann::json;
@@ -129,6 +130,23 @@ int save_master::save_player(player* p){
 
 }
 
+#define NPC_DIR "npcs"
+
+int save_master::save_npc(npc *npc_obj) {
+    std::string json_str = npc_manager.serialize_npc_to_json(npc_obj);
+
+    json j = json::parse(json_str);
+
+    int id = j["id"];
+
+    std::string fname = std::to_string(id) + ".npcdat";
+
+    std::string full_p_save_f = save_dir + "/" + NPC_DIR + "/" + fname;
+
+    return easy_file_ops::save_to_text_file(j.dump(), full_p_save_f);
+}
+
+
 int save_master::save_instance(){
     for(int i = 0; i < world.chunks.size(); i++){
         save_chunk(world.chunks[i].serialize_chunk().dump());
@@ -138,5 +156,10 @@ int save_master::save_instance(){
         save_player(player_manager.players[i]);
     }
 
+    for (int i = 0; i < npc_manager.npcs.size(); i++) {
+        save_npc(npc_manager.npcs[i]);
+    }
+
     return 0;
 }
+

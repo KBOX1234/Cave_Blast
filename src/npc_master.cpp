@@ -259,3 +259,56 @@ player* npc::closest_player() {
 
     return p;
 }
+
+std::string npc_master::serialize_npc_to_json(npc *npc_c) {
+    serialized_npc npc_s = serialize_npc(npc_c);
+
+    json npc_json;
+
+    npc_json["pos"]["x"] = npc_s.pos.x;
+    npc_json["pos"]["y"] = npc_s.pos.x;
+
+    npc_json["rotation"] = npc_s.rotation;
+
+    npc_json["scale"] = npc_s.scale;
+
+    npc_json["size"]["x"] = npc_s.size.x;
+    npc_json["size"]["y"] = npc_s.size.y;
+
+    npc_json["stats"]["health"] = npc_s.stat.health;
+    npc_json["stats"]["max_health"] = npc_s.stat.max_health;
+    npc_json["stats"]["max_damage"] = npc_s.stat.max_damage;
+    npc_json["stats"]["max_block"] = npc_s.stat.max_block;
+    npc_json["stats"]["speed"] = npc_s.stat.speed;
+    npc_json["stats"]["target_player"] = npc_s.stat.target_player;
+
+    npc_json["id"] = npc_s.id;
+
+    npc_json["type"] = npc_s.type;
+
+    return npc_json.dump();
+}
+
+int npc_master::load_serialized_npc_from_json(std::string json_str) {
+    json npc_json = json::parse(json_str);
+
+    int npc_id = new_npc(npc_json["type"], {0, 0});
+
+    npc* working_npc = npcs[find_npc_slot_by_id(npc_id)];
+
+    if(npc_json.contains("pos")) {
+        working_npc->pos->x = npc_json["pos"]["x"];
+        working_npc->pos->y = npc_json["pos"]["y"];
+    }
+
+    *working_npc->rotation = npc_json.value("rotation", 0);
+
+    *working_npc->scale = npc_json.value("scale", 1);
+
+    working_npc->stat.health = npc_json["stats"].value("health", 1);
+
+    working_npc->id = npc_json["id"];
+
+    return npc_id;
+}
+

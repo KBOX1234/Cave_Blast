@@ -33,6 +33,8 @@ class save_master{
 
         int save_player(player* p);
 
+        int save_npc(npc* npc_obj);
+
         int save_instance();
 };
 
