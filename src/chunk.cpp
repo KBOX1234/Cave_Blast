@@ -136,17 +136,18 @@ json chunk::serialize_chunk() {
     j["l1_data"] = block_data;
 
     //l2
+    json block_data2;
     for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
         std::string name = item_manager.get_item_name_by_id(l2[i].attr->item_id);
         if (name == "null") {
-            block_data[i] = l2[i].attr->item_id;
+            block_data2[i] = l2[i].attr->item_id;
 
         }
         else {
-            block_data[i] = name;
+            block_data2[i] = name;
         }
     }
-    j["l2_data"] = block_data;
+    j["l2_data"] = block_data2;
 
     return j;
 }
@@ -182,7 +183,7 @@ int chunk::new_chunk_from_json(json j) {
 
         json data = j["l2_data"];
         for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++) {
-            l1[i].attr = item_manager.fetch_item(data[i])->block_type_ptr;
+            l2[i].attr = item_manager.fetch_item(data[i])->block_type_ptr;
         }
     }
 

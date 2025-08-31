@@ -217,9 +217,10 @@ chunk *world_class::generate_chunk(Vector2 pos) {
     chunk* chnk = generator.generate_chunk(pos);
 
     if(pos.x == 0 && pos.y == 0){
-        for(int i = 0; i < CHUNK_SIZE*CHUNK_SIZE; i++){
-            chnk->set_block_index(item_manager.fetch_item("air")->block_type_ptr, i);
-        }
+        chnk->set_block(item_manager.fetch_item("air")->block_type_ptr, {0, 2});
+        chnk->set_block(item_manager.fetch_item("air")->block_type_ptr, {0, 3});
+        chnk->set_block(item_manager.fetch_item("air")->block_type_ptr, {1, 2});
+        chnk->set_block(item_manager.fetch_item("air")->block_type_ptr, {1, 3});
     }
 
     add_chunk(chnk);

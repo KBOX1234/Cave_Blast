@@ -123,7 +123,7 @@ bool player::is_valid_move_2(Vector2 pos2) {
             Vector2 block_vec = { (float)bx - 1, (float)by};
             block* blk = world.get_block(block_vec);
 
-            if (blk != nullptr) {
+            if (blk != nullptr && blk->attr != nullptr) {
                 auto item = item_manager.fetch_item_by_id(blk->attr->item_id);
                 if (item->is_block == false || item->is_solid == false) continue;
 

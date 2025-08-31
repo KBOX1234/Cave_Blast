@@ -103,7 +103,7 @@ void render::draw_chunk(Vector2 chnk_pos) {
 
                 Vector2 pos = {(pointer.x + (chnk_pos.x * CHUNK_SIZE))*BLOCK_SIZE, (pointer.y + (chnk_pos.y * CHUNK_SIZE))*BLOCK_SIZE};
 
-                DrawTextureEx(*l1_t, pos, 0, l1_texture_scale,  {255, 255, 255, 50});
+                DrawTextureEx(*l1_t, pos, 0, l1_texture_scale,  {255, 255, 255, 128});
                 DrawTextureEx(*l2_t, pos, 0, l2_texture_scale,  WHITE);
             }
 
